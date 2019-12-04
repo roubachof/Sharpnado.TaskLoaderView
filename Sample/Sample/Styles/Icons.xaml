@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:styles="clr-namespace:Sample.Styles;assembly=Sample">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <OnPlatform x:Key="FontAwesome" x:TypeArguments="x:String">
+        <OnPlatform.Platforms>
+            <On Platform="Android" Value="Font-Awesome-5-Free-Solid-900.otf#Font Awesome 5 Free" />
+            <On Platform="iOS" Value="Font Awesome 5 Free" />
+            <On Platform="UWP" Value="Assets/Fonts/fa.otf#Font Awesome 5 Free" />
+        </OnPlatform.Platforms>
+    </OnPlatform>
+
+
+    <Color x:Key="ColorTabIcon">Gray</Color>
+
+
+    <x:Double x:Key="SizeSmallIcon">15</x:Double>
+    <x:Double x:Key="SizeMediumSmallIcon">25</x:Double>
+    <x:Double x:Key="SizeMediumIcon">30</x:Double>
+    <x:Double x:Key="SizeLargeIcon">45</x:Double>
+
+    <x:Double x:Key="SizeTabIcon">24</x:Double>
+
+
+    <OnPlatform x:Key="StringBackIcon" x:TypeArguments="x:String">
+        <OnPlatform.Platforms>
+            <On Platform="Android" Value="{x:Static styles:IconFont.ArrowLeft}" />
+            <On Platform="iOS" Value="{x:Static styles:IconFont.ChevronLeft}" />
+            <On Platform="UWP" Value="{x:Static styles:IconFont.ArrowLeft}" />
+        </OnPlatform.Platforms>
+    </OnPlatform>
+
+    <FontImageSource x:Key="IconFloppy"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Save}"
+                     Size="{StaticResource SizeMediumSmallIcon}"
+                     Color="{StaticResource SecondaryColor}" />
+
+    <FontImageSource x:Key="IconSkeletonSmall"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Skull}"
+                     Size="{StaticResource SizeSmallIcon}"
+                     Color="{StaticResource SecondaryColor}" />
+
+    <FontImageSource x:Key="IconHeartRateLarge"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Heartbeat}"
+                     Size="{StaticResource SizeMediumSmallIcon}"
+                     Color="{StaticResource SecondaryColor}" />
+
+    <FontImageSource x:Key="IconSpeedRateLarge"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.TachometerAlt}"
+                     Size="{StaticResource SizeMediumSmallIcon}"
+                     Color="{StaticResource SecondaryColor}" />
+
+    <FontImageSource x:Key="IconBack"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{StaticResource StringBackIcon}"
+                     Size="{StaticResource SizeTabIcon}"
+                     Color="{StaticResource ColorTabIcon}" />
+
+    <FontImageSource x:Key="IconTabNews"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Newspaper}"
+                     Size="{StaticResource SizeTabIcon}"
+                     Color="{StaticResource ColorTabIcon}" />
+
+    <FontImageSource x:Key="IconTabControls"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Cogs}"
+                     Size="{StaticResource SizeTabIcon}"
+                     Color="{StaticResource ColorTabIcon}" />
+
+    <FontImageSource x:Key="IconTabScenarios"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Scroll}"
+                     Size="{StaticResource SizeTabIcon}"
+                     Color="{StaticResource ColorTabIcon}" />
+
+    <FontImageSource x:Key="IconTabResources"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Book}"
+                     Size="{StaticResource SizeTabIcon}"
+                     Color="{StaticResource ColorTabIcon}" />
+
+    <FontImageSource x:Key="IconTabAbout"
+                     FontFamily="{StaticResource FontAwesome}"
+                     Glyph="{x:Static styles:IconFont.Info}"
+                     Size="{StaticResource SizeTabIcon}"
+                     Color="{StaticResource ColorTabIcon}" />
+
+</ResourceDictionary>

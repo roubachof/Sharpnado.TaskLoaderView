@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+        <ResourceDictionary Source="Text.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="GameName"
+           BasedOn="{StaticResource TextSubhead}"
+           TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource FontKarmatic}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
+    </Style>
+    <Style x:Key="GameCompany"
+           BasedOn="{StaticResource TextBody}"
+           TargetType="Label" >
+        <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
+    </Style>
+    <Style x:Key="GameGenre"
+           BasedOn="{StaticResource TextBody}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource CellSecondaryTextColor}" />
+    </Style>
+
+    <Style x:Key="GameReleaseDate"
+           BasedOn="{StaticResource TextBody}"
+           TargetType="Label">
+        <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
+    </Style>
+
+    <Style x:Key="GameRating"
+           BasedOn="{StaticResource TextBody}"
+           TargetType="Label">
+        <Setter Property="VerticalOptions" Value="End" />
+        <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
+    </Style>
+
+</ResourceDictionary>

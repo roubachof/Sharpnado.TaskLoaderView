@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Sample.Views.MainPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
+             xmlns:local="clr-namespace:Sample.Infrastructure;assembly=Sample"
+             BackgroundColor="{StaticResource TosBackground}"
+             NavigationPage.HasNavigationBar="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ToolBarStyle" TargetType="Frame">
+                <Setter Property="Padding" Value="{StaticResource ThicknessLarge}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource TosWindows}" />
+            </Style>
+            <Style x:Key="CardStyle" TargetType="Frame">
+                <Setter Property="Margin" Value="{StaticResource ThicknessLarge}" />
+                <Setter Property="Padding" Value="{StaticResource ThicknessLarge}" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="BackgroundColor" Value="{StaticResource TosWindows}" />
+            </Style>
+            <Style x:Key="CardIcon" TargetType="Image">
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Start" />
+            </Style>
+            <Style x:Key="CardTitle"
+                   BasedOn="{StaticResource TextTitle}"
+                   TargetType="Label">
+                <Setter Property="Margin" Value="0,-5, 0, 0" />
+                <Setter Property="VerticalOptions" Value="Start" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Frame x:Name="ToolBar"
+               Grid.Row="0"
+               Style="{StaticResource ToolBarStyle}"
+               CornerRadius="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80" />
+                    <RowDefinition x:Name="ImageRowHeight" Height="60" />
+                    <RowDefinition Height="2" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{StaticResource SpacingMedium}" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0"
+                       Grid.ColumnSpan="5"
+                       Style="{StaticResource TextTitle}"
+                       VerticalOptions="Center"
+                       FontFamily="{StaticResource FontKarmatic}"
+                       FontSize="28"
+                       Text="{loc:Translate Title_TaskLoaderView}" />
+                <Image Grid.Row="1"
+                       Grid.Column="1"
+                       WidthRequest="60"
+                       HeightRequest="60"
+                       HorizontalOptions="Center"
+                       VerticalOptions="End"
+                       Source="{local:ImageResource Sample.Images.busy_bee.png}" />
+                <Image Grid.Row="1"
+                       Grid.Column="2"
+                       WidthRequest="60"
+                       HeightRequest="60"
+                       HorizontalOptions="Center"
+                       VerticalOptions="End"
+                       Source="{local:ImageResource Sample.Images.success.png}" />
+                <Image Grid.Row="1"
+                       Grid.Column="3"
+                       WidthRequest="60"
+                       HeightRequest="60"
+                       HorizontalOptions="Center"
+                       VerticalOptions="End"
+                       Source="{local:ImageResource Sample.Images.bomb.png}" />
+                <BoxView Grid.Row="2"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="5"
+                         Margin="-15,13,-15,-15"
+                         Color="Black" />
+            </Grid>
+        </Frame>
+        <ScrollView x:Name="ScrollView" Grid.Row="1">
+            <StackLayout Orientation="Vertical">
+                <Grid>
+                    <Frame Margin="{StaticResource ThicknessLarge}"
+                           BackgroundColor="Black"
+                           CornerRadius="5"
+                           TranslationY="3" />
+                    <Frame Style="{StaticResource CardStyle}">
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="120" />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Grid.Row="0"
+                                   Grid.Column="0"
+                                   Style="{StaticResource CardIcon}"
+                                   Source="{StaticResource IconFloppy}" />
+                            <Label Grid.Row="0"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CardTitle}"
+                                   FontFamily="{StaticResource FontArcadeClassic}"
+                                   FontSize="36"
+                                   Text="{loc:Translate DefaultLayout_Title}" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="3"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate DefaultLayout_Description}" />
+
+                            <Button Grid.Row="2"
+                                    Grid.Column="2"
+                                    Padding="5,2,5,5"
+                                    BackgroundColor="White"
+                                    BorderColor="Black"
+                                    BorderWidth="5"
+                                    Clicked="ButtonDefaultLayoutOnClicked"
+                                    CornerRadius="5"
+                                    FontSize="24"
+                                    Text="{loc:Translate Button_TestIt}" />
+                        </Grid>
+                    </Frame>
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+
+
+
+</ContentPage>

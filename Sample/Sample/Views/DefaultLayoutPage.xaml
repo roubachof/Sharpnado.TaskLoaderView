@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Sample.Views.DefaultLayoutPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
+             xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             NavigationPage.HasNavigationBar="False">
+
+    <d:ContentPage.BindingContext>
+        <viewModels:DefaultLayoutViewModel />
+    </d:ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ErrorPickerStyle" TargetType="Picker">
+                <Setter Property="VerticalOptions" Value="{StaticResource PickerVerticalOption}" />
+                <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="3" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Toolbar  -->
+            <views:NavigationToolBar Grid.Row="0" />
+
+            <StackLayout Grid.Row="1"
+                         Padding="15,0"
+                         BindingContext="{Binding ErrorEmulator}"
+                         Orientation="Horizontal"
+                         Spacing="10">
+
+                <Label Style="{StaticResource TextTitle}"
+                       VerticalOptions="Center"
+                       FontFamily="{StaticResource FontArcadeClassic}"
+                       Text="{loc:Translate ErrorEmulator_Title}" />
+
+                <Picker Style="{StaticResource ErrorPickerStyle}"
+                        ItemsSource="{Binding ErrorTypes}"
+                        SelectedIndex="{Binding SelectedIndex}"
+                        TextColor="{StaticResource TosBackground}" />
+            </StackLayout>
+
+            <BoxView Grid.Row="2" BackgroundColor="Black" />
+
+            <RefreshView Grid.Row="3"
+                         Command="{Binding RefreshCommand}"
+                         RefreshColor="{StaticResource OnDarkColor}">
+                <ListView BackgroundColor="{DynamicResource GameListBackground}"
+                          ItemTemplate="{StaticResource GameDataTemplate}"
+                          ItemsSource="{Binding Games}"
+                          RowHeight="150"
+                          SelectionMode="None"
+                          SeparatorVisibility="None" />
+            </RefreshView>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

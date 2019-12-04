@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Color x:Key="DarkSurface">#121212</Color>
+
+    <Color x:Key="TosBackground">#00E000</Color>
+
+    <Color x:Key="DarkElevation2dp">#212121</Color>
+    <Color x:Key="DarkElevation4dp">#272727</Color>
+
+    <Color x:Key="TosWindows">White</Color>
+
+    <!--<Color x:Key="PrimaryColor">#7777CC</Color>
+    <Color x:Key="SecondaryColor">#7777CC</Color>-->
+
+    <Color x:Key="DarkBackground">#282923</Color>
+    <Color x:Key="GreyBackground">#42433E</Color>
+    <Color x:Key="LightGreyBackground">#6D6E6A</Color>
+
+    <Color x:Key="AccentColor">#00E000</Color>
+    <Color x:Key="OnDarkColor">#FFFFFF</Color>
+
+    <Color x:Key="PrimaryColor">Black</Color>
+    <Color x:Key="SecondaryColor">Black</Color>
+
+    <Color x:Key="OnPrimaryColor">#000000</Color>
+    <Color x:Key="OnSecondaryColor">#000000</Color>
+
+    <Color x:Key="OnSurfaceColor">#FFFFFF</Color>
+
+    <Color x:Key="NavigationBarColor">#212121</Color>
+    <Color x:Key="BarTextColor">#FFFFFF</Color>
+
+    <!--<Color x:Key="TextPrimaryColor">#FFFFFF</Color>-->
+
+    <Color x:Key="TextPrimaryColor">#000000</Color>
+
+    <Color x:Key="TextWhitePrimaryColor">#FFFFFF</Color>
+    <Color x:Key="TextSecondaryColor">#C0C0C0</Color>
+    <Color x:Key="TextTernaryColor">#A0A0A0</Color>
+
+</ResourceDictionary>
