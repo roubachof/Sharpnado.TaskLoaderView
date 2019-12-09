@@ -14,6 +14,8 @@
         <Setter Property="FontFamily" Value="{StaticResource FontKarmatic}" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
+        <Setter Property="MaxLines" Value="2" />
+        <Setter Property="LineBreakMode" Value="TailTruncation"/>
     </Style>
     <Style x:Key="GameCompany"
            BasedOn="{StaticResource TextBody}"

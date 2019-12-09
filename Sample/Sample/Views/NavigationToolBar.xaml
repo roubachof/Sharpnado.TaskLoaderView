@@ -13,7 +13,8 @@
                    TargetType="Label">
 
                 <Setter Property="FontFamily" Value="{StaticResource FontArcadeClassic}" />
-                <Setter Property="Margin" Value="10,-5, 0, 0" />
+                <Setter Property="Margin" Value="10, -5, 0, 0" />
+                <Setter Property="Padding" Value="{StaticResource FontArcadeDefaultPadding}" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="HorizontalOptions" Value="Start" />
             </Style>
@@ -26,7 +27,8 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Image Grid.Column="0"
+            <Image x:Name="BackImage"
+                   Grid.Column="0"
                    Aspect="Fill"
                    Source="{img:ImageResource Sample.Images.close.png}">
                 <Image.GestureRecognizers>
@@ -34,14 +36,15 @@
                 </Image.GestureRecognizers>
             </Image>
 
-            <Image Grid.Column="1"
+            <Image x:Name="BorderImage"
+                   Grid.Column="1"
                    HorizontalOptions="Fill"
                    Aspect="Fill"
                    Source="{img:ImageResource Sample.Images.bar_border.png}" />
 
-            <Label Grid.Column="1"
-                   Style="{StaticResource ToolBarTitle}"
-                   Text="Default Layouts" />
+            <Label x:Name="TitleLabel"
+                   Grid.Column="1"
+                   Style="{StaticResource ToolBarTitle}" />
         </Grid>
     </ContentView.Content>
 </ContentView>

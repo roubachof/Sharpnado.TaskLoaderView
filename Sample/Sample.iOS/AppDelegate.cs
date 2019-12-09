@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+
+using ObjCRuntime;
+
 using UIKit;
+
+using Xamarin.Forms;
 
 namespace Sample.iOS
 {
@@ -25,7 +30,45 @@ namespace Sample.iOS
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
+            Xamarin.Forms.Forms.ViewInitialized += Forms_ViewInitialized;
+
             return base.FinishedLaunching(app, options);
+        }
+
+        private void Forms_ViewInitialized(object sender, Xamarin.Forms.ViewInitializedEventArgs e)
+        {
+            if (e.View is Page)
+            {
+                UpdateStatusBar();
+            }
+        }
+
+        private void UpdateStatusBar()
+        {
+            var statusBarColor = UIColor.Black; // #2254A8
+
+            if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+            {
+                foreach (var window in UIApplication.SharedApplication.Windows)
+                {
+                    const int statusBarTag = 38482;
+
+                    if (window.ViewWithTag(statusBarTag) != null) continue;
+
+                    var statusBar = new UIView(UIApplication.SharedApplication.StatusBarFrame);
+                    statusBar.Tag = 38482;
+                    statusBar.BackgroundColor = statusBarColor;
+                    window.AddSubview(statusBar);
+                }
+            }
+            else
+            {
+                var statusBar = UIApplication.SharedApplication.ValueForKey(new NSString("statusBar")) as UIView;
+                if (statusBar.RespondsToSelector(new Selector("setBackgroundColor:")))
+                {
+                    statusBar.BackgroundColor = statusBarColor;
+                }
+            }
         }
     }
 }

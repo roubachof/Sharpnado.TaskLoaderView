@@ -70,6 +70,29 @@ namespace Sample.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can define your own views:
+        ///* Error view
+        ///* Loading view
+        ///* Empty view
+        ///* Notification error view
+        ///The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custom views very precisely..
+        /// </summary>
+        internal static string CustomLayout_Description {
+            get {
+                return ResourceManager.GetString("CustomLayout_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Custom Views.
+        /// </summary>
+        internal static string CustomLayout_Title {
+            get {
+                return ResourceManager.GetString("CustomLayout_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to `TaskLoaderView` provides defaults layout for all the views matching your task states:
         ///
         ///* Loading
@@ -87,7 +110,7 @@ namespace Sample.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Default layouts.
+        ///   Looks up a localized string similar to Default  Views.
         /// </summary>
         internal static string DefaultLayout_Title {
             get {
@@ -96,7 +119,16 @@ namespace Sample.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;It&apos;s not me, it&apos;s the back office.&quot;.
+        ///   Looks up a localized string similar to Nothing here folks..
+        /// </summary>
+        internal static string Empty_Screen {
+            get {
+                return ResourceManager.GetString("Empty_Screen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;It&apos;s not me, it&apos;s the backend.&quot;.
         /// </summary>
         internal static string Error_Business {
             get {
@@ -137,6 +169,15 @@ namespace Sample.Localization {
         internal static string ErrorEmulator_Title {
             get {
                 return ResourceManager.GetString("ErrorEmulator_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error On Refresh.
+        /// </summary>
+        internal static string ErrorType_ErrorOnRefresh {
+            get {
+                return ResourceManager.GetString("ErrorType_ErrorOnRefresh", resourceCulture);
             }
         }
         

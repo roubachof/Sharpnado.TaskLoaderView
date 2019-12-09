@@ -21,11 +21,11 @@ namespace Sample.Domain
                                             + "sort popularity desc;"
                                             + "where platforms = [{0}, {1}] & id >= {2} & id < {3};" + "limit 20;";
 
-        private readonly IGDBApi _igdbClient;
+        private readonly IGDBRestClient _igdbClient;
 
         public RetroGamingService()
         {
-            _igdbClient = Client.Create("b4f8877672fb840873c1bf1b5fe611fb");
+            _igdbClient = RefitClient.Create("b4f8877672fb840873c1bf1b5fe611fb");
         }
 
         public async Task<List<Game>> GetAtariAndAmigaGames()
@@ -69,15 +69,28 @@ namespace Sample.Domain
 
         private static Game ToDomainEntity(IGDB.Models.Game igdbModel)
         {
-            string coverUrl = ImageHelper.GetImageUrl(imageId: igdbModel.Cover.Value.ImageId, size: ImageSize.CoverBig, retina: true);
+            string coverUrl = "https:" + ImageHelper.GetImageUrl(
+                                  imageId: igdbModel.Cover.Value.ImageId,
+                                  size: ImageSize.CoverBig,
+                                  retina: true);
+
+            var genres = igdbModel.Genres == null
+                             ? new List<Genre>()
+                             : igdbModel.Genres.Values.Select(g => new Genre(g.Id.Value, g.Name))
+                                 .ToList();
+
+            var involvedCompanies = igdbModel.InvolvedCompanies == null
+                                        ? new List<Company>()
+                                        : igdbModel.InvolvedCompanies.Values.Select(
+                                                ic => new Company(ic.Company.Value.Id.Value, ic.Company.Value.Name))
+                                            .ToList();
 
             return new Game(
                 igdbModel.Id.Value,
                 coverUrl,
                 igdbModel.FirstReleaseDate.Value.DateTime,
-                igdbModel.Genres.Values.Select(g => new Genre(g.Id.Value, g.Name)).ToList(),
-                igdbModel.InvolvedCompanies.Values
-                    .Select(ic => new Company(ic.Company.Value.Id.Value, ic.Company.Value.Name)).ToList(),
+                genres,
+                involvedCompanies,
                 igdbModel.Name,
                 igdbModel.Rating);
         }

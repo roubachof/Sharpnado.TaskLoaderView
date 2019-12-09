@@ -6,15 +6,17 @@ using Sample.Localization;
 
 namespace Sample.ViewModels
 {
-    public class ErrorEmulatorVm : Bindable
+    public class ErrorEmulatorViewModel : Bindable
     {
         private readonly ErrorEmulator _errorEmulator;
         private readonly Action _onErrorTypeChanged;
 
         private int _selectedIndex;
 
-        public ErrorEmulatorVm(ErrorEmulator errorEmulator, Action onErrorTypeChanged)
+        public ErrorEmulatorViewModel(ErrorEmulator errorEmulator, Action onErrorTypeChanged)
         {
+            errorEmulator.ErrorType = ErrorType.None;
+
             _errorEmulator = errorEmulator;
             _onErrorTypeChanged = onErrorTypeChanged;
 
@@ -25,6 +27,7 @@ namespace Sample.ViewModels
                 SampleResources.ErrorType_Network,
                 SampleResources.ErrorType_Server,
                 SampleResources.ErrorType_NoData,
+                SampleResources.ErrorType_ErrorOnRefresh,
             };
         }
 
@@ -38,7 +41,11 @@ namespace Sample.ViewModels
                 if (SetAndRaise(ref _selectedIndex, value))
                 {
                     _errorEmulator.ErrorType = (ErrorType)_selectedIndex;
-                    _onErrorTypeChanged();
+
+                    if (_errorEmulator.ErrorType != ErrorType.ErrorOnRefresh)
+                    {
+                        _onErrorTypeChanged();
+                    }
                 }
             }
         }

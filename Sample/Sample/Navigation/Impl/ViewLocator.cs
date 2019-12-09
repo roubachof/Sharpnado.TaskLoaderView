@@ -15,9 +15,10 @@ namespace Sample.Navigation.Impl
 {
     public class ViewLocator : IViewLocator
     {
-        private static readonly Dictionary<string, Type> ViewLocatorDictionary = new Dictionary<string, Type>
+        private static readonly List<(Type ViewModelType, Type ViewType)> ViewLocatorDictionary = new List<(Type, Type)>
             {
-                { nameof(DefaultLayoutViewModel), typeof(DefaultLayoutPage) },
+                (typeof(RetroGamesViewModel), typeof(DefaultViewsPage)),
+                (typeof(RetroGamesViewModel), typeof(UserViewsPage)),
             };
 
         public IBindablePage GetViewFor<TViewModel>()
@@ -25,17 +26,17 @@ namespace Sample.Navigation.Impl
         {
             var viewModel = DependencyContainer.Instance.GetInstance<TViewModel>();
             var view =
-                (IBindablePage)DependencyContainer.Instance.GetInstance(ViewLocatorDictionary[typeof(TViewModel).Name]);
+                (IBindablePage)DependencyContainer.Instance.GetInstance(FindViewByViewModel(typeof(TViewModel)));
             view.BindingContext = viewModel;
             return view;
         }
 
-        public IBindablePage GetViewFor<TViewModel>(TViewModel viewModel, NavigationTransition transition)
-            where TViewModel : ANavigableViewModel
+        public IBindablePage GetView<TView>()
+            where TView : class, IBindablePage
         {
             var view =
-                (IBindablePage)DependencyContainer.Instance.GetInstance(
-                    ViewLocatorDictionary[$"{viewModel.GetType().Name}+{transition}"]);
+                (IBindablePage)DependencyContainer.Instance.GetInstance(typeof(TView));
+            var viewModel = DependencyContainer.Instance.GetInstance(FindViewModelByView(typeof(TView)));
             view.BindingContext = viewModel;
             return view;
         }
@@ -51,25 +52,33 @@ namespace Sample.Navigation.Impl
         public Type GetViewTypeFor<TViewModel>()
             where TViewModel : ANavigableViewModel
         {
-            return ViewLocatorDictionary[typeof(TViewModel).Name];
+            return FindViewByViewModel(typeof(TViewModel));
         }
 
-        /// <summary>
-        /// Gets the view type matching the given view model and transition.
-        /// </summary>
-        /// <param name="viewModel">
-        /// </param>
-        /// <param name="transition">
-        /// </param>
-        /// <typeparam name="TViewModel">
-        /// The view model type.
-        /// </typeparam>
-        /// <returns>
-        /// </returns>
-        public Type GetViewTypeFor<TViewModel>(TViewModel viewModel, NavigationTransition transition)
-            where TViewModel : ANavigableViewModel
+        private static Type FindViewModelByView(Type viewType)
         {
-            return ViewLocatorDictionary[$"{viewModel.GetType().Name}+{transition}"];
+            foreach (var pair in ViewLocatorDictionary)
+            {
+                if (pair.ViewType == viewType)
+                {
+                    return pair.ViewModelType;
+                }
+            }
+
+            return null;
+        }
+
+        private static Type FindViewByViewModel(Type viewModelType)
+        {
+            foreach (var pair in ViewLocatorDictionary)
+            {
+                if (pair.ViewModelType == viewModelType)
+                {
+                    return pair.ViewType;
+                }
+            }
+
+            return null;
         }
     }
 }

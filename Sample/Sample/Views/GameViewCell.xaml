@@ -11,21 +11,23 @@
     </d:ViewCell.BindingContext>
     <ViewCell.View>
         <Grid>
-            <Frame Margin="{StaticResource ThicknessLarge}"
-                   BackgroundColor="{StaticResource DarkElevation2dp}"
+            <Frame Margin="15,10,15,10"
+                   BackgroundColor="{StaticResource GreyBackground}"
                    CornerRadius="5"
-                   TranslationY="3" />
-            <Frame Margin="{StaticResource ThicknessLarge}"
+                   HasShadow="False"
+                   TranslationY="2" />
+            <Frame Margin="15,10,15,10"
                    Padding="0"
                    BackgroundColor="{DynamicResource CellBackgroundColor}"
                    CornerRadius="5"
+                   HasShadow="False"
                    IsClippedToBounds="True">
-                <Grid ColumnSpacing="{StaticResource SpacingMedium}">
+                <Grid Padding="0,0,10,0" ColumnSpacing="{StaticResource SpacingMedium}">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="20" />
                         <RowDefinition Height="40" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="30" />
                         <RowDefinition Height="10" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>

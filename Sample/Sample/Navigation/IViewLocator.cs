@@ -30,29 +30,8 @@ namespace Sample.Navigation
         IBindablePage GetViewFor<TViewModel>()
             where TViewModel : ANavigableViewModel;
 
-        /// <summary>
-        /// Builds the view matching the given [view model type + transition].
-        /// Binds the view model instance to the created view.
-        /// </summary>
-        /// <example>
-        /// FullAutoPatientAssayScreenVm + NavigationTransition.ToResult =&gt; creates a PatientAssayResultView
-        /// </example>
-        /// <typeparam name="TViewModel">
-        /// The view model type.
-        /// </typeparam>
-        /// <param name="viewModel">
-        /// The view model to be bound to the created view.
-        /// </param>
-        /// <param name="transition">
-        /// The transition leading to the view.
-        /// </param>
-        /// <remarks>
-        /// The service regards the view model as already loaded.
-        /// </remarks>
-        /// <returns>
-        /// </returns>
-        IBindablePage GetViewFor<TViewModel>(TViewModel viewModel, NavigationTransition transition)
-            where TViewModel : ANavigableViewModel;
+        IBindablePage GetView<TView>()
+            where TView : class, IBindablePage;
 
         /// <summary>
         /// Gets the view type matching the given view model.
@@ -63,21 +42,6 @@ namespace Sample.Navigation
         /// <returns>
         /// </returns>
         Type GetViewTypeFor<TViewModel>()
-            where TViewModel : ANavigableViewModel;
-
-        /// <summary>
-        /// Gets the view type matching the given view model and transition.
-        /// </summary>
-        /// <param name="viewModel">
-        /// </param>
-        /// <param name="transition">
-        /// </param>
-        /// <typeparam name="TViewModel">
-        /// The view model type.
-        /// </typeparam>
-        /// <returns>
-        /// </returns>
-        Type GetViewTypeFor<TViewModel>(TViewModel viewModel, NavigationTransition transition)
             where TViewModel : ANavigableViewModel;
     }
 }

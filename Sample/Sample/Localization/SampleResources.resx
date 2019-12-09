@@ -139,7 +139,7 @@
     <value>Unknown Error thrown</value>
   </data>
   <data name="Error_Business" xml:space="preserve">
-    <value>"It's not me, it's the back office."</value>
+    <value>"It's not me, it's the backend."</value>
     <comment>server.png</comment>
   </data>
   <data name="Error_Network" xml:space="preserve">
@@ -162,12 +162,29 @@ Those layouts are stylable, you can provide converters for error image and messa
 Set the loader color, the retry button text, the font family used....</value>
   </data>
   <data name="DefaultLayout_Title" xml:space="preserve">
-    <value>Default layouts</value>
+    <value>Default  Views</value>
   </data>
   <data name="Title_TaskLoaderView" xml:space="preserve">
     <value>Sharpnado's TaskLoaderView</value>
   </data>
   <data name="ErrorEmulator_Title" xml:space="preserve">
     <value>Error Emulation</value>
+  </data>
+  <data name="CustomLayout_Description" xml:space="preserve">
+    <value>You can define your own views:
+* Error view
+* Loading view
+* Empty view
+* Notification error view
+The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custom views very precisely.</value>
+  </data>
+  <data name="CustomLayout_Title" xml:space="preserve">
+    <value>User Custom Views</value>
+  </data>
+  <data name="Empty_Screen" xml:space="preserve">
+    <value>Nothing here folks.</value>
+  </data>
+  <data name="ErrorType_ErrorOnRefresh" xml:space="preserve">
+    <value>Error On Refresh</value>
   </data>
 </root>

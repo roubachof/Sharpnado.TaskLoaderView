@@ -7,6 +7,7 @@
         Network = 2,
         Server = 3,
         NoData = 4,
+        ErrorOnRefresh = 5,
     }
 
     public class ErrorEmulator

@@ -3,7 +3,6 @@ using System.ComponentModel;
 
 using Sample.Infrastructure;
 using Sample.Navigation;
-using Sample.ViewModels;
 
 using Sharpnado.Tasks;
 
@@ -26,7 +25,12 @@ namespace Sample.Views
 
         private void ButtonDefaultLayoutOnClicked(object sender, EventArgs e)
         {
-            TaskMonitor.Create(_navigationService.NavigateToAsync<DefaultLayoutViewModel>());
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsPage>());
+        }
+
+        private void ButtonCustomLayoutOnClicked(object sender, EventArgs e)
+        {
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<UserViewsPage>());
         }
     }
 }

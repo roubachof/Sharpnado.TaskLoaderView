@@ -15,11 +15,16 @@
     <!--<Color x:Key="PrimaryColor">#7777CC</Color>
     <Color x:Key="SecondaryColor">#7777CC</Color>-->
 
-    <Color x:Key="DarkBackground">#282923</Color>
+    <Color x:Key="TopElementBackground">#323232</Color>
+    <Color x:Key="DarkBackgroundColor">#303030</Color>
+
     <Color x:Key="GreyBackground">#42433E</Color>
     <Color x:Key="LightGreyBackground">#6D6E6A</Color>
+    <Color x:Key="LighterGreyBackground">#A0A0A0</Color>
+    <Color x:Key="LightestGreyBackground">#C0C0C0</Color>
 
     <Color x:Key="AccentColor">#00E000</Color>
+    <Color x:Key="AccentSoftColor">#5BB974</Color>
     <Color x:Key="OnDarkColor">#FFFFFF</Color>
 
     <Color x:Key="PrimaryColor">Black</Color>
@@ -36,6 +41,7 @@
     <!--<Color x:Key="TextPrimaryColor">#FFFFFF</Color>-->
 
     <Color x:Key="TextPrimaryColor">#000000</Color>
+    <Color x:Key="TextPrimaryMaterialColor">#B0000000</Color>
 
     <Color x:Key="TextWhitePrimaryColor">#FFFFFF</Color>
     <Color x:Key="TextSecondaryColor">#C0C0C0</Color>

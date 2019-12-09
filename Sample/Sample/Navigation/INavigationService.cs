@@ -33,31 +33,15 @@ namespace Sample.Navigation
         /// </param>
         /// <returns>
         /// </returns>
-        Task NavigateToAsync<TViewModel>(object parameter = null, bool modalNavigation = false, bool clearStack = false, bool animated = true)
+        Task NavigateToViewModelAsync<TViewModel>(object parameter = null, bool modalNavigation = false, bool clearStack = false, bool animated = true)
             where TViewModel : ANavigableViewModel;
 
-        /// <summary>
-        /// Navigates to the bindable page matching the given navigable view model type + the given transition.
-        /// </summary>
-        /// <example>
-        /// FullAutoPatientAssayScreenVm + NavigationTransition.ToResult =&gt; navigates to a PatientAssayResultView
-        /// </example>
-        /// <typeparam name="TViewModel">
-        /// The view model type.
-        /// </typeparam>
-        /// <param name="viewModel">
-        /// The view model instance.
-        /// </param>
-        /// <param name="transition">
-        /// The transition to be made.
-        /// </param>
-        /// <param name="rootChild">
-        /// Navigates and makes the new view a child from the root page.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        Task NavigateToAsync<TViewModel>(TViewModel viewModel, NavigationTransition transition, bool rootChild = false)
-            where TViewModel : ANavigableViewModel;
+        Task NavigateToViewAsync<TView>(
+            object parameter = null,
+            bool modalNavigation = false,
+            bool clearStack = false,
+            bool animated = true)
+            where TView : class, IBindablePage;
 
         /// <summary>
         /// Navigation from menu means: reset the stack, and then add the new page.

@@ -65,7 +65,7 @@
                      FontFamily="{StaticResource FontAwesome}"
                      Glyph="{StaticResource StringBackIcon}"
                      Size="{StaticResource SizeTabIcon}"
-                     Color="{StaticResource ColorTabIcon}" />
+                     Color="{StaticResource TosWindows}" />
 
     <FontImageSource x:Key="IconTabNews"
                      FontFamily="{StaticResource FontAwesome}"

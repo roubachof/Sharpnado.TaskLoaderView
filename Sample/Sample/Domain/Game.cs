@@ -54,11 +54,11 @@ namespace Sample.Domain
 
         public List<Genre> Genres { get; }
 
-        public string MajorGenre => Genres[0].Name;
+        public string MajorGenre => Genres.Count == 0 ? "Unknown Genre" : Genres[0].Name;
 
         public List<Company> Companies { get; }
 
-        public string MajorCompany => Companies[0].Name;
+        public string MajorCompany => Companies.Count == 0 ? "Unknown Company" : Companies[0].Name;
 
         public double? Rating { get; }
 

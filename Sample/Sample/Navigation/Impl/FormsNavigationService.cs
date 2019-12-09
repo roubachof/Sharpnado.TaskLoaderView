@@ -58,7 +58,7 @@ namespace Sample.Navigation.Impl
         /// </summary>
         private INavigation FormsNavigation => _lazyFormsNavigation.Value.Navigation;
 
-        public async Task NavigateToAsync<TViewModel>(
+        public async Task NavigateToViewModelAsync<TViewModel>(
             object parameter = null,
             bool modalNavigation = false,
             bool clearStack = false,
@@ -98,26 +98,44 @@ namespace Sample.Navigation.Impl
             ((ANavigableViewModel)view.BindingContext).Load(parameter);
         }
 
-        public async Task NavigateToAsync<TViewModel>(
-            TViewModel viewModel,
-            NavigationTransition transition,
-            bool rootChild = false)
-            where TViewModel : ANavigableViewModel
+        public async Task NavigateToViewAsync<TView>(
+            object parameter = null,
+            bool modalNavigation = false,
+            bool clearStack = false,
+            bool animated = true)
+            where TView : class, IBindablePage
         {
-            var view = _viewLocator.GetViewFor(viewModel, transition);
-            await NavigationPage.PushAsync((Page)view, true);
-
-            if (rootChild)
+            if (clearStack)
             {
-                foreach (
-                    var page in
-                    FormsNavigation
-                        .NavigationStack.Take(FormsNavigation.NavigationStack.Count - 1)
-                        .Skip(1))
+                var viewType = typeof(TView);
+                var rootPage = FormsNavigation.NavigationStack.First();
+                if (viewType != rootPage.GetType())
                 {
-                    FormsNavigation.RemovePage(page);
+                    var newRootView = (Page)_viewLocator.GetView<TView>();
+
+                    // Make the new view the root of our navigation stack
+                    FormsNavigation.InsertPageBefore(newRootView, rootPage);
+                    rootPage = newRootView;
                 }
+
+                // Then we want to go back to root page and clear the stack
+                await NavigationPage.PopToRootAsync(animated);
+                ((ANavigableViewModel)rootPage.BindingContext).Load(parameter);
+                return;
             }
+
+            var view = _viewLocator.GetView<TView>();
+
+            if (modalNavigation)
+            {
+                await FormsNavigation.PushModalAsync((Page)view, animated);
+            }
+            else
+            {
+                await NavigationPage.PushAsync((Page)view, animated);
+            }
+
+            ((ANavigableViewModel)view.BindingContext).Load(parameter);
         }
 
         public async Task NavigateFromMenuToAsync<TViewModel>()
