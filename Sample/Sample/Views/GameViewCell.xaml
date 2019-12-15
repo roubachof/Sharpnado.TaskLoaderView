@@ -39,7 +39,7 @@
                     <Image Grid.Row="0"
                            Grid.RowSpan="5"
                            Grid.Column="0"
-                           Aspect="Fill"
+                           Aspect="AspectFill"
                            Source="{Binding CoverUrl}" />
 
                     <Label Grid.Row="0"

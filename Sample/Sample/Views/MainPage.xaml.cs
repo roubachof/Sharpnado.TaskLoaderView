@@ -1,12 +1,16 @@
 ﻿using System;
 using System.ComponentModel;
 
+using Sample.Domain;
 using Sample.Infrastructure;
 using Sample.Navigation;
+using Sample.ViewModels;
 
 using Sharpnado.Tasks;
 
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Sample.Views
 {
@@ -17,20 +21,41 @@ namespace Sample.Views
     {
         private readonly INavigationService _navigationService;
 
+        private readonly IRetroGamingService _retroGamingService;
+
         public MainPage()
         {
             InitializeComponent();
             _navigationService = DependencyContainer.Instance.GetInstance<INavigationService>();
+            _retroGamingService = DependencyContainer.Instance.GetInstance<IRetroGamingService>();
+
+            LoadOnDemandCard.BindingContext = new LoadOnDemandViewModel(_retroGamingService);
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            var safeInsets = On<iOS>().SafeAreaInsets();
+            safeInsets.Bottom = 0;
+            Padding = safeInsets;
+
+            ResourcesHelper.SetSublimeGameMode();
         }
 
         private void ButtonDefaultLayoutOnClicked(object sender, EventArgs e)
         {
-            TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsPage>());
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsPage>(GamePlatform.Console));
         }
 
         private void ButtonCustomLayoutOnClicked(object sender, EventArgs e)
         {
-            TaskMonitor.Create(_navigationService.NavigateToViewAsync<UserViewsPage>());
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<UserViewsPage>(GamePlatform.Computer));
+        }
+
+        private void SkeletonLoadingOnClicked(object sender, EventArgs e)
+        {
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsSkeletonPage>(GamePlatform.Computer));
         }
     }
 }

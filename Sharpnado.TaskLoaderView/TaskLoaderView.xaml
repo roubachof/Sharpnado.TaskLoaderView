@@ -7,8 +7,8 @@
              mc:Ignorable="d"
              xmlns:behaviors="clr-namespace:Sharpnado.Presentation.Forms.Behaviors;assembly=Sharpnado.TaskLoaderView"
              xmlns:col="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
-             xmlns:viewModels="clr-namespace:Sharpnado.Presentation.Forms.ViewModels;assembly=Sharpnado.TaskLoaderView"
-             d:DataContext="{d:DesignInstance viewModels:IViewModelLoader}">
+             xmlns:viewModels="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
+             d:DataContext="{d:DesignInstance viewModels:ITaskLoaderNotifier}">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -49,17 +49,20 @@
                          AbsoluteLayout.LayoutFlags="All"
                          AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                          HorizontalOptions="FillAndExpand"
-                         VerticalOptions="FillAndExpand" />
+                         VerticalOptions="FillAndExpand"
+                         IsVisible="False" />
             <ActivityIndicator x:Name="DefaultLoader"
                                AbsoluteLayout.LayoutFlags="All"
                                AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                                HorizontalOptions="Center"
-                               VerticalOptions="Center" />
+                               VerticalOptions="Center"
+                               IsRunning="False" />
             <StackLayout x:Name="DefaultErrorView"
                          AbsoluteLayout.LayoutFlags="All"
                          AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
+                         IsVisible="False"
                          Orientation="Vertical">
                 <Image x:Name="ErrorViewImage"
                        WidthRequest="80"
@@ -81,6 +84,7 @@
                          AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                          HorizontalOptions="Center"
                          VerticalOptions="Center"
+                         IsVisible="False"
                          Orientation="Vertical">
                 <Image x:Name="EmptyStateImage"
                        WidthRequest="80"
@@ -100,7 +104,8 @@
                    Style="{StaticResource ViewSnackbar}"
                    Margin="15"
                    Padding="15"
-                   CornerRadius="5">
+                   CornerRadius="5"
+                   IsVisible="False">
                 <Frame.Behaviors>
                     <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
                 </Frame.Behaviors>

@@ -8,6 +8,9 @@
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:local="clr-namespace:Sample.Infrastructure;assembly=Sample"
+             xmlns:sharpnado="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
+             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource TosBackground}"
              NavigationPage.HasNavigationBar="False">
@@ -22,7 +25,7 @@
             <Style x:Key="CardStyle" TargetType="Frame">
                 <Setter Property="Margin" Value="15, 8, 15, 8" />
                 <Setter Property="Padding" Value="{StaticResource ThicknessLarge}" />
-                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="CornerRadius" Value="10" />
                 <Setter Property="HasShadow" Value="False" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TosWindows}" />
             </Style>
@@ -31,6 +34,16 @@
                    TargetType="Label">
                 <Setter Property="Margin" Value="0,-5, 0, 0" />
                 <Setter Property="VerticalOptions" Value="Start" />
+            </Style>
+            <Style x:Key="ButtonTextIt" TargetType="Button">
+                <Setter Property="Padding" Value="5,2,5,5" />
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="BorderColor" Value="Black" />
+                <Setter Property="BorderWidth" Value="3" />
+                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="Text" Value="{loc:Translate Button_TestIt}" />
+                <Setter Property="TextColor" Value="Black" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -95,15 +108,16 @@
         <ScrollView x:Name="ScrollView" Grid.Row="1">
             <StackLayout Orientation="Vertical">
                 <Grid>
-                    <Frame Margin="15,15,15,8"
+                    <Frame Style="{StaticResource CardStyle}"
+                           Margin="15,15,15,8"
                            BackgroundColor="Black"
-                           CornerRadius="5"
-                           HasShadow="False"
                            TranslationY="2" />
                     <Frame Style="{StaticResource CardStyle}" Margin="15,15,15,8">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="250" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
@@ -125,32 +139,39 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="{StaticResource FontAtariSt}"
-                                   Text="{loc:Translate DefaultLayout_Description}" />
+                                   Text="{loc:Translate DefaultLayout_Description_1}" />
 
-                            <Button Grid.Row="2"
+                            <Image Grid.Row="2"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Margin="-15,0"
+                                   Aspect="Fill"
+                                   Source="{local:ImageResource Sample.Images.default_views.png}" />
+
+                            <Label Grid.Row="3"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate DefaultLayout_Description_2}" />
+
+                            <Button Grid.Row="4"
                                     Grid.Column="1"
-                                    Padding="5,2,5,5"
-                                    BackgroundColor="White"
-                                    BorderColor="Black"
-                                    BorderWidth="5"
-                                    Clicked="ButtonDefaultLayoutOnClicked"
-                                    CornerRadius="5"
-                                    FontSize="24"
-                                    Text="{loc:Translate Button_TestIt}"
-                                    TextColor="Black" />
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Clicked="ButtonDefaultLayoutOnClicked" />
                         </Grid>
                     </Frame>
                 </Grid>
                 <Grid>
-                    <Frame Margin="15,8,15,8"
+                    <Frame Style="{StaticResource CardStyle}"
                            BackgroundColor="Black"
-                           CornerRadius="5"
-                           HasShadow="False"
                            TranslationY="2" />
                     <Frame Style="{StaticResource CardStyle}">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="250" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
@@ -172,19 +193,187 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="{StaticResource FontAtariSt}"
-                                   Text="{loc:Translate CustomLayout_Description}" />
+                                   Text="{loc:Translate CustomLayout_Description_1}" />
 
-                            <Button Grid.Row="2"
+                            <Image Grid.Row="2"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Margin="-15,0"
+                                   Aspect="Fill"
+                                   Source="{local:ImageResource Sample.Images.user_views.png}" />
+
+                            <Label Grid.Row="3"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate CustomLayout_Description_2}" />
+
+                            <Button Grid.Row="4"
                                     Grid.Column="1"
-                                    Padding="5,2,5,5"
-                                    BackgroundColor="White"
-                                    BorderColor="Black"
-                                    BorderWidth="5"
-                                    Clicked="ButtonCustomLayoutOnClicked"
-                                    CornerRadius="5"
-                                    FontSize="24"
-                                    Text="{loc:Translate Button_TestIt}"
-                                    TextColor="Black" />
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Clicked="ButtonCustomLayoutOnClicked" />
+                        </Grid>
+                    </Frame>
+                </Grid>
+                <Grid>
+                    <Frame Style="{StaticResource CardStyle}"
+                           BackgroundColor="Black"
+                           TranslationY="2" />
+                    <Frame Style="{StaticResource CardStyle}">
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="250" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="120" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CardTitle}"
+                                   FontFamily="{StaticResource FontArcadeClassic}"
+                                   FontSize="36"
+                                   Text="{loc:Translate SkeletonLoading_Title}" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate SkeletonLoading_Description_1}" />
+
+                            <Image Grid.Row="2"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Margin="-15,0"
+                                   Aspect="Fill"
+                                   Source="{local:ImageResource Sample.Images.skeleton_views.png}" />
+
+                            <Label Grid.Row="3"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate SkeletonLoading_Description_2}" />
+
+                            <Button Grid.Row="4"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Clicked="SkeletonLoadingOnClicked" />
+                        </Grid>
+                    </Frame>
+                </Grid>
+                <Grid>
+                    <Frame Style="{StaticResource CardStyle}"
+                           BackgroundColor="Black"
+                           TranslationY="2" />
+                    <Frame x:Name="LoadOnDemandCard"
+                           Style="{StaticResource CardStyle}"
+                           x:DataType="viewModels:LoadOnDemandViewModel">
+                        <d:Frame.BindingContext>
+                            <viewModels:LoadOnDemandViewModel />
+                        </d:Frame.BindingContext>
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="255" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="30" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Style="{StaticResource CardTitle}"
+                                   FontFamily="{StaticResource FontArcadeClassic}"
+                                   FontSize="36"
+                                   Text="{loc:Translate NotStartedView_Title}" />
+
+                            <Button Grid.Row="0"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Command="{Binding RandomGameLoader.ResetCommand}"
+                                    Text="R" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate NotStartedView_Description}" />
+
+                            <sharpnado:TaskLoaderView Grid.Row="2"
+                                                      Grid.Column="0"
+                                                      Grid.ColumnSpan="2"
+                                                      AccentColor="{StaticResource AccentColor}"
+                                                      ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
+                                                      ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
+                                                      FontFamily="{StaticResource FontAtariSt}"
+                                                      TaskLoaderNotifier="{Binding RandomGameLoader}"
+                                                      TaskLoaderType="ResultAsLoadingView"
+                                                      TextColor="Black">
+                                <sharpnado:TaskLoaderView.NotStartedView>
+                                    <Button AbsoluteLayout.LayoutFlags="PositionProportional"
+                                            AbsoluteLayout.LayoutBounds="0.5, 0.5, 120, 50"
+                                            Style="{StaticResource ButtonTextIt}"
+                                            Command="{Binding LoadRandomGameCommand}" />
+                                </sharpnado:TaskLoaderView.NotStartedView>
+
+                                <Frame Style="{StaticResource CardStyle}"
+                                       Margin="-15,0,-15,-15"
+                                       Padding="0"
+                                       skeleton:Skeleton.Animation="Beat"
+                                       skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                                       skeleton:Skeleton.IsParent="True"
+                                       BackgroundColor="{DynamicResource CellBackgroundColor}"
+                                       CornerRadius="10"
+                                       IsClippedToBounds="True">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="160" />
+                                            <RowDefinition Height="40" />
+                                            <RowDefinition Height="20" />
+                                            <RowDefinition Height="20" />
+                                        </Grid.RowDefinitions>
+                                        <Image Grid.Row="0"
+                                               skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                               skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                                               Aspect="AspectFill"
+                                               Source="{Binding RandomGameLoader.Result.ScreenshotUrl}" />
+
+                                        <Label Grid.Row="1"
+                                               Style="{StaticResource GameName}"
+                                               Margin="15,0"
+                                               skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                               skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                                               Text="{Binding RandomGameLoader.Result.Name}" />
+
+                                        <Label Grid.Row="2"
+                                               Style="{StaticResource GameCompany}"
+                                               Margin="15,0"
+                                               skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                               skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                                               Text="{Binding RandomGameLoader.Result.MajorCompany}" />
+
+                                        <Label Grid.Row="3"
+                                               Style="{StaticResource GameGenre}"
+                                               Margin="15,0"
+                                               Text="{Binding RandomGameLoader.Result.MajorGenre}" />
+                                    </Grid>
+                                </Frame>
+
+                            </sharpnado:TaskLoaderView>
+
+
                         </Grid>
                     </Frame>
                 </Grid>

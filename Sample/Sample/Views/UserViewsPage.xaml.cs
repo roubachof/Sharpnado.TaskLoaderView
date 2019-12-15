@@ -19,14 +19,15 @@ namespace Sample.Views
         {
             InitializeComponent();
 
-            ResourcesHelper.SetTosCellMode();
-
             BusyImage.PropertyChanged += BusyImagePropertyChanged;
+            ErrorNotificationView.PropertyChanged += ErrorNotificationViewPropertyChanged;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            ResourcesHelper.SetTosCellMode();
 
             var safeInsets = On<iOS>().SafeAreaInsets();
             safeInsets.Bottom = 0;
@@ -49,17 +50,33 @@ namespace Sample.Views
             }
         }
 
+        private void ErrorNotificationViewPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(IsVisible))
+            {
+                if (ErrorNotificationView.IsVisible)
+                {
+                    TaskMonitor.Create(ErrorNotificationView.ScaleTo(1, 500));
+                }
+                else
+                {
+                    ErrorNotificationView.Scale = 0;
+                }
+            }
+        }
+
         private async Task StartBeeAnimationAsync(CancellationToken cancellationToken)
         {
-            const double deltaMove = 15;
+            const double deltaYMove = 15;
+            const double deltaXMove = 30;
 
+            await BusyImage.TranslateTo(deltaXMove, -deltaYMove, 125);
             while (!cancellationToken.IsCancellationRequested)
             {
-                await BusyImage.TranslateTo(deltaMove, -deltaMove, 125);
-                await BusyImage.TranslateTo(deltaMove, 2 * deltaMove, 200);
-                await BusyImage.TranslateTo(2 * -deltaMove, 2 * -deltaMove);
-                await BusyImage.TranslateTo(2 * -deltaMove, 2 * deltaMove, 200);
-                await BusyImage.TranslateTo(0, 0, 100);
+                await BusyImage.TranslateTo(deltaXMove, 2 * deltaYMove, 200);
+                await BusyImage.TranslateTo(2 * -deltaXMove, 2 * -deltaYMove);
+                await BusyImage.TranslateTo(2 * -deltaXMove, 2 * deltaYMove, 200);
+                await BusyImage.TranslateTo(deltaXMove, -deltaYMove);
             }
         }
     }

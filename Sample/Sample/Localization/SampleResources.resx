@@ -150,15 +150,11 @@
     <value>"An ill wind is blowing..."</value>
     <comment>richmond.jpg</comment>
   </data>
-  <data name="DefaultLayout_Description" xml:space="preserve">
-    <value>`TaskLoaderView` provides defaults layout for all the views matching your task states:
-
-* Loading
-* Error
-* Success
-* Notification
-
-Those layouts are stylable, you can provide converters for error image and message.
+  <data name="DefaultLayout_Description_1" xml:space="preserve">
+    <value>`TaskLoaderView` provides defaults layout for all the views matching your task states (Loading/Error/Success/Notification).</value>
+  </data>
+  <data name="DefaultLayout_Description_2" xml:space="preserve">
+    <value>Those layouts are stylable, you can provide converters for error image and message.
 Set the loader color, the retry button text, the font family used....</value>
   </data>
   <data name="DefaultLayout_Title" xml:space="preserve">
@@ -170,13 +166,11 @@ Set the loader color, the retry button text, the font family used....</value>
   <data name="ErrorEmulator_Title" xml:space="preserve">
     <value>Error Emulation</value>
   </data>
-  <data name="CustomLayout_Description" xml:space="preserve">
-    <value>You can define your own views:
-* Error view
-* Loading view
-* Empty view
-* Notification error view
-The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custom views very precisely.</value>
+  <data name="CustomLayout_Description_1" xml:space="preserve">
+    <value>You can define your own views for each task state.</value>
+  </data>
+  <data name="CustomLayout_Description_2" xml:space="preserve">
+    <value>The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custom views very precisely.</value>
   </data>
   <data name="CustomLayout_Title" xml:space="preserve">
     <value>User Custom Views</value>
@@ -186,5 +180,22 @@ The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custo
   </data>
   <data name="ErrorType_ErrorOnRefresh" xml:space="preserve">
     <value>Error On Refresh</value>
+  </data>
+  <data name="NotStartedView_Description" xml:space="preserve">
+    <value>Create a custom user NotStartedView to display a view before the Task is ran.
+You can for example use it to start your task on demand.
+</value>
+  </data>
+  <data name="NotStartedView_Title" xml:space="preserve">
+    <value>Not Started View</value>
+  </data>
+  <data name="SkeletonLoading_Description_1" xml:space="preserve">
+    <value>Supports the excellent Xamarin.Forms.Skeleton loading package by Horus.</value>
+  </data>
+  <data name="SkeletonLoading_Description_2" xml:space="preserve">
+    <value>Find an easier implementation of the pattern with static dummy entities.</value>
+  </data>
+  <data name="SkeletonLoading_Title" xml:space="preserve">
+    <value>Skeleton loading</value>
   </data>
 </root>

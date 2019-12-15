@@ -1,6 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
-using Sharpnado.Presentation.Forms.ViewModels;
 using Sharpnado.TaskLoaderView;
 
 using Xamarin.Forms;
@@ -8,13 +11,40 @@ using Xamarin.Forms.Xaml;
 
 namespace Sharpnado.Presentation.Forms.CustomViews
 {
+    public enum TaskStartMode
+    {
+        Manual = 0,
+        Auto,
+    }
+
+    public enum TaskLoaderType
+    {
+        Normal = 0,
+        ResultAsLoadingView,
+    }
+
     [ContentProperty("Child")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TaskLoaderView : ContentView
     {
-        public static readonly BindableProperty ViewModelLoaderProperty = BindableProperty.Create(
-            nameof(ViewModelLoader),
-            typeof(IViewModelLoader),
+        public static readonly BindableProperty TaskSourceProperty = BindableProperty.Create(
+            nameof(TaskSource),
+            typeof(Func<Task>),
+            typeof(TaskLoaderView));
+
+        public static readonly BindableProperty TaskLoaderNotifierProperty = BindableProperty.Create(
+            nameof(TaskLoaderNotifier),
+            typeof(ITaskLoaderNotifier),
+            typeof(TaskLoaderView));
+
+        public static readonly BindableProperty TaskStartModeProperty = BindableProperty.Create(
+            nameof(TaskStartMode),
+            typeof(TaskStartMode),
+            typeof(TaskLoaderView));
+
+        public static readonly BindableProperty TaskLoaderTypeProperty = BindableProperty.Create(
+            nameof(TaskLoaderType),
+            typeof(TaskLoaderType),
             typeof(TaskLoaderView));
 
         public static readonly BindableProperty FontFamilyProperty = BindableProperty.Create(
@@ -62,12 +92,13 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             nameof(EmptyStateMessage),
             typeof(string),
             typeof(TaskLoaderView),
-            "No results yet.");
+            defaultValue: DefaultEmptyStateMessage);
 
         public static readonly BindableProperty ErrorMessageConverterProperty = BindableProperty.Create(
             nameof(ErrorMessageConverter),
             typeof(IValueConverter),
-            typeof(TaskLoaderView));
+            typeof(TaskLoaderView),
+            defaultValue: new DefaultErrorMessageConverter());
 
         public static readonly BindableProperty ErrorImageConverterProperty = BindableProperty.Create(
             nameof(ErrorImageConverter),
@@ -89,14 +120,45 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             typeof(View),
             typeof(TaskLoaderView));
 
+        public static readonly BindableProperty NotStartedViewProperty = BindableProperty.Create(
+            nameof(NotStartedView),
+            typeof(View),
+            typeof(TaskLoaderView));
+
         public static readonly BindableProperty ErrorNotificationViewProperty = BindableProperty.Create(
             nameof(ErrorNotificationView),
             typeof(View),
             typeof(TaskLoaderView));
 
+        private const string DefaultEmptyStateMessage = @"No result yet ¯\_(ツ)_/¯";
+
         public TaskLoaderView()
         {
             InitializeComponent();
+
+            StartTaskCommand = new Command(
+                () =>
+                    {
+                        if (TaskLoaderNotifier == null)
+                        {
+                            Trace.WriteLine(
+                                "StartTaskCommand was called but the TaskSource AND the TaskLoaderNotifier property are null");
+                            return;
+                        }
+
+                        TaskLoaderNotifier.Load();
+                    });
+
+            ResetCommand = new Command(
+                () =>
+                    {
+                        foreach (var child in Container.Children)
+                        {
+                            child.IsVisible = NotStartedView == child;
+                        }
+
+                        TaskLoaderNotifier?.Reset();
+                    });
         }
 
         private enum ViewIndex
@@ -109,19 +171,49 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
             Empty = 3,
 
-            Notification = 4,
+            NotStarted = 4,
+
+            Notification = 5,
         }
 
-        public IViewModelLoader ViewModelLoader
+        public ICommand StartTaskCommand { get; }
+
+        public ICommand ResetCommand { get; }
+
+        public Func<Task> TaskSource
         {
-            get => (IViewModelLoader)GetValue(ViewModelLoaderProperty);
-            set => SetValue(ViewModelLoaderProperty, value);
+            get => (Func<Task>)GetValue(TaskSourceProperty);
+            set => SetValue(TaskSourceProperty, value);
+        }
+
+        public ITaskLoaderNotifier TaskLoaderNotifier
+        {
+            get => (ITaskLoaderNotifier)GetValue(TaskLoaderNotifierProperty);
+            set => SetValue(TaskLoaderNotifierProperty, value);
+        }
+
+        public TaskStartMode TaskStartMode
+        {
+            get => (TaskStartMode)GetValue(TaskStartModeProperty);
+            set => SetValue(TaskStartModeProperty, value);
+        }
+
+        public TaskLoaderType TaskLoaderType
+        {
+            get => (TaskLoaderType)GetValue(TaskLoaderTypeProperty);
+            set => SetValue(TaskLoaderTypeProperty, value);
         }
 
         public View ErrorNotificationView
         {
             get => (View)GetValue(ErrorNotificationViewProperty);
             set => SetValue(ErrorNotificationViewProperty, value);
+        }
+
+        public View NotStartedView
+        {
+            get => (View)GetValue(NotStartedViewProperty);
+            set => SetValue(NotStartedViewProperty, value);
         }
 
         public View EmptyView
@@ -222,8 +314,20 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
             switch (propertyName)
             {
-                case nameof(ViewModelLoader):
+                case nameof(TaskSource):
+                    CreateFromTaskSource();
+                    break;
+
+                case nameof(TaskLoaderNotifier):
                     SetBindings();
+                    break;
+
+                case nameof(TaskStartMode):
+                    OnTaskStartModeSet();
+                    break;
+
+                case nameof(TaskLoaderType):
+                    OnTaskLoaderTypeSet();
                     break;
 
                 case nameof(LoadingView):
@@ -236,6 +340,10 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
                 case nameof(EmptyView):
                     UpdateEmptyView();
+                    break;
+
+                case nameof(NotStartedView):
+                    UpdateNotStartedView();
                     break;
 
                 case nameof(ErrorNotificationView):
@@ -273,6 +381,27 @@ namespace Sharpnado.Presentation.Forms.CustomViews
                 case nameof(NotificationTextColor):
                     UpdateNotificationTextColor();
                     break;
+            }
+        }
+
+        private void OnTaskStartModeSet()
+        {
+            if (TaskStartMode == TaskStartMode.Manual)
+            {
+                return;
+            }
+
+            TaskLoaderNotifier?.Load();
+        }
+
+        private void OnTaskLoaderTypeSet()
+        {
+            if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
+            {
+                DefaultLoader.IsVisible = false;
+                ResultView.SetBinding(
+                    ContentView.IsVisibleProperty,
+                    new Binding(nameof(TaskLoaderNotifier.IsRunningOrSuccessfullyCompleted), source: TaskLoaderNotifier));
             }
         }
 
@@ -358,6 +487,24 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             Container.Children.Insert((int)ViewIndex.Empty, EmptyView);
         }
 
+        private void UpdateNotStartedView()
+        {
+            if (NotStartedView == null)
+            {
+                return;
+            }
+
+            var bounds = AbsoluteLayout.GetLayoutBounds(NotStartedView);
+            if (bounds == Rectangle.Zero)
+            {
+                // Apply default bounds
+                AbsoluteLayout.SetLayoutBounds(NotStartedView, new Rectangle(1, 1, 1, 1));
+                AbsoluteLayout.SetLayoutFlags(NotStartedView, AbsoluteLayoutFlags.All);
+            }
+
+            Container.Children.Insert((int)ViewIndex.NotStarted, NotStartedView);
+        }
+
         private void UpdateErrorView()
         {
             if (ErrorView == null)
@@ -409,33 +556,60 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             ErrorNotificationViewLabel.TextColor = NotificationTextColor;
         }
 
+        private void CreateFromTaskSource()
+        {
+            if (TaskSource == null)
+            {
+                return;
+            }
+
+            var taskSourceType = TaskSource.GetType();
+            var taskType = taskSourceType.GenericTypeArguments[0];
+            if (taskType.IsGenericType)
+            {
+                var taskResultType = taskType.GenericTypeArguments[0];
+                var taskLoaderNotifierType = typeof(TaskLoaderNotifier<>).MakeGenericType(taskResultType);
+                TaskLoaderNotifier = (ITaskLoaderNotifier)Activator.CreateInstance(taskLoaderNotifierType, TaskSource);
+                return;
+            }
+
+            TaskLoaderNotifier = new TaskLoaderNotifier(TaskSource);
+        }
+
         private void SetBindings()
         {
-            if (ViewModelLoader == null)
+            if (TaskLoaderNotifier == null)
             {
                 return;
             }
 
             ResultView.SetBinding(
                 ContentView.IsVisibleProperty,
-                new Binding(nameof(ViewModelLoader.ShowResult), source: ViewModelLoader));
+                new Binding(nameof(TaskLoaderNotifier.ShowResult), source: TaskLoaderNotifier));
 
             if (LoadingView != null)
             {
                 LoadingView.SetBinding(
                     IsVisibleProperty,
-                    new Binding(nameof(ViewModelLoader.ShowLoader), source: ViewModelLoader));
+                    new Binding(nameof(TaskLoaderNotifier.ShowLoader), source: TaskLoaderNotifier));
             }
             else
             {
                 SetDefaultLoadingViewBindings();
             }
 
+            if (NotStartedView != null)
+            {
+                NotStartedView.SetBinding(
+                    IsVisibleProperty,
+                    new Binding(nameof(TaskLoaderNotifier.IsNotStarted), source: TaskLoaderNotifier));
+            }
+
             if (ErrorView != null)
             {
                 ErrorView.SetBinding(
                     IsVisibleProperty,
-                    new Binding(nameof(ViewModelLoader.ShowError), source: ViewModelLoader));
+                    new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
             }
             else
             {
@@ -446,7 +620,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             {
                 ErrorNotificationView.SetBinding(
                     IsVisibleProperty,
-                    new Binding(nameof(ViewModelLoader.ShowErrorNotification), source: ViewModelLoader, mode: BindingMode.TwoWay));
+                    new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
             }
             else
             {
@@ -457,26 +631,30 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             {
                 EmptyView.SetBinding(
                     IsVisibleProperty,
-                    new Binding(nameof(ViewModelLoader.ShowEmptyState), source: ViewModelLoader));
+                    new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));
             }
             else
             {
                 SetDefaultEmptyStateViewBindings();
             }
+
+            OnTaskLoaderTypeSet();
+
+            OnTaskStartModeSet();
         }
 
         private void SetDefaultLoadingViewBindings()
         {
             DefaultLoader.SetBinding(
                 ActivityIndicator.IsRunningProperty,
-                new Binding(nameof(ViewModelLoader.ShowLoader), source: ViewModelLoader));
+                new Binding(nameof(TaskLoaderNotifier.ShowLoader), source: TaskLoaderNotifier));
         }
 
         private void SetDefaultErrorViewBindings()
         {
             DefaultErrorView.SetBinding(
                 StackLayout.IsVisibleProperty,
-                new Binding(nameof(ViewModelLoader.ShowError), source: ViewModelLoader));
+                new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
 
             ErrorViewImage.IsVisible = ErrorImageConverter != null;
             if (ErrorViewImage.IsVisible)
@@ -484,39 +662,39 @@ namespace Sharpnado.Presentation.Forms.CustomViews
                 ErrorViewImage.SetBinding(
                     Image.SourceProperty,
                     new Binding(
-                        nameof(ViewModelLoader.Error),
-                        source: ViewModelLoader,
+                        nameof(TaskLoaderNotifier.Error),
+                        source: TaskLoaderNotifier,
                         converter: ErrorImageConverter));
             }
 
             ErrorViewLabel.SetBinding(
                 Label.TextProperty,
                 new Binding(
-                    nameof(ViewModelLoader.Error),
-                    source: ViewModelLoader,
+                    nameof(TaskLoaderNotifier.Error),
+                    source: TaskLoaderNotifier,
                     converter: ErrorMessageConverter));
 
             ErrorViewButton.SetBinding(
                 Button.CommandProperty,
-                new Binding(nameof(ViewModelLoader.ReloadCommand), source: ViewModelLoader));
+                new Binding(nameof(TaskLoaderNotifier.ReloadCommand), source: TaskLoaderNotifier));
         }
 
         private void SetDefaultErrorNotificationViewBindings()
         {
             DefaultErrorNotificationView.SetBinding(
                 Frame.IsVisibleProperty,
-                new Binding(nameof(ViewModelLoader.ShowErrorNotification), source: ViewModelLoader, mode: BindingMode.TwoWay));
+                new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
 
             ErrorNotificationViewLabel.SetBinding(
                 Label.TextProperty,
-                new Binding(nameof(ViewModelLoader.Error), source: ViewModelLoader, converter: ErrorMessageConverter));
+                new Binding(nameof(TaskLoaderNotifier.Error), source: TaskLoaderNotifier, converter: ErrorMessageConverter));
         }
 
         private void SetDefaultEmptyStateViewBindings()
         {
             DefaultEmptyStateView.SetBinding(
                 Label.IsVisibleProperty,
-                new Binding(nameof(ViewModelLoader.ShowEmptyState), source: ViewModelLoader));
+                new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));
 
             EmptyStateImage.IsVisible = EmptyStateImageSource != null;
             if (EmptyStateImage.IsVisible)

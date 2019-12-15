@@ -9,7 +9,7 @@ using Sample.Infrastructure;
 using Sample.Navigation;
 using Sample.Services;
 
-using Sharpnado.Presentation.Forms.ViewModels;
+using Sharpnado.Presentation.Forms;
 
 using Xamarin.Forms;
 
@@ -21,6 +21,8 @@ namespace Sample.ViewModels
 
         private readonly ErrorEmulator _errorEmulator;
 
+        private GamePlatform _platform;
+
         public RetroGamesViewModel(INavigationService navigationService, IRetroGamingService retroGamingService, ErrorEmulator errorEmulator)
             : base(navigationService)
         {
@@ -29,12 +31,16 @@ namespace Sample.ViewModels
 
             RefreshCommand = new Command(() => Load(null));
 
-            ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator,  () => Load(null));
+            ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator,  () => Loader.Load(InitializeAsync));
 
-            Loader = new ViewModelLoader<List<Game>>();
+            // TaskStartMode = Auto
+            // Loader = new TaskLoaderNotifier<List<Game>>(InitializeAsync);
+
+            // TaskStartMode = Manual (Default mode)
+            Loader = new TaskLoaderNotifier<List<Game>>();
         }
 
-        public ViewModelLoader<List<Game>> Loader { get; }
+        public TaskLoaderNotifier<List<Game>> Loader { get; }
 
         public ICommand RefreshCommand { get; }
 
@@ -42,6 +48,9 @@ namespace Sample.ViewModels
 
         public override void Load(object parameter)
         {
+            _platform = (GamePlatform)parameter;
+
+            // TaskStartMode = Manual (Default mode)
             Loader.Load(InitializeAsync);
         }
 
@@ -50,7 +59,9 @@ namespace Sample.ViewModels
             Stopwatch watch = new Stopwatch();
             watch.Start();
 
-            var result = await _retroGamingService.GetAtariAndAmigaGames();
+            var result = _platform == GamePlatform.Computer
+                             ? await _retroGamingService.GetAtariAndAmigaGames()
+                             : await _retroGamingService.GetNesAndSmsGames();
 
             watch.Stop();
             var remainingWaitingTime = TimeSpan.FromSeconds(4) - watch.Elapsed;
@@ -119,6 +130,7 @@ namespace Sample.ViewModels
                         new Game(
                             1,
                             "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tnp.jpg",
+                            null,
                             new DateTime(1984, 2, 10),
                             new List<Genre> { new Genre(1, "Puzzle") },
                             new List<Company> { new Company(1, "USSR") },
@@ -127,6 +139,7 @@ namespace Sample.ViewModels
                         new Game(
                             2,
                             "https://images.igdb.com/igdb/image/upload/t_cover_big/tsi99e7cbu6pituhjfwe.jpg",
+                            null,
                             new DateTime(1988, 4, 1),
                             new List<Genre> { new Genre(1, "Action") },
                             new List<Company> { new Company(1, "Elite") },

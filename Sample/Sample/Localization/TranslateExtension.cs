@@ -50,6 +50,11 @@ namespace Sample.Localization
 #endif
             }
 
+            if (Device.RuntimePlatform != Device.UWP)
+            {
+                translation = translation.Replace(@"\r\n", Environment.NewLine);
+            }
+
             return translation;
         }
     }

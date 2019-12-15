@@ -65,11 +65,12 @@
 
             <customViews:TaskLoaderView Grid.Row="2"
                                         Style="{StaticResource TaskLoaderStyle}"
-                                        ViewModelLoader="{Binding Loader}">
+                                        TaskLoaderNotifier="{Binding Loader}">
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
                              RefreshColor="{StaticResource AccentColor}">
                     <ListView BackgroundColor="Transparent"
+                              CachingStrategy="RecycleElementAndDataTemplate"
                               Header=""
                               ItemTemplate="{StaticResource GameDataTemplate}"
                               ItemsSource="{Binding Loader.Result}"

@@ -31,10 +31,11 @@ namespace Sample.Domain
 
     public class Game
     {
-        public Game(long id, string coverUrl, DateTime firstReleaseDate, List<Genre> genres, List<Company> companies, string name, double? rating)
+        public Game(long id, string coverUrl, string screenshotUrl, DateTime firstReleaseDate, List<Genre> genres, List<Company> companies, string name, double? rating)
         {
             Id = id;
             CoverUrl = coverUrl;
+            ScreenshotUrl = screenshotUrl;
             FirstReleaseDate = firstReleaseDate;
             Genres = genres;
             Companies = companies;
@@ -45,6 +46,8 @@ namespace Sample.Domain
         public long Id { get; }
 
         public string CoverUrl { get; }
+
+        public string ScreenshotUrl { get; }
 
         public DateTime FirstReleaseDate { get; }
 

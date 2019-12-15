@@ -70,16 +70,20 @@ namespace Sample.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can define your own views:
-        ///* Error view
-        ///* Loading view
-        ///* Empty view
-        ///* Notification error view
-        ///The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custom views very precisely..
+        ///   Looks up a localized string similar to You can define your own views for each task state..
         /// </summary>
-        internal static string CustomLayout_Description {
+        internal static string CustomLayout_Description_1 {
             get {
-                return ResourceManager.GetString("CustomLayout_Description", resourceCulture);
+                return ResourceManager.GetString("CustomLayout_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The `TaskLoaderView` uses an AbsoluteLayout, so you can even position your custom views very precisely..
+        /// </summary>
+        internal static string CustomLayout_Description_2 {
+            get {
+                return ResourceManager.GetString("CustomLayout_Description_2", resourceCulture);
             }
         }
         
@@ -93,19 +97,21 @@ namespace Sample.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to `TaskLoaderView` provides defaults layout for all the views matching your task states:
-        ///
-        ///* Loading
-        ///* Error
-        ///* Success
-        ///* Notification
-        ///
-        ///Those layouts are stylable, you can provide converters for error image and message.
+        ///   Looks up a localized string similar to `TaskLoaderView` provides defaults layout for all the views matching your task states (Loading/Error/Success/Notification)..
+        /// </summary>
+        internal static string DefaultLayout_Description_1 {
+            get {
+                return ResourceManager.GetString("DefaultLayout_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Those layouts are stylable, you can provide converters for error image and message.
         ///Set the loader color, the retry button text, the font family used.....
         /// </summary>
-        internal static string DefaultLayout_Description {
+        internal static string DefaultLayout_Description_2 {
             get {
-                return ResourceManager.GetString("DefaultLayout_Description", resourceCulture);
+                return ResourceManager.GetString("DefaultLayout_Description_2", resourceCulture);
             }
         }
         
@@ -223,6 +229,53 @@ namespace Sample.Localization {
         internal static string ErrorType_Unknown {
             get {
                 return ResourceManager.GetString("ErrorType_Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a custom user NotStartedView to display a view before the Task is ran.
+        ///You can for example use it to start your task on demand.
+        ///.
+        /// </summary>
+        internal static string NotStartedView_Description {
+            get {
+                return ResourceManager.GetString("NotStartedView_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Started View.
+        /// </summary>
+        internal static string NotStartedView_Title {
+            get {
+                return ResourceManager.GetString("NotStartedView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supports the excellent Xamarin.Forms.Skeleton loading package by Horus..
+        /// </summary>
+        internal static string SkeletonLoading_Description_1 {
+            get {
+                return ResourceManager.GetString("SkeletonLoading_Description_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find an easier implementation of the pattern with static dummy entities..
+        /// </summary>
+        internal static string SkeletonLoading_Description_2 {
+            get {
+                return ResourceManager.GetString("SkeletonLoading_Description_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skeleton loading.
+        /// </summary>
+        internal static string SkeletonLoading_Title {
+            get {
+                return ResourceManager.GetString("SkeletonLoading_Title", resourceCulture);
             }
         }
         

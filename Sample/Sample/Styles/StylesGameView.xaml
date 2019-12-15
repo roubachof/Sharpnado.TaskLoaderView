@@ -15,12 +15,14 @@
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
         <Setter Property="MaxLines" Value="2" />
-        <Setter Property="LineBreakMode" Value="TailTruncation"/>
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
     </Style>
     <Style x:Key="GameCompany"
            BasedOn="{StaticResource TextBody}"
-           TargetType="Label" >
+           TargetType="Label">
         <Setter Property="TextColor" Value="{DynamicResource CellTextColor}" />
+        <Setter Property="MaxLines" Value="1" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
     </Style>
     <Style x:Key="GameGenre"
            BasedOn="{StaticResource TextBody}"

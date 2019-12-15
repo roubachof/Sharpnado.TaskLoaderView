@@ -5,6 +5,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:behaviors="clr-namespace:Sharpnado.Presentation.Forms.Behaviors;assembly=Sharpnado.TaskLoaderView"
              xmlns:img="clr-namespace:Sample.Infrastructure;assembly=Sample"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
@@ -33,6 +34,11 @@
                 <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
                 <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
             </Style>
+            <Style x:Key="ErrorBombStyle" TargetType="Image">
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="Margin" Value="-15,0,0,0" />
+                <Setter Property="Source" Value="{img:ImageResource Sample.Images.bomb.png}" />
+            </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -60,9 +66,10 @@
 
             <BoxView Grid.Row="2" BackgroundColor="Black" />
 
-            <sharpnado:TaskLoaderView Grid.Row="3"
+            <sharpnado:TaskLoaderView x:Name="TaskLoaderView"
+                                      Grid.Row="3"
                                       Style="{StaticResource TaskLoaderStyle}"
-                                      ViewModelLoader="{Binding Loader}">
+                                      TaskLoaderNotifier="{Binding Loader}">
 
                 <sharpnado:TaskLoaderView.LoadingView>
                     <Image x:Name="BusyImage"
@@ -72,10 +79,59 @@
                            Source="{img:ImageResource Sample.Images.busy_bee_white_bg.png}" />
                 </sharpnado:TaskLoaderView.LoadingView>
 
+                <sharpnado:TaskLoaderView.ErrorView>
+                    <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                          AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
+                          Padding="15,0,0,0"
+                          BackgroundColor="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.Column="0"
+                               Style="{StaticResource ErrorBombStyle}" />
+                        <Image Grid.Row="0"
+                               Grid.Column="1"
+                               Style="{StaticResource ErrorBombStyle}" />
+                        <Image Grid.Row="0"
+                               Grid.Column="2"
+                               Style="{StaticResource ErrorBombStyle}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Style="{StaticResource TextBody}"
+                               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                    </Grid>
+                </sharpnado:TaskLoaderView.ErrorView>
+
+                <sharpnado:TaskLoaderView.ErrorNotificationView>
+                    <Grid x:Name="ErrorNotificationView"
+                          AbsoluteLayout.LayoutFlags="PositionProportional"
+                          AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+                          Scale="0">
+                        <Grid.Behaviors>
+                            <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
+                        </Grid.Behaviors>
+                        <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
+                        <Label Style="{StaticResource TextBody}"
+                               Margin="{StaticResource ThicknessLarge}"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                    </Grid>
+                </sharpnado:TaskLoaderView.ErrorNotificationView>
+
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
-                             RefreshColor="White">
+                             RefreshColor="{StaticResource AccentColor}">
                     <ListView BackgroundColor="Transparent"
+                              CachingStrategy="RecycleElementAndDataTemplate"
                               Header=""
                               ItemTemplate="{StaticResource GameDataTemplate}"
                               ItemsSource="{Binding Loader.Result}"

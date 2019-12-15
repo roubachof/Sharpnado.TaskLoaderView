@@ -15,17 +15,32 @@ namespace Sample.Domain
 
         private const int NesPlatformId = 18;
 
+        private const int MegadrivePlatformId = 29;
+
+        private const int GameBoyPlatformId = 33;
+
+        private const int Atari2600PlatformId = 59;
+
         private const int SmsPlatformId = 64;
 
-        private const string GamesRequest = "fields name, genres.name, first_release_date, cover.image_id, involved_companies.company.name, rating;"
+        private const string GamesRequest = "fields name, genres.name, first_release_date, cover.image_id, involved_companies.company.name, rating, screenshots.image_id;"
                                             + "sort popularity desc;"
-                                            + "where platforms = [{0}, {1}] & id >= {2} & id < {3};" + "limit 20;";
+                                            + "where platforms = ({0}) & id >= {1} & id < {2};" + "limit {3};";
 
         private readonly IGDBRestClient _igdbClient;
 
         public RetroGamingService()
         {
             _igdbClient = RefitClient.Create("b4f8877672fb840873c1bf1b5fe611fb");
+        }
+
+        public async Task<Game> GetRandomGame()
+        {
+            List<Game> result = DateTime.UtcNow.Millisecond % 2 == 0
+                                    ? await GetNesAndSmsGames()
+                                    : await GetAtariAndAmigaGames();
+
+            return result[0];
         }
 
         public async Task<List<Game>> GetAtariAndAmigaGames()
@@ -35,10 +50,10 @@ namespace Sample.Domain
                                 IGDB.Client.Endpoints.Games,
                                 query: string.Format(
                                     GamesRequest,
-                                    AtariPlatformId,
-                                    AmigaPlatformId,
+                                    string.Join(",", new[] { AtariPlatformId, AmigaPlatformId }),
                                     bounds.LowerId,
-                                    bounds.HigherId))
+                                    bounds.HigherId,
+                                    20))
                                  .ConfigureAwait(false);
 
             return igdbModels.Select(ToDomainEntity).ToList();
@@ -51,19 +66,19 @@ namespace Sample.Domain
                                 IGDB.Client.Endpoints.Games,
                                 query: string.Format(
                                     GamesRequest,
-                                    NesPlatformId,
-                                    SmsPlatformId,
+                                    string.Join(",", new[] { NesPlatformId, SmsPlatformId, MegadrivePlatformId, GameBoyPlatformId, Atari2600PlatformId }),
                                     bounds.LowerId,
-                                    bounds.HigherId))
+                                    bounds.HigherId,
+                                    20))
                                  .ConfigureAwait(false);
 
             return igdbModels.Select(ToDomainEntity).ToList();
         }
 
-        private (int LowerId, int HigherId) GetIdBounds()
+        private (int LowerId, int HigherId) GetIdBounds(int interval = 1000)
         {
-            int lowerId = DateTime.Now.DayOfYear % 10 * 1000;
-            int higherId = lowerId + 1000;
+            int lowerId = DateTime.Now.DayOfYear % 10 * interval;
+            int higherId = lowerId + interval;
             return (lowerId, higherId);
         }
 
@@ -73,6 +88,13 @@ namespace Sample.Domain
                                   imageId: igdbModel.Cover.Value.ImageId,
                                   size: ImageSize.CoverBig,
                                   retina: true);
+
+            string screenshotUrl = igdbModel.Screenshots == null || igdbModel.Screenshots.Values.Length == 0
+                                   ? null
+                                   : "https:" + ImageHelper.GetImageUrl(
+                                          imageId: igdbModel.Screenshots.Values.First().ImageId,
+                                          size: ImageSize.ScreenshotMed,
+                                          retina: true);
 
             var genres = igdbModel.Genres == null
                              ? new List<Genre>()
@@ -88,6 +110,7 @@ namespace Sample.Domain
             return new Game(
                 igdbModel.Id.Value,
                 coverUrl,
+                screenshotUrl,
                 igdbModel.FirstReleaseDate.Value.DateTime,
                 genres,
                 involvedCompanies,

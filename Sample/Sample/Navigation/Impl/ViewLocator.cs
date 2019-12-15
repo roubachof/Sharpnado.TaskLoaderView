@@ -18,6 +18,7 @@ namespace Sample.Navigation.Impl
         private static readonly List<(Type ViewModelType, Type ViewType)> ViewLocatorDictionary = new List<(Type, Type)>
             {
                 (typeof(RetroGamesViewModel), typeof(DefaultViewsPage)),
+                (typeof(RetroGamesViewModel), typeof(DefaultViewsSkeletonPage)),
                 (typeof(RetroGamesViewModel), typeof(UserViewsPage)),
             };
 
