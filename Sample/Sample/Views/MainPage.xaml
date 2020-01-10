@@ -331,7 +331,7 @@
                                 <Frame Style="{StaticResource CardStyle}"
                                        Margin="-15,0,-15,-15"
                                        Padding="0"
-                                       skeleton:Skeleton.Animation="Beat"
+                                       skeleton:Skeleton.Animation="Fade"
                                        skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
                                        skeleton:Skeleton.IsParent="True"
                                        BackgroundColor="{DynamicResource CellBackgroundColor}"
@@ -339,7 +339,7 @@
                                        IsClippedToBounds="True">
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="160" />
+                                            <RowDefinition Height="180" />
                                             <RowDefinition Height="40" />
                                             <RowDefinition Height="20" />
                                             <RowDefinition Height="20" />
@@ -347,7 +347,7 @@
                                         <Image Grid.Row="0"
                                                skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
                                                skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-                                               Aspect="AspectFill"
+                                               Aspect="Fill"
                                                Source="{Binding RandomGameLoader.Result.ScreenshotUrl}" />
 
                                         <Label Grid.Row="1"

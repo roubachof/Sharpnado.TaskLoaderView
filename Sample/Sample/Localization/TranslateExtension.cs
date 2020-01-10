@@ -52,7 +52,7 @@ namespace Sample.Localization
 
             if (Device.RuntimePlatform != Device.UWP)
             {
-                translation = translation.Replace(@"\r\n", Environment.NewLine);
+                translation = translation.Replace("\r\n", Environment.NewLine);
             }
 
             return translation;

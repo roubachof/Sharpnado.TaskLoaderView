@@ -23,7 +23,7 @@
 	<key>MinimumOSVersion</key>
 	<string>8.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>Sample</string>
+	<string>Retronado</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.companyname.Sample</string>
 	<key>CFBundleVersion</key>
