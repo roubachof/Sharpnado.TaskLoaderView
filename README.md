@@ -9,7 +9,7 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 **Featuring:**
 
 * Default layout for all loading states (`Loading`, `Error`, `Success`, `Notification`, `Refresh`)
-* Stylable layouts including fonts, accent colors, error Docs, ...
+* Stylable layouts including fonts, accent colors, error images, ...
 * Any states are overridable with user custom views and easily positionned with AbsoluteLayout properties
 * Support for `Xamarin.Forms.Skeleton` nuget package
 * Support for refresh scenarios, and error while refreshing with the `ErrorNotificationView`
@@ -61,10 +61,10 @@ It is highly stylable, and you can even provide converters to translate an `Exce
             <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
             <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
             <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
-            <Setter Property="EmptyStateDocsource" Value="{inf:ImageResource Sample.Docs.dougal.png}" />
+            <Setter Property="EmptyStateImageSource" Value="{inf:ImageResource Sample.Images.dougal.png}" />
             <Setter Property="RetryButtonText" Value="{loc:Translate ErrorButton_Retry}" />
             <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
-            <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToDocsourceConverter}" />
+            <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
             <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />
             <Setter Property="BackgroundColor" Value="{StaticResource LightGreyBackground}" />
             <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
@@ -94,7 +94,7 @@ It is highly stylable, and you can even provide converters to translate an `Exce
 ```
 
 ```csharp
-public class ExceptionToDocsourceConverter : IValueConverter
+public class ExceptionToImageSourceConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -118,7 +118,7 @@ public class ExceptionToDocsourceConverter : IValueConverter
                 break;
         }
 
-        return Docsource.FromFile(imageName);
+        return ImageSource.FromFile(imageName);
     }
 }
 ```
@@ -157,7 +157,7 @@ You can also override any state views to implement your own:
                 AbsoluteLayout.LayoutFlags="PositionProportional"
                 AbsoluteLayout.LayoutBounds="0.5, 0.5, 60, 60"
                 Aspect="AspectFit"
-                Source="{img:ImageResource Sample.Docs.busy_bee_white_bg.png}" />
+                Source="{img:ImageResource Sample.Images.busy_bee_white_bg.png}" />
     </sharpnado:TaskLoaderView.LoadingView>
 
     <sharpnado:TaskLoaderView.ErrorView>
@@ -199,7 +199,7 @@ You can also override any state views to implement your own:
             <Grid.Behaviors>
                 <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
             </Grid.Behaviors>
-            <Image Aspect="Fill" Source="{img:ImageResource Sample.Docs.window_border.png}" />
+            <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
             <Label Style="{StaticResource TextBody}"
                     Margin="{StaticResource ThicknessLarge}"
                     VerticalOptions="Center"
@@ -309,7 +309,7 @@ If you are not loading a list but a simple object, you don't even have to use a 
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             AccentColor="{StaticResource AccentColor}"
-                            ErrorImageConverter="{StaticResource ExceptionToDocsourceConverter}"
+                            ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
                             ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
                             FontFamily="{StaticResource FontAtariSt}"
                             TaskLoaderNotifier="{Binding RandomGameLoader}"
@@ -376,7 +376,7 @@ Here `TaskLoaderType="ResultAsLoadingView"` is set cause we are using the skelet
                             Grid.Column="0"
                             Grid.ColumnSpan="2"
                             AccentColor="{StaticResource AccentColor}"
-                            ErrorImageConverter="{StaticResource ExceptionToDocsourceConverter}"
+                            ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
                             ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
                             FontFamily="{StaticResource FontAtariSt}"
                             TaskLoaderNotifier="{Binding RandomGameLoader}"
@@ -476,7 +476,7 @@ The `ErrorNotificationView` is also customizable if you like. It's brought to yo
         <Grid.Behaviors>
             <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
         </Grid.Behaviors>
-        <Image Aspect="Fill" Source="{img:ImageResource Sample.Docs.window_border.png}" />
+        <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
         <Label Style="{StaticResource TextBody}"
                 Margin="{StaticResource ThicknessLarge}"
                 VerticalOptions="Center"
