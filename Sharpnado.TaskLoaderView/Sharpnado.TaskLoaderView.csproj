@@ -19,6 +19,7 @@
 
     <PackageProjectUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</PackageProjectUrl>
     <RepositoryUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</RepositoryUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/tlv_icon_tos.png</PackageIconUrl>
     <PackageTags>xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
 
     <Title>TaskLoaderView: free yourself from IsBusy=true!</Title>
