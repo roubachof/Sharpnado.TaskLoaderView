@@ -147,7 +147,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <views:NavigationToolBar Title="{loc:Translate DefaultLayout_Title}"
+            <views:NavigationToolBar Title="{loc:Translate SkeletonLoading_Title}"
                                      Grid.Row="0"
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />

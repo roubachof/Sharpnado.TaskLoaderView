@@ -2,9 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-using Sharpnado.Presentation.Forms;
-
-namespace Sharpnado.TaskLoaderView
+namespace Sharpnado.Presentation.Forms
 {
     public abstract class TaskLoaderCommandBase : ICommand
     {
@@ -12,7 +10,7 @@ namespace Sharpnado.TaskLoaderView
 
         protected TaskLoaderCommandBase(Func<object, bool> canExecute = null)
         {
-            _canExecute = _canExecute;
+            _canExecute = canExecute;
         }
 
         public event EventHandler CanExecuteChanged;

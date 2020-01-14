@@ -6,9 +6,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:behaviors="clr-namespace:Sharpnado.Presentation.Forms.Behaviors;assembly=Sharpnado.TaskLoaderView"
-             xmlns:col="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
-             xmlns:viewModels="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
-             d:DataContext="{d:DesignInstance viewModels:ITaskLoaderNotifier}">
+             xmlns:nado="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
+             d:DataContext="{d:DesignInstance nado:ITaskLoaderNotifier}">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -17,12 +16,12 @@
                 <Setter Property="MinimumWidthRequest" Value="64" />
                 <Setter Property="Padding" Value="15,0" />
                 <Setter Property="BackgroundColor" Value="Accent" />
-                <Setter Property="TextColor" Value="{x:Static col:ColorHelper.WhiteText}" />
+                <Setter Property="TextColor" Value="{x:Static nado:ColorHelper.WhiteText}" />
             </Style>
             <Style x:Key="TextCenter" TargetType="Label">
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="TextColor" Value="{x:Static col:ColorHelper.BlackText}" />
+                <Setter Property="TextColor" Value="{x:Static nado:ColorHelper.BlackText}" />
             </Style>
             <Style x:Key="TextError"
                    BasedOn="{StaticResource TextCenter}"
@@ -31,14 +30,14 @@
                 <Setter Property="LineBreakMode" Value="CharacterWrap" />
             </Style>
             <Style x:Key="ViewSnackbar" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="{x:Static col:ColorHelper.MaterialNotificationColor}" />
+                <Setter Property="BackgroundColor" Value="{x:Static nado:ColorHelper.MaterialNotificationColor}" />
             </Style>
             <Style x:Key="TextSnackbar"
                    BasedOn="{StaticResource TextCenter}"
                    TargetType="Label">
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="LineBreakMode" Value="CharacterWrap" />
-                <Setter Property="TextColor" Value="{x:Static col:ColorHelper.WhiteText}" />
+                <Setter Property="TextColor" Value="{x:Static nado:ColorHelper.WhiteText}" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
