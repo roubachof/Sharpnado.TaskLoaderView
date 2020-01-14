@@ -4,7 +4,9 @@
 
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
-Featuring:
+<img src="https://img.shields.io/nuget/v/Sharpnado.TaskLoaderView.svg"/>
+
+**Featuring:**
 
 * Default layout for all loading states (`Loading`, `Error`, `Success`, `Notification`, `Refresh`)
 * Stylable layouts including fonts, accent colors, error Docs, ...
