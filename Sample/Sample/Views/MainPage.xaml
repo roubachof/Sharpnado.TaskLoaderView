@@ -10,6 +10,7 @@
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:local="clr-namespace:Sample.Infrastructure;assembly=Sample"
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:sharpnado="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
@@ -269,6 +270,65 @@
                                     Grid.Column="1"
                                     Style="{StaticResource ButtonTextIt}"
                                     Clicked="SkeletonLoadingOnClicked" />
+                        </Grid>
+                    </Frame>
+                </Grid>
+                <Grid>
+                    <Frame Style="{StaticResource CardStyle}"
+                           Margin="15,15,15,8"
+                           BackgroundColor="Black"
+                           TranslationY="2" />
+                    <Frame Style="{StaticResource CardStyle}" Margin="15,15,15,8">
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="250" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="120" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CardTitle}"
+                                   FontFamily="{StaticResource FontArcadeClassic}"
+                                   FontSize="36"
+                                   Text="{loc:Translate Lottie_Title}" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate Lottie_Description}" />
+
+                            <BoxView Grid.Row="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="2"
+                                     Margin="-15,-10,-15,10"
+                                     Color="{StaticResource LightGreyBackground}" />
+
+                            <lottie:AnimationView x:Name="animationView"
+                                                  Grid.Row="2"
+                                                  Grid.Column="0"
+                                                  Grid.ColumnSpan="2"
+                                                  Margin="-15,-10,-15,10"
+                                                  HorizontalOptions="FillAndExpand"
+                                                  VerticalOptions="FillAndExpand"
+                                                  Animation="lottie_grey.json"
+                                                  AutoPlay="True"
+                                                  Loop="True" />
+
+
+
+                            <Button Grid.Row="3"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Clicked="ButtonDefaultLayoutOnClicked" />
                         </Grid>
                     </Frame>
                 </Grid>

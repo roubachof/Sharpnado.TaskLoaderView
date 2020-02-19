@@ -71,6 +71,9 @@
     <BundleResource Include="Resources\ka1.ttf" />
     <BundleResource Include="Resources\ac.ttf" />
     <BundleResource Include="Resources\atarist.ttf" />
+    <BundleResource Include="Resources\delorean_grey.json" />
+    <BundleResource Include="Resources\lottie_green.json" />
+    <BundleResource Include="Resources\lottie_grey.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

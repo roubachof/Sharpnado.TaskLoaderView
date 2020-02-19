@@ -77,6 +77,9 @@
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
+    <AndroidAsset Include="Assets\delorean_grey.json" />
+    <AndroidAsset Include="Assets\lottie_green.json" />
+    <AndroidAsset Include="Assets\lottie_grey.json" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.xml" />
