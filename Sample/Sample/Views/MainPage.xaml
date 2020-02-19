@@ -5,6 +5,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:domain="clr-namespace:Sample.Domain"
+             xmlns:forms="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:local="clr-namespace:Sample.Infrastructure;assembly=Sample"
@@ -274,9 +276,7 @@
                     <Frame Style="{StaticResource CardStyle}"
                            BackgroundColor="Black"
                            TranslationY="2" />
-                    <Frame x:Name="LoadOnDemandCard"
-                           Style="{StaticResource CardStyle}"
-                           x:DataType="viewModels:LoadOnDemandViewModel">
+                    <Frame x:Name="LoadOnDemandCard" Style="{StaticResource CardStyle}">
                         <d:Frame.BindingContext>
                             <viewModels:LoadOnDemandViewModel />
                         </d:Frame.BindingContext>
@@ -301,7 +301,7 @@
                             <Button Grid.Row="0"
                                     Grid.Column="1"
                                     Style="{StaticResource ButtonTextIt}"
-                                    Command="{Binding RandomGameLoader.ResetCommand}"
+                                    Command="{Binding RandomGameLoaderCommand.Notifier.ResetCommand}"
                                     Text="R" />
 
                             <Label Grid.Row="1"
@@ -318,23 +318,24 @@
                                                       ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
                                                       ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
                                                       FontFamily="{StaticResource FontAtariSt}"
-                                                      TaskLoaderNotifier="{Binding RandomGameLoader}"
+                                                      TaskLoaderNotifier="{Binding RandomGameLoaderCommand.Notifier}"
                                                       TaskLoaderType="ResultAsLoadingView"
                                                       TextColor="Black">
                                 <sharpnado:TaskLoaderView.NotStartedView>
                                     <Button AbsoluteLayout.LayoutFlags="PositionProportional"
                                             AbsoluteLayout.LayoutBounds="0.5, 0.5, 120, 50"
                                             Style="{StaticResource ButtonTextIt}"
-                                            Command="{Binding LoadRandomGameCommand}" />
+                                            Command="{Binding RandomGameLoaderCommand}" />
                                 </sharpnado:TaskLoaderView.NotStartedView>
 
                                 <Frame Style="{StaticResource CardStyle}"
                                        Margin="-15,0,-15,-15"
                                        Padding="0"
                                        skeleton:Skeleton.Animation="Fade"
-                                       skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                                       skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
                                        skeleton:Skeleton.IsParent="True"
                                        BackgroundColor="{DynamicResource CellBackgroundColor}"
+                                       BindingContext="{Binding RandomGameLoaderCommand.Notifier}"
                                        CornerRadius="10"
                                        IsClippedToBounds="True">
                                     <Grid>
@@ -346,33 +347,31 @@
                                         </Grid.RowDefinitions>
                                         <Image Grid.Row="0"
                                                skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                                               skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                                               skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
                                                Aspect="Fill"
-                                               Source="{Binding RandomGameLoader.Result.ScreenshotUrl}" />
+                                               Source="{Binding Result.ScreenshotUrl}" />
 
                                         <Label Grid.Row="1"
                                                Style="{StaticResource GameName}"
                                                Margin="15,0"
                                                skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                                               skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-                                               Text="{Binding RandomGameLoader.Result.Name}" />
+                                               skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
+                                               Text="{Binding Result.Name}" />
 
                                         <Label Grid.Row="2"
                                                Style="{StaticResource GameCompany}"
                                                Margin="15,0"
                                                skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                                               skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-                                               Text="{Binding RandomGameLoader.Result.MajorCompany}" />
+                                               skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
+                                               Text="{Binding Result.MajorCompany}" />
 
                                         <Label Grid.Row="3"
                                                Style="{StaticResource GameGenre}"
                                                Margin="15,0"
-                                               Text="{Binding RandomGameLoader.Result.MajorGenre}" />
+                                               Text="{Binding Result.MajorGenre}" />
                                     </Grid>
                                 </Frame>
-
                             </sharpnado:TaskLoaderView>
-
 
                         </Grid>
                     </Frame>

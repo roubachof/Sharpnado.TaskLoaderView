@@ -48,6 +48,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -134,13 +135,16 @@
       <Version>4.0.1</Version>
       <ExcludeAssets>all</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.3.0.991250" />
+    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991640" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Com.Airbnb.iOS.Lottie">
+      <Version>2.5.10</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\Sample\Sample.csproj">
-      <Project>{7ABC76C9-4340-4861-B009-2A01B9EDEC36}</Project>
+      <Project>{87D8E2F9-619B-4D8B-AD01-08C988FB8270}</Project>
       <Name>Sample</Name>
     </ProjectReference>
   </ItemGroup>

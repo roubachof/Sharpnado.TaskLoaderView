@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+// XF min version 3.4.0.33328
 namespace Sharpnado.Presentation.Forms.CustomViews
 {
     public enum TaskStartMode

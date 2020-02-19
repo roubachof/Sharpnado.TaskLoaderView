@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 using Sample.Domain;
 using Sample.Services;
 
 using Sharpnado.Presentation.Forms;
-
-using Xamarin.Forms;
 
 namespace Sample.ViewModels
 {
@@ -19,15 +16,10 @@ namespace Sample.ViewModels
         {
             _retroGamingService = retroGamingService;
 
-            RandomGameLoader = new TaskLoaderNotifier<Game>();
-
-            LoadRandomGameCommand = new Command(
-                () => { RandomGameLoader.Load(GetRandomGame); });
+            RandomGameLoaderCommand = new TaskLoaderCommand<Game>(GetRandomGame);
         }
 
-        public TaskLoaderNotifier<Game> RandomGameLoader { get; }
-
-        public ICommand LoadRandomGameCommand { get; }
+        public TaskLoaderCommand<Game> RandomGameLoaderCommand { get; }
 
         private async Task<Game> GetRandomGame()
         {
