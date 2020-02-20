@@ -20,6 +20,7 @@ namespace Sample.Navigation.Impl
                 (typeof(RetroGamesViewModel), typeof(DefaultViewsPage)),
                 (typeof(RetroGamesViewModel), typeof(DefaultViewsSkeletonPage)),
                 (typeof(RetroGamesViewModel), typeof(UserViewsPage)),
+                (typeof(RetroGamesViewModel), typeof(LottieViewsPage)),
             };
 
         public IBindablePage GetViewFor<TViewModel>()

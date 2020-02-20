@@ -36,8 +36,8 @@
     </OnPlatform>
 
     <Style ApplyToDerivedTypes="True" TargetType="NavigationPage">
-        <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationBarColor}"/>
-        <Setter Property="BarTextColor" Value="{StaticResource BarTextColor}"/>
+        <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationBarColor}" />
+        <Setter Property="BarTextColor" Value="{StaticResource BarTextColor}" />
     </Style>
 
     <DataTemplate x:Key="GameDataTemplate">
@@ -46,6 +46,8 @@
 
     <converters:ExceptionToImageSourceConverter x:Key="ExceptionToImageSourceConverter" />
     <converters:ExceptionToErrorMessageConverter x:Key="ExceptionToErrorMessageConverter" />
+    <converters:CyclicLoadingLottieConverter x:Key="CyclicLoadingLottieConverter" />
+    <converters:ExceptionToLottieConverter x:Key="ExceptionToLottieConverter" />
 
     <!--<Style TargetType="customViews:TaskLoaderView">
         <Setter Property="AccentColor" Value="{StaticResource PrimaryColor}"/>

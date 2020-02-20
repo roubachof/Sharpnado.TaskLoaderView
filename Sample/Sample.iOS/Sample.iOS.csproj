@@ -74,6 +74,12 @@
     <BundleResource Include="Resources\delorean_grey.json" />
     <BundleResource Include="Resources\lottie_green.json" />
     <BundleResource Include="Resources\lottie_grey.json" />
+    <BundleResource Include="Resources\sketch_grey.json" />
+    <BundleResource Include="Resources\no_internet.json" />
+    <BundleResource Include="Resources\server_error.json" />
+    <BundleResource Include="Resources\cassette_grey.json" />
+    <BundleResource Include="Resources\connection_grey.json" />
+    <BundleResource Include="Resources\joystick_grey.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -130,7 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="StyleCop.Analyzers">
-      <Version>1.2.0-beta.113</Version>
+      <Version>1.2.0-beta.164</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -138,7 +144,7 @@
       <Version>4.0.1</Version>
       <ExcludeAssets>all</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991640" />
+    <PackageReference Include="Xamarin.Forms" Version="4.3.0.991250" />
     <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
     <PackageReference Include="Com.Airbnb.iOS.Lottie">
       <Version>2.5.10</Version>

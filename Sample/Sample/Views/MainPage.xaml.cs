@@ -48,6 +48,11 @@ namespace Sample.Views
             TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsPage>(GamePlatform.Console));
         }
 
+        private void ButtonLottieLayoutOnClicked(object sender, EventArgs e)
+        {
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<LottieViewsPage>(GamePlatform.Console));
+        }
+
         private void ButtonCustomLayoutOnClicked(object sender, EventArgs e)
         {
             TaskMonitor.Create(_navigationService.NavigateToViewAsync<UserViewsPage>(GamePlatform.Computer));

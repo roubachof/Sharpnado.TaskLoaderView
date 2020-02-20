@@ -323,12 +323,10 @@
                                                   AutoPlay="True"
                                                   Loop="True" />
 
-
-
                             <Button Grid.Row="3"
                                     Grid.Column="1"
                                     Style="{StaticResource ButtonTextIt}"
-                                    Clicked="ButtonDefaultLayoutOnClicked" />
+                                    Clicked="ButtonLottieLayoutOnClicked" />
                         </Grid>
                     </Frame>
                 </Grid>
