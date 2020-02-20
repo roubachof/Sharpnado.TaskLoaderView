@@ -80,6 +80,7 @@
     <BundleResource Include="Resources\cassette_grey.json" />
     <BundleResource Include="Resources\connection_grey.json" />
     <BundleResource Include="Resources\joystick_grey.json" />
+    <BundleResource Include="Resources\empty_state.json" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

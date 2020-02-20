@@ -86,6 +86,7 @@
     <AndroidAsset Include="Assets\cassette_grey.json" />
     <AndroidAsset Include="Assets\connection_grey.json" />
     <AndroidAsset Include="Assets\joystick_grey.json" />
+    <AndroidAsset Include="Assets\empty_state.json" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.xml" />
