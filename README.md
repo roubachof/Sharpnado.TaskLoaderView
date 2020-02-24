@@ -1,6 +1,6 @@
 # TaskLoaderView 2.0: Let's burn IsBusy=true!
 
-<img src="Docs/taskloaderview.png" width="400" />
+<img src="Docs/tlv_icon_tos.png" width="200" />
 
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
@@ -10,7 +10,7 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 
 * Default layout for all loading states (`Loading`, `Error`, `Success`, `Notification`, `Refresh`)
 * Stylable layouts including fonts, accent colors, error images, ...
-* Any states are overridable with user custom views and easily positionned with AbsoluteLayout properties
+* Any states are overridable with user custom views and easily positioned with AbsoluteLayout properties
 * Support for `Xamarin.Forms.Skeleton` nuget package
 * Support for refresh scenarios, and error while refreshing with the `ErrorNotificationView`
 * Support loading task on demand with the `NotStarted` state
@@ -25,7 +25,7 @@ It uses the Sharpnado's [TaskMonitor](https://github.com/roubachof/Sharpnado.Tas
 
 ### Default state views
 
-The `TaskLoaderView` implements defaut view for all the task loading states:
+The `TaskLoaderView` implements default view for all the task loading states:
 
 * Loading, a simple ActivityLoader is displayed
 * Error, an image with a retry button
@@ -79,16 +79,16 @@ It is highly stylable, and you can even provide converters to translate an `Exce
                             Style="{StaticResource TaskLoaderStyle}"
                             TaskLoaderNotifier="{Binding Loader}">
     <RefreshView Command="{Binding Loader.RefreshCommand}"
-                    IsRefreshing="{Binding Loader.ShowRefresher}"
-                    RefreshColor="{StaticResource AccentColor}">
+                 IsRefreshing="{Binding Loader.ShowRefresher}"
+                 RefreshColor="{StaticResource AccentColor}">
         <ListView BackgroundColor="Transparent"
-                    CachingStrategy="RecycleElementAndDataTemplate"
-                    Header=""
-                    ItemTemplate="{StaticResource GameDataTemplate}"
-                    ItemsSource="{Binding Loader.Result}"
-                    RowHeight="140"
-                    SelectionMode="None"
-                    SeparatorVisibility="None" />
+                  CachingStrategy="RecycleElementAndDataTemplate"
+                  Header=""
+                  ItemTemplate="{StaticResource GameDataTemplate}"
+                  ItemsSource="{Binding Loader.Result}"
+                  RowHeight="140"
+                  SelectionMode="None"
+                  SeparatorVisibility="None" />
     </RefreshView>
 </customViews:TaskLoaderView>
 ```
@@ -148,23 +148,23 @@ You can also override any state views to implement your own:
 
 ```xml
 <sharpnado:TaskLoaderView x:Name="TaskLoaderView"
-                            Grid.Row="3"
-                            Style="{StaticResource TaskLoaderStyle}"
-                            TaskLoaderNotifier="{Binding Loader}">
+                          Grid.Row="3"
+                          Style="{StaticResource TaskLoaderStyle}"
+                          TaskLoaderNotifier="{Binding Loader}">
 
     <sharpnado:TaskLoaderView.LoadingView>
         <Image x:Name="BusyImage"
-                AbsoluteLayout.LayoutFlags="PositionProportional"
-                AbsoluteLayout.LayoutBounds="0.5, 0.5, 60, 60"
-                Aspect="AspectFit"
-                Source="{img:ImageResource Sample.Images.busy_bee_white_bg.png}" />
+               AbsoluteLayout.LayoutFlags="PositionProportional"
+               AbsoluteLayout.LayoutBounds="0.5, 0.5, 60, 60"
+               Aspect="AspectFit"
+               Source="{img:ImageResource Sample.Images.busy_bee_white_bg.png}" />
     </sharpnado:TaskLoaderView.LoadingView>
 
     <sharpnado:TaskLoaderView.ErrorView>
         <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
-                AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
-                Padding="15,0,0,0"
-                BackgroundColor="White">
+              AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
+              Padding="15,0,0,0"
+              BackgroundColor="White">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />
                 <RowDefinition Height="30" />
@@ -175,50 +175,50 @@ You can also override any state views to implement your own:
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Image Grid.Row="0"
-                    Grid.Column="0"
-                    Style="{StaticResource ErrorBombStyle}" />
+                   Grid.Column="0"
+                   Style="{StaticResource ErrorBombStyle}" />
             <Image Grid.Row="0"
-                    Grid.Column="1"
-                    Style="{StaticResource ErrorBombStyle}" />
+                   Grid.Column="1"
+                   Style="{StaticResource ErrorBombStyle}" />
             <Image Grid.Row="0"
-                    Grid.Column="2"
-                    Style="{StaticResource ErrorBombStyle}" />
+                   Grid.Column="2"
+                   Style="{StaticResource ErrorBombStyle}" />
             <Label Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    Style="{StaticResource TextBody}"
-                    Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                   Grid.Column="0"
+                   Grid.ColumnSpan="3"
+                   Style="{StaticResource TextBody}"
+                   Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
         </Grid>
     </sharpnado:TaskLoaderView.ErrorView>
 
     <sharpnado:TaskLoaderView.ErrorNotificationView>
         <Grid x:Name="ErrorNotificationView"
-                AbsoluteLayout.LayoutFlags="PositionProportional"
-                AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
-                Scale="0">
+              AbsoluteLayout.LayoutFlags="PositionProportional"
+              AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+              Scale="0">
             <Grid.Behaviors>
                 <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
             </Grid.Behaviors>
             <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
             <Label Style="{StaticResource TextBody}"
-                    Margin="{StaticResource ThicknessLarge}"
-                    VerticalOptions="Center"
-                    HorizontalTextAlignment="Center"
-                    Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                   Margin="{StaticResource ThicknessLarge}"
+                   VerticalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
         </Grid>
     </sharpnado:TaskLoaderView.ErrorNotificationView>
 
     <RefreshView Command="{Binding Loader.RefreshCommand}"
-                    IsRefreshing="{Binding Loader.ShowRefresher}"
-                    RefreshColor="{StaticResource AccentColor}">
+                 IsRefreshing="{Binding Loader.ShowRefresher}"
+                 RefreshColor="{StaticResource AccentColor}">
         <ListView BackgroundColor="Transparent"
-                    CachingStrategy="RecycleElementAndDataTemplate"
-                    Header=""
-                    ItemTemplate="{StaticResource GameDataTemplate}"
-                    ItemsSource="{Binding Loader.Result}"
-                    RowHeight="140"
-                    SelectionMode="None"
-                    SeparatorVisibility="None" />
+                  CachingStrategy="RecycleElementAndDataTemplate"
+                  Header=""
+                  ItemTemplate="{StaticResource GameDataTemplate}"
+                  ItemsSource="{Binding Loader.Result}"
+                  RowHeight="140"
+                  SelectionMode="None"
+                  SeparatorVisibility="None" />
     </RefreshView>
 </sharpnado:TaskLoaderView>
 ```
@@ -226,6 +226,89 @@ You can also override any state views to implement your own:
 You can see that the `TaskLoaderView` uses an `AbsoluteLayout` internally. So you can use `AbsoluteLayout` bounds and flags to position your views.
 
 <img src="Docs/user_loading.gif" width="300" />
+
+### Support for Lottie
+
+With custom views and [Lottie](https://github.com/Baseflow/LottieXamarin), you can add all the amazing animations made by your best designer \o/
+
+Use Lottie json animations for subtle app branding and dazzle your guests in your mundane diner parties!
+
+<img src="Docs/lottie-short.gif" width="300" />
+
+```xml
+<customViews:TaskLoaderView Grid.Row="2"
+                            Style="{StaticResource TaskLoaderStyle}"
+                            TaskLoaderNotifier="{Binding Loader}">
+    <customViews:TaskLoaderView.LoadingView>
+        <lottie:AnimationView x:Name="LoadingLottie"
+                              AbsoluteLayout.LayoutFlags="PositionProportional"
+                              AbsoluteLayout.LayoutBounds="0.5, 0.4, 120, 120"
+                              HorizontalOptions="FillAndExpand"
+                              VerticalOptions="FillAndExpand"
+                              Animation="{Binding Loader.ShowLoader, Converter={StaticResource CyclicLoadingLottieConverter}}"
+                              AutoPlay="True"
+                              Loop="True" />
+    </customViews:TaskLoaderView.LoadingView>
+
+    <customViews:TaskLoaderView.EmptyView>
+        <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional" 
+                     AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180">
+
+            <lottie:AnimationView HorizontalOptions="FillAndExpand"
+                                  VerticalOptions="FillAndExpand"
+                                  Animation="empty_state.json"
+                                  AutoPlay="True"
+                                  Loop="True" />
+
+            <Label Style="{StaticResource TextBody}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Text="{loc:Translate Empty_Screen}"
+                   TextColor="White" />
+            <Button Style="{StaticResource TextBody}"
+                    HeightRequest="40"
+                    Margin="0,20,0,0"
+                    Padding="25,0"
+                    HorizontalOptions="Center"
+                    BackgroundColor="{StaticResource TopElementBackground}"
+                    Command="{Binding Loader.ReloadCommand}"
+                    Text="{loc:Translate ErrorButton_Retry}"
+                    TextColor="White" />
+        </StackLayout>
+    </customViews:TaskLoaderView.EmptyView>
+
+    <customViews:TaskLoaderView.ErrorView>
+        <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional" 
+                     AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180">
+
+            <lottie:AnimationView HorizontalOptions="FillAndExpand"
+                                  VerticalOptions="FillAndExpand"
+                                  Animation="{Binding Loader.Error, Converter={StaticResource ExceptionToLottieConverter}}"
+                                  AutoPlay="True"
+                                  Loop="True" />
+
+            <Label Style="{StaticResource TextBody}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                   TextColor="White" />
+            <Button Style="{StaticResource TextBody}"
+                    HeightRequest="40"
+                    Margin="0,20,0,0"
+                    Padding="25,0"
+                    HorizontalOptions="Center"
+                    BackgroundColor="{StaticResource TopElementBackground}"
+                    Command="{Binding Loader.ReloadCommand}"
+                    Text="{loc:Translate ErrorButton_Retry}"
+                    TextColor="White" />
+        </StackLayout>
+    </customViews:TaskLoaderView.ErrorView>
+
+    ...
+
+</customViews:TaskLoaderView>
+```
+
 
 ### Support for Xamarin.Forms.Skeleton
 
@@ -246,22 +329,22 @@ In case of a list: you just have to create a static array of item view models.
                             TaskLoaderNotifier="{Binding Loader}">
     <customViews:TaskLoaderView.LoadingView>
         <ListView Style="{StaticResource ListGameStyle}"
-                    sk:Skeleton.Animation="Fade"
-                    sk:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
-                    sk:Skeleton.IsParent="True"
-                    ItemTemplate="{StaticResource GameSkeletonViewCell}"
-                    ItemsSource="{x:Static views:Skeletons.Games}"
-                    VerticalScrollBarVisibility="Never" />
+                  sk:Skeleton.Animation="Fade"
+                  sk:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                  sk:Skeleton.IsParent="True"
+                  ItemTemplate="{StaticResource GameSkeletonViewCell}"
+                  ItemsSource="{x:Static views:Skeletons.Games}"
+                  VerticalScrollBarVisibility="Never" />
     </customViews:TaskLoaderView.LoadingView>
 
 
     <RefreshView Command="{Binding Loader.RefreshCommand}"
-                    IsRefreshing="{Binding Loader.ShowRefresher}"
-                    RefreshColor="{StaticResource AccentColor}">
+                 IsRefreshing="{Binding Loader.ShowRefresher}"
+                 RefreshColor="{StaticResource AccentColor}">
         <ListView Style="{StaticResource ListGameStyle}"
-                    CachingStrategy="RecycleElementAndDataTemplate"
-                    ItemTemplate="{StaticResource GameSkeletonViewCell}"
-                    ItemsSource="{Binding Loader.Result}" />
+                  CachingStrategy="RecycleElementAndDataTemplate"
+                  ItemTemplate="{StaticResource GameSkeletonViewCell}"
+                  ItemsSource="{Binding Loader.Result}" />
     </RefreshView>
 </customViews:TaskLoaderView>
 ```
@@ -306,25 +389,25 @@ If you are not loading a list but a simple object, you don't even have to use a 
 
 ```xml
 <sharpnado:TaskLoaderView Grid.Row="2"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            AccentColor="{StaticResource AccentColor}"
-                            ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
-                            ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
-                            FontFamily="{StaticResource FontAtariSt}"
-                            TaskLoaderNotifier="{Binding RandomGameLoader}"
-                            TaskLoaderType="ResultAsLoadingView"
-                            TextColor="Black">
+                          Grid.Column="0"
+                          Grid.ColumnSpan="2"
+                          AccentColor="{StaticResource AccentColor}"
+                          ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
+                          ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
+                          FontFamily="{StaticResource FontAtariSt}"
+                          TaskLoaderNotifier="{Binding RandomGameLoader}"
+                          TaskLoaderType="ResultAsLoadingView"
+                          TextColor="Black">
 
     <Frame Style="{StaticResource CardStyle}"
-            Margin="-15,0,-15,-15"
-            Padding="0"
-            skeleton:Skeleton.Animation="Beat"
-            skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-            skeleton:Skeleton.IsParent="True"
-            BackgroundColor="{DynamicResource CellBackgroundColor}"
-            CornerRadius="10"
-            IsClippedToBounds="True">
+           Margin="-15,0,-15,-15"
+           Padding="0"
+           skeleton:Skeleton.Animation="Beat"
+           skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+           skeleton:Skeleton.IsParent="True"
+           BackgroundColor="{DynamicResource CellBackgroundColor}"
+           CornerRadius="10"
+           IsClippedToBounds="True">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="160" />
@@ -333,29 +416,29 @@ If you are not loading a list but a simple object, you don't even have to use a 
                 <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <Image Grid.Row="0"
-                    skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                    skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-                    Aspect="AspectFill"
-                    Source="{Binding RandomGameLoader.Result.ScreenshotUrl}" />
+                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                   skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                   Aspect="AspectFill"
+                   Source="{Binding RandomGameLoader.Result.ScreenshotUrl}" />
 
             <Label Grid.Row="1"
-                    Style="{StaticResource GameName}"
-                    Margin="15,0"
-                    skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                    skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-                    Text="{Binding RandomGameLoader.Result.Name}" />
+                   Style="{StaticResource GameName}"
+                   Margin="15,0"
+                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                   skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                   Text="{Binding RandomGameLoader.Result.Name}" />
 
             <Label Grid.Row="2"
-                    Style="{StaticResource GameCompany}"
-                    Margin="15,0"
-                    skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                    skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-                    Text="{Binding RandomGameLoader.Result.MajorCompany}" />
+                   Style="{StaticResource GameCompany}"
+                   Margin="15,0"
+                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                   skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+                   Text="{Binding RandomGameLoader.Result.MajorCompany}" />
 
             <Label Grid.Row="3"
-                    Style="{StaticResource GameGenre}"
-                    Margin="15,0"
-                    Text="{Binding RandomGameLoader.Result.MajorGenre}" />
+                   Style="{StaticResource GameGenre}"
+                   Margin="15,0"
+                   Text="{Binding RandomGameLoader.Result.MajorGenre}" />
         </Grid>
     </Frame>
 
@@ -373,15 +456,15 @@ Here `TaskLoaderType="ResultAsLoadingView"` is set cause we are using the skelet
 
 ```xml
 <sharpnado:TaskLoaderView Grid.Row="2"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            AccentColor="{StaticResource AccentColor}"
-                            ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
-                            ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
-                            FontFamily="{StaticResource FontAtariSt}"
-                            TaskLoaderNotifier="{Binding RandomGameLoader}"
-                            TaskLoaderType="ResultAsLoadingView"
-                            TextColor="Black">
+                          Grid.Column="0"
+                          Grid.ColumnSpan="2"
+                          AccentColor="{StaticResource AccentColor}"
+                          ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
+                          ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
+                          FontFamily="{StaticResource FontAtariSt}"
+                          TaskLoaderNotifier="{Binding RandomGameLoader}"
+                          TaskLoaderType="ResultAsLoadingView"
+                          TextColor="Black">
     <sharpnado:TaskLoaderView.NotStartedView>
         <Button AbsoluteLayout.LayoutFlags="PositionProportional"
                 AbsoluteLayout.LayoutBounds="0.5, 0.5, 120, 50"
@@ -390,14 +473,14 @@ Here `TaskLoaderType="ResultAsLoadingView"` is set cause we are using the skelet
     </sharpnado:TaskLoaderView.NotStartedView>
 
     <Frame Style="{StaticResource CardStyle}"
-            Margin="-15,0,-15,-15"
-            Padding="0"
-            skeleton:Skeleton.Animation="Beat"
-            skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-            skeleton:Skeleton.IsParent="True"
-            BackgroundColor="{DynamicResource CellBackgroundColor}"
-            CornerRadius="10"
-            IsClippedToBounds="True">
+           Margin="-15,0,-15,-15"
+           Padding="0"
+           skeleton:Skeleton.Animation="Beat"
+           skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
+           skeleton:Skeleton.IsParent="True"
+           BackgroundColor="{DynamicResource CellBackgroundColor}"
+           CornerRadius="10"
+           IsClippedToBounds="True">
         ...
     </Frame>
 </sharpnado:TaskLoaderView
@@ -443,7 +526,7 @@ We tend to forget a state in our `Task` loading cycle: the notification view.
 Consider this scenario:
 
 1. we are loading a list of retro game
-2. loading is successfull: the list is displayed
+2. loading is successful: the list is displayed
 3. we are refreshing the list
 4. oops an error occurs
 5. do we want to see the error view although the items were correctly loaded before?
@@ -470,18 +553,18 @@ The `ErrorNotificationView` is also customizable if you like. It's brought to yo
 ```xml
 <sharpnado:TaskLoaderView.ErrorNotificationView>
     <Grid x:Name="ErrorNotificationView"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
-            Scale="0">
+          AbsoluteLayout.LayoutFlags="PositionProportional"
+          AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+          Scale="0">
         <Grid.Behaviors>
             <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
         </Grid.Behaviors>
         <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
         <Label Style="{StaticResource TextBody}"
-                Margin="{StaticResource ThicknessLarge}"
-                VerticalOptions="Center"
-                HorizontalTextAlignment="Center"
-                Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+               Margin="{StaticResource ThicknessLarge}"
+               VerticalOptions="Center"
+               HorizontalTextAlignment="Center"
+               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
     </Grid>
 </sharpnado:TaskLoaderView.ErrorNotificationView>
 ```
@@ -492,12 +575,12 @@ Just bind the `RefreshCommand` to the `RefreshView` and `IsRefreshing` to the `S
 
 ```xml
 <RefreshView Command="{Binding Loader.RefreshCommand}"
-                IsRefreshing="{Binding Loader.ShowRefresher}"
-                RefreshColor="{StaticResource AccentColor}">
+             IsRefreshing="{Binding Loader.ShowRefresher}"
+             RefreshColor="{StaticResource AccentColor}">
     <ListView Style="{StaticResource ListGameStyle}"
-                CachingStrategy="RecycleElementAndDataTemplate"
-                ItemTemplate="{StaticResource GameSkeletonViewCell}"
-                ItemsSource="{Binding Loader.Result}" />
+              CachingStrategy="RecycleElementAndDataTemplate"
+              ItemTemplate="{StaticResource GameSkeletonViewCell}"
+              ItemsSource="{Binding Loader.Result}" />
 </RefreshView>
 ```
 
@@ -505,7 +588,7 @@ Just bind the `RefreshCommand` to the `RefreshView` and `IsRefreshing` to the `S
 
 For more about that, you can read this post on Sharpnado: https://www.sharpnado.com/taskloaderview-async-init-made-easy/.
 
-For deeper understanding of Composition vs Inheritance, my session at XamExpertDay: https://github.com/roubachof/SLIDES_FreeYourselfFromIsBusy.
+For deeper understanding of Composition vs Inheritance, my session at XamlExpertDay: https://github.com/roubachof/SLIDES_FreeYourselfFromIsBusy.
 
 The `TaskLoaderNotifier` is a loading component for your tasks, and is commonly used in your view models.
 
@@ -552,16 +635,16 @@ You bind your `TaskLoaderNotifier` to your `TaskLoaderView`, and the magic happe
                             Style="{StaticResource TaskLoaderStyle}"
                             TaskLoaderNotifier="{Binding Loader}">
     <RefreshView Command="{Binding Loader.RefreshCommand}"
-                    IsRefreshing="{Binding Loader.ShowRefresher}"
-                    RefreshColor="{StaticResource AccentColor}">
+                 IsRefreshing="{Binding Loader.ShowRefresher}"
+                 RefreshColor="{StaticResource AccentColor}">
         <ListView BackgroundColor="Transparent"
-                    CachingStrategy="RecycleElementAndDataTemplate"
-                    Header=""
-                    ItemTemplate="{StaticResource GameDataTemplate}"
-                    ItemsSource="{Binding Loader.Result}"
-                    RowHeight="140"
-                    SelectionMode="None"
-                    SeparatorVisibility="None" />
+                  CachingStrategy="RecycleElementAndDataTemplate"
+                  Header=""
+                  ItemTemplate="{StaticResource GameDataTemplate}"
+                  ItemsSource="{Binding Loader.Result}"
+                  RowHeight="140"
+                  SelectionMode="None"
+                  SeparatorVisibility="None" />
     </RefreshView>
 </customViews:TaskLoaderView>
 ```

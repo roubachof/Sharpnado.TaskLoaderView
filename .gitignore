@@ -332,3 +332,6 @@ ASALocalRun/
 # Ignore all differences in line endings
 *        -crlf
 .DS_Store
+
+# visual studio code
+.vscode/
