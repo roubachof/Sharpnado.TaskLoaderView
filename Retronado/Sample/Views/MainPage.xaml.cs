@@ -45,6 +45,7 @@ namespace Sample.Views
 
         private void ButtonDefaultLayoutOnClicked(object sender, EventArgs e)
         {
+            // TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultIsBusyViewsPage>(GamePlatform.Console));
             TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsPage>(GamePlatform.Console));
         }
 

@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 using IGDB;
+using Sample.Infrastructure;
+using Sample.Services;
 
 namespace Sample.Domain
 {
     public class RetroGamingService : IRetroGamingService
     {
+        private readonly ErrorEmulator _errorEmulator;
         private const int AtariPlatformId = 63;
 
         private const int AmigaPlatformId = 16;
@@ -29,8 +33,9 @@ namespace Sample.Domain
 
         private readonly IGDBRestClient _igdbClient;
 
-        public RetroGamingService()
+        public RetroGamingService(ErrorEmulator errorEmulator)
         {
+            _errorEmulator = errorEmulator;
             _igdbClient = RefitClient.Create("b4f8877672fb840873c1bf1b5fe611fb");
         }
 
@@ -45,6 +50,8 @@ namespace Sample.Domain
 
         public async Task<List<Game>> GetAtariAndAmigaGames()
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             var bounds = GetIdBounds();
             var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
                                 IGDB.Client.Endpoints.Games,
@@ -56,11 +63,45 @@ namespace Sample.Domain
                                     20))
                                  .ConfigureAwait(false);
 
-            return igdbModels.Select(ToDomainEntity).ToList();
+            var result = igdbModels.Select(ToDomainEntity).ToList();
+            watch.Stop();
+            var remainingWaitingTime = TimeSpan.FromSeconds(4) - watch.Elapsed;
+            if (remainingWaitingTime > TimeSpan.Zero)
+            {
+                // Sometimes the api is too good x)
+                await Task.Delay(remainingWaitingTime);
+            }
+
+            switch (_errorEmulator.ErrorType)
+            {
+                case ErrorType.Unknown:
+                    throw new InvalidOperationException();
+
+                case ErrorType.Network:
+                    throw new NetworkException();
+
+                case ErrorType.Server:
+                    throw new ServerException();
+
+                case ErrorType.NoData:
+                    return new List<Game>();
+
+                case ErrorType.ErrorOnRefresh:
+                    if (DateTime.Now.Second % 2 == 0)
+                    {
+                        throw new NetworkException();
+                    }
+
+                    throw new ServerException();
+            }
+
+            return result;
         }
 
         public async Task<List<Game>> GetNesAndSmsGames()
         {
+            Stopwatch watch = new Stopwatch();
+            watch.Start();
             var bounds = GetIdBounds();
             var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
                                 IGDB.Client.Endpoints.Games,
@@ -72,7 +113,39 @@ namespace Sample.Domain
                                     20))
                                  .ConfigureAwait(false);
 
-            return igdbModels.Select(ToDomainEntity).ToList();
+            var result = igdbModels.Select(ToDomainEntity).ToList();
+            watch.Stop();
+            var remainingWaitingTime = TimeSpan.FromSeconds(4) - watch.Elapsed;
+            if (remainingWaitingTime > TimeSpan.Zero)
+            {
+                // Sometimes the api is too good x)
+                await Task.Delay(remainingWaitingTime);
+            }
+
+            switch (_errorEmulator.ErrorType)
+            {
+                case ErrorType.Unknown:
+                    throw new InvalidOperationException();
+
+                case ErrorType.Network:
+                    throw new NetworkException();
+
+                case ErrorType.Server:
+                    throw new ServerException();
+
+                case ErrorType.NoData:
+                    return new List<Game>();
+
+                case ErrorType.ErrorOnRefresh:
+                    if (DateTime.Now.Second % 2 == 0)
+                    {
+                        throw new NetworkException();
+                    }
+
+                    throw new ServerException();
+            }
+
+            return result;
         }
 
         private (int LowerId, int HigherId) GetIdBounds(int interval = 1000)

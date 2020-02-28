@@ -80,7 +80,7 @@ namespace Sample.Navigation.Impl
 
                 // Then we want to go back to root page and clear the stack
                 await NavigationPage.PopToRootAsync(animated);
-                ((ANavigableViewModel)rootPage.BindingContext).Load(parameter);
+                ((ANavigableViewModel)rootPage.BindingContext).OnNavigated(parameter);
                 return;
             }
 
@@ -95,7 +95,7 @@ namespace Sample.Navigation.Impl
                 await NavigationPage.PushAsync((Page)view, animated);
             }
 
-            ((ANavigableViewModel)view.BindingContext).Load(parameter);
+            ((ANavigableViewModel)view.BindingContext).OnNavigated(parameter);
         }
 
         public async Task NavigateToViewAsync<TView>(
@@ -120,7 +120,7 @@ namespace Sample.Navigation.Impl
 
                 // Then we want to go back to root page and clear the stack
                 await NavigationPage.PopToRootAsync(animated);
-                ((ANavigableViewModel)rootPage.BindingContext).Load(parameter);
+                ((ANavigableViewModel)rootPage.BindingContext).OnNavigated(parameter);
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace Sample.Navigation.Impl
                 await NavigationPage.PushAsync((Page)view, animated);
             }
 
-            ((ANavigableViewModel)view.BindingContext).Load(parameter);
+            ((ANavigableViewModel)view.BindingContext).OnNavigated(parameter);
         }
 
         public async Task NavigateFromMenuToAsync<TViewModel>()
@@ -143,7 +143,7 @@ namespace Sample.Navigation.Impl
         {
             var view = _viewLocator.GetViewFor<TViewModel>();
             await NavigationPage.PushAsync((Page)view);
-            ((ANavigableViewModel)view.BindingContext).Load(null);
+            ((ANavigableViewModel)view.BindingContext).OnNavigated(null);
 
             foreach (
                 var page in
@@ -158,7 +158,7 @@ namespace Sample.Navigation.Impl
         public async Task<IBindablePage> NavigateBackAsync(object parameter = null)
         {
             var page = (IBindablePage)await NavigationPage.PopAsync();
-            ((ANavigableViewModel)page.BindingContext).Load(parameter);
+            ((ANavigableViewModel)page.BindingContext).OnNavigated(parameter);
             return page;
         }
     }

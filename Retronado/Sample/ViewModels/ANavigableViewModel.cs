@@ -48,7 +48,7 @@ namespace Sample.ViewModels
         /// <param name="parameter">
         /// The parameter.
         /// </param>
-        public virtual void Load(object parameter)
+        public virtual void OnNavigated(object parameter)
         {
         }
 

@@ -48,6 +48,8 @@
     <converters:ExceptionToErrorMessageConverter x:Key="ExceptionToErrorMessageConverter" />
     <converters:CyclicLoadingLottieConverter x:Key="CyclicLoadingLottieConverter" />
     <converters:ExceptionToLottieConverter x:Key="ExceptionToLottieConverter" />
+    <converters:StringToImageSourceResourceConverter x:Key="StringToImageSourceResourceConverter"/>
+    <converters:ListCountToVisibilityConverter x:Key="ListCountToVisibilityConverter"/>
 
     <!--<Style TargetType="customViews:TaskLoaderView">
         <Setter Property="AccentColor" Value="{StaticResource PrimaryColor}"/>
