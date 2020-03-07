@@ -65,7 +65,7 @@ namespace Sample.Domain
 
             var result = igdbModels.Select(ToDomainEntity).ToList();
             watch.Stop();
-            var remainingWaitingTime = TimeSpan.FromSeconds(4) - watch.Elapsed;
+            var remainingWaitingTime = TimeSpan.FromSeconds(2) - watch.Elapsed;
             if (remainingWaitingTime > TimeSpan.Zero)
             {
                 // Sometimes the api is too good x)
@@ -115,7 +115,7 @@ namespace Sample.Domain
 
             var result = igdbModels.Select(ToDomainEntity).ToList();
             watch.Stop();
-            var remainingWaitingTime = TimeSpan.FromSeconds(4) - watch.Elapsed;
+            var remainingWaitingTime = TimeSpan.FromSeconds(2) - watch.Elapsed;
             if (remainingWaitingTime > TimeSpan.Zero)
             {
                 // Sometimes the api is too good x)

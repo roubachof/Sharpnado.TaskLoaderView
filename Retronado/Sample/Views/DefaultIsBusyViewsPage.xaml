@@ -82,7 +82,8 @@
 
             <AbsoluteLayout Grid.Row="2">
 
-                <RefreshView AbsoluteLayout.LayoutFlags="All"
+                <RefreshView x:Name="ResultView"
+                             AbsoluteLayout.LayoutFlags="All"
                              AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                              Command="{Binding RefreshCommand}"
                              IsRefreshing="{Binding IsRefreshing}"
@@ -98,14 +99,16 @@
                               SeparatorVisibility="None" />
                 </RefreshView>
 
-                <ActivityIndicator AbsoluteLayout.LayoutFlags="All"
+                <ActivityIndicator x:Name="LoadingView"
+                                   AbsoluteLayout.LayoutFlags="All"
                                    AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"
                                    Color="{StaticResource AccentColor}"
                                    IsRunning="{Binding IsBusy}" />
 
-                <StackLayout AbsoluteLayout.LayoutFlags="All"
+                <StackLayout x:Name="ErrorView"
+                             AbsoluteLayout.LayoutFlags="All"
                              AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
                              HorizontalOptions="Center"
                              VerticalOptions="Center"

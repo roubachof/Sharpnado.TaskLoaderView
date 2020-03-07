@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 using Sample.Domain;
 using Sample.Infrastructure;
 using Sample.Navigation;
-using Sample.Services;
 
 using Sharpnado.Presentation.Forms;
-
-using Xamarin.Forms;
 
 namespace Sample.ViewModels
 {

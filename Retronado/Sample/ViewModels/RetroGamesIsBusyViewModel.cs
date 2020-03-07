@@ -30,7 +30,10 @@ namespace Sample.ViewModels
 
         private List<Game> _games;
 
-        public RetroGamesIsBusyViewModel(INavigationService navigationService, IRetroGamingService retroGamingService, ErrorEmulator errorEmulator)
+        public RetroGamesIsBusyViewModel(
+            INavigationService navigationService,
+            IRetroGamingService retroGamingService,
+            ErrorEmulator errorEmulator)
             : base(navigationService)
         {
             _retroGamingService = retroGamingService;
@@ -89,7 +92,7 @@ namespace Sample.ViewModels
 
         public ErrorEmulatorViewModel ErrorEmulatorViewModel { get; }
 
-        public override async void OnNavigated(object parameter)
+        public override void OnNavigated(object parameter)
         {
             _platform = (GamePlatform)parameter;
 
