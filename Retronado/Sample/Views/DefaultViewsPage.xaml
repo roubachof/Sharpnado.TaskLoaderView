@@ -26,7 +26,6 @@
                 <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
                 <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
                 <Setter Property="EmptyStateImageSource" Value="{inf:ImageResource Sample.Images.dougal.png}" />
-                <Setter Property="RetryButtonText" Value="{loc:Translate ErrorButton_Retry}" />
                 <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
                 <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
                 <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />

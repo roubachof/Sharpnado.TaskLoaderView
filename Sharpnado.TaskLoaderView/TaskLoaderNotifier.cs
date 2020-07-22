@@ -46,6 +46,8 @@ namespace Sharpnado.Presentation.Forms
 
         bool ShowErrorNotification { get; }
 
+        ITaskMonitor CurrentLoadingTask { get; }
+
         void Load();
 
         void Reset();
@@ -137,9 +139,9 @@ namespace Sharpnado.Presentation.Forms
             set => SetAndRaise(ref _error, value);
         }
 
-        protected object SyncRoot { get; } = new object();
+        public ITaskMonitor CurrentLoadingTask { get; protected set; }
 
-        protected ITaskMonitor CurrentLoadingTask { get; set; }
+        protected object SyncRoot { get; } = new object();
 
         public abstract void Load();
 

@@ -135,6 +135,8 @@ namespace Sharpnado.Presentation.Forms.CustomViews
         {
             InitializeComponent();
 
+            Initialize();
+
             StartTaskCommand = new Command(
                 () =>
                     {
@@ -383,6 +385,28 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             }
         }
 
+        private void Initialize()
+        {
+            CreateFromTaskSource();
+            SetBindings();
+
+            OnTaskStartModeSet();
+            OnTaskLoaderTypeSet();
+            UpdateLoadingView();
+            UpdateErrorView();
+            UpdateEmptyView();
+            UpdateNotStartedView();
+            UpdateErrorNotificationView();
+            UpdateEmptyStateImageSource();
+            UpdateEmptyStateMessage();
+            UpdateAccentColor();
+            UpdateTextColor();
+            UpdateFontFamily();
+            UpdateRetryButtonText();
+            UpdateNotificationBackgroundColor();
+            UpdateNotificationTextColor();
+        }
+
         private void OnTaskStartModeSet()
         {
             if (TaskStartMode == TaskStartMode.Manual)
@@ -395,6 +419,11 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void OnTaskLoaderTypeSet()
         {
+            if (DefaultLoader == null)
+            {
+                return;
+            }
+
             if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
             {
                 DefaultLoader.IsVisible = false;
@@ -406,6 +435,11 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateAccentColor()
         {
+            if (DefaultLoader == null)
+            {
+                return;
+            }
+
             DefaultLoader.Color = AccentColor;
             ErrorViewButton.BackgroundColor = AccentColor;
             ErrorViewButton.TextColor = ColorHelper.GetTextColorFromBackground(AccentColor);
@@ -413,12 +447,22 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateTextColor()
         {
+            if (ErrorViewLabel == null)
+            {
+                return;
+            }
+
             ErrorViewLabel.TextColor = TextColor;
             EmptyStateLabel.TextColor = TextColor;
         }
 
         private void UpdateFontFamily()
         {
+            if (ErrorViewLabel == null)
+            {
+                return;
+            }
+
             ErrorNotificationViewLabel.FontFamily = FontFamily;
             ErrorViewLabel.FontFamily = FontFamily;
             EmptyStateLabel.FontFamily = FontFamily;
@@ -426,16 +470,31 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateRetryButtonText()
         {
+            if (ErrorViewButton == null)
+            {
+                return;
+            }
+
             ErrorViewButton.Text = RetryButtonText;
         }
 
         private void UpdateEmptyStateImageSource()
         {
+            if (EmptyStateImage == null)
+            {
+                return;
+            }
+
             EmptyStateImage.Source = EmptyStateImageSource;
         }
 
         private void UpdateEmptyStateMessage()
         {
+            if (EmptyStateLabel == null)
+            {
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(EmptyStateMessage))
             {
                 return;
@@ -446,7 +505,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateErrorNotificationView()
         {
-            if (ErrorNotificationView == null)
+            if (Container?.Children == null || ErrorNotificationView == null)
             {
                 return;
             }
@@ -468,7 +527,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateEmptyView()
         {
-            if (EmptyView == null)
+            if (Container?.Children == null || EmptyView == null)
             {
                 return;
             }
@@ -488,7 +547,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateNotStartedView()
         {
-            if (NotStartedView == null)
+            if (Container?.Children == null || NotStartedView == null)
             {
                 return;
             }
@@ -506,7 +565,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateErrorView()
         {
-            if (ErrorView == null)
+            if (Container?.Children == null || ErrorView == null)
             {
                 return;
             }
@@ -526,7 +585,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateLoadingView()
         {
-            if (LoadingView == null)
+            if (Container?.Children == null || LoadingView == null)
             {
                 return;
             }
@@ -546,12 +605,22 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateNotificationBackgroundColor()
         {
+            if (ErrorNotificationViewLabel == null)
+            {
+                return;
+            }
+
             DefaultErrorNotificationView.BackgroundColor = NotificationBackgroundColor;
             ErrorNotificationViewLabel.TextColor = ColorHelper.GetTextColorFromBackground(NotificationTextColor);
         }
 
         private void UpdateNotificationTextColor()
         {
+            if (ErrorNotificationViewLabel == null)
+            {
+                return;
+            }
+
             ErrorNotificationViewLabel.TextColor = NotificationTextColor;
         }
 
@@ -644,13 +713,18 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void SetDefaultLoadingViewBindings()
         {
-            DefaultLoader.SetBinding(
+            DefaultLoader?.SetBinding(
                 ActivityIndicator.IsRunningProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowLoader), source: TaskLoaderNotifier));
         }
 
         private void SetDefaultErrorViewBindings()
         {
+            if (DefaultErrorView == null)
+            {
+                return;
+            }
+
             DefaultErrorView.SetBinding(
                 StackLayout.IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
@@ -680,6 +754,11 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void SetDefaultErrorNotificationViewBindings()
         {
+            if (DefaultErrorNotificationView == null)
+            {
+                return;
+            }
+
             DefaultErrorNotificationView.SetBinding(
                 Frame.IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
@@ -691,6 +770,11 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void SetDefaultEmptyStateViewBindings()
         {
+            if (DefaultEmptyStateView == null)
+            {
+                return;
+            }
+
             DefaultEmptyStateView.SetBinding(
                 Label.IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));

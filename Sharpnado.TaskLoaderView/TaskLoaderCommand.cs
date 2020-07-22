@@ -53,22 +53,43 @@ namespace Sharpnado.Presentation.Forms
 
     public class TaskLoaderCommand<T> : TaskLoaderCommandBase
     {
-        private readonly Func<Task<T>> _taskSource;
+        private readonly Func<T, Task> _taskSource;
 
-        public TaskLoaderCommand(Func<Task<T>> taskSource, Func<object, bool> canExecute = null)
+        public TaskLoaderCommand(Func<T, Task> taskSource, Func<object, bool> canExecute = null)
             : base(canExecute)
         {
             _taskSource = taskSource;
-            Notifier = new TaskLoaderNotifier<T>();
+            Notifier = new TaskLoaderNotifier();
         }
 
-        public TaskLoaderNotifier<T> Notifier { get; }
+        public TaskLoaderNotifier Notifier { get; }
 
         protected override bool IsExecuting => !Notifier.IsNotStarted && Notifier.IsNotCompleted;
 
         public override void Execute(object parameter)
         {
-            Notifier.Load(_taskSource);
+            Notifier.Load(() => _taskSource((T)parameter));
+        }
+    }
+
+    public class TaskLoaderCommand<TParam, TTask> : TaskLoaderCommandBase
+    {
+        private readonly Func<TParam, Task<TTask>> _taskSource;
+
+        public TaskLoaderCommand(Func<TParam, Task<TTask>> taskSource, Func<object, bool> canExecute = null)
+            : base(canExecute)
+        {
+            _taskSource = taskSource;
+            Notifier = new TaskLoaderNotifier<TTask>();
+        }
+
+        public TaskLoaderNotifier<TTask> Notifier { get; }
+
+        protected override bool IsExecuting => !Notifier.IsNotStarted && Notifier.IsNotCompleted;
+
+        public override void Execute(object parameter)
+        {
+            Notifier.Load(() => _taskSource((TParam)parameter));
         }
     }
 }

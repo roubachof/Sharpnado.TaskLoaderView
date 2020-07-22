@@ -16,10 +16,10 @@ namespace Sample.ViewModels
         {
             _retroGamingService = retroGamingService;
 
-            RandomGameLoaderCommand = new TaskLoaderCommand<Game>(GetRandomGame);
+            RandomGameLoaderCommand = new TaskLoaderCommand<object, Game>(_ => GetRandomGame());
         }
 
-        public TaskLoaderCommand<Game> RandomGameLoaderCommand { get; }
+        public TaskLoaderCommand<object, Game> RandomGameLoaderCommand { get; }
 
         private async Task<Game> GetRandomGame()
         {
