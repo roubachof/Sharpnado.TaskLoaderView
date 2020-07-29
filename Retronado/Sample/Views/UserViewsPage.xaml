@@ -80,34 +80,36 @@
                 </sharpnado:TaskLoaderView.LoadingView>
 
                 <sharpnado:TaskLoaderView.ErrorView>
-                    <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
-                          AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
-                          Padding="15,0,0,0"
-                          BackgroundColor="White">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="60" />
-                            <RowDefinition Height="30" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Image Grid.Row="0"
-                               Grid.Column="0"
-                               Style="{StaticResource ErrorBombStyle}" />
-                        <Image Grid.Row="0"
-                               Grid.Column="1"
-                               Style="{StaticResource ErrorBombStyle}" />
-                        <Image Grid.Row="0"
-                               Grid.Column="2"
-                               Style="{StaticResource ErrorBombStyle}" />
-                        <Label Grid.Row="1"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="3"
-                               Style="{StaticResource TextBody}"
-                               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
-                    </Grid>
+                    <DataTemplate>
+                        <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                              AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
+                              Padding="15,0,0,0"
+                              BackgroundColor="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Row="0"
+                                   Grid.Column="0"
+                                   Style="{StaticResource ErrorBombStyle}" />
+                            <Image Grid.Row="0"
+                                   Grid.Column="1"
+                                   Style="{StaticResource ErrorBombStyle}" />
+                            <Image Grid.Row="0"
+                                   Grid.Column="2"
+                                   Style="{StaticResource ErrorBombStyle}" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="3"
+                                   Style="{StaticResource TextBody}"
+                                   Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                        </Grid>
+                    </DataTemplate>
                 </sharpnado:TaskLoaderView.ErrorView>
 
                 <sharpnado:TaskLoaderView.ErrorNotificationView>

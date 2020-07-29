@@ -10,13 +10,13 @@ using Xamarin.Forms;
 
 namespace Sharpnado.Presentation.Forms
 {
-    public interface ITaskLoaderNotifier
+    public interface ITaskLoaderNotifier : INotifyPropertyChanged
     {
         ICommand ResetCommand { get; }
 
-        ICommand ReloadCommand { get; }
+        ICommand ReloadCommand { get; set; }
 
-        ICommand RefreshCommand { get; }
+        ICommand RefreshCommand { get; set; }
 
         bool IsCompleted { get; }
 
@@ -53,7 +53,7 @@ namespace Sharpnado.Presentation.Forms
         void Reset();
     }
 
-    public abstract class TaskLoaderNotifierBase : INotifyPropertyChanged, ITaskLoaderNotifier
+    public abstract class TaskLoaderNotifierBase : ITaskLoaderNotifier
     {
         private bool _showLoader;
         private bool _showRefresher;
@@ -66,8 +66,10 @@ namespace Sharpnado.Presentation.Forms
 
         private Exception _error;
 
-        protected TaskLoaderNotifierBase()
+        protected TaskLoaderNotifierBase(bool disableEmptyState = false)
         {
+            DisableEmptyState = disableEmptyState;
+
             ResetCommand = new Command(Reset);
         }
 
@@ -75,9 +77,9 @@ namespace Sharpnado.Presentation.Forms
 
         public ICommand ResetCommand { get; }
 
-        public ICommand ReloadCommand { get; protected set; }
+        public ICommand ReloadCommand { get; set; }
 
-        public ICommand RefreshCommand { get; protected set; }
+        public ICommand RefreshCommand { get; set; }
 
         public bool IsCompleted => CurrentLoadingTask.IsCompleted;
 
@@ -140,6 +142,8 @@ namespace Sharpnado.Presentation.Forms
         }
 
         public ITaskMonitor CurrentLoadingTask { get; protected set; }
+
+        protected bool DisableEmptyState { get; }
 
         protected object SyncRoot { get; } = new object();
 
@@ -308,15 +312,16 @@ namespace Sharpnado.Presentation.Forms
 
         private TData _result;
 
-        public TaskLoaderNotifier()
+        public TaskLoaderNotifier(bool disableEmptyState = false)
+        : base(disableEmptyState)
         {
             CurrentLoadingTask = TaskMonitor<TData>.NotStartedTask;
             ReloadCommand = new Command(() => Load(_loadingTaskSource));
             RefreshCommand = new Command(() => Load(_loadingTaskSource, isRefreshing: true));
         }
 
-        public TaskLoaderNotifier(Func<Task<TData>> loadingTaskSource)
-            : this()
+        public TaskLoaderNotifier(Func<Task<TData>> loadingTaskSource, bool disableEmptyState = false)
+            : this(disableEmptyState)
         {
             _loadingTaskSource = loadingTaskSource;
         }
@@ -410,7 +415,7 @@ namespace Sharpnado.Presentation.Forms
             // Log.Info("Task successfully completed");
             RaisePropertyChanged(nameof(IsSuccessfullyCompleted));
 
-            if (Result == null || (Result is ICollection collection && collection.Count == 0))
+            if (!DisableEmptyState && (Result == null || (Result is ICollection collection && collection.Count == 0)))
             {
                 // Log.Info("Showing empty state");
                 ShowEmptyState = true;

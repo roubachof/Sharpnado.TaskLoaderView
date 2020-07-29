@@ -22,6 +22,73 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <DataTemplate x:Key="LoadingLottieDataTemplate">
+                <lottie:AnimationView x:Name="LoadingLottie"
+                                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                                      AbsoluteLayout.LayoutBounds="0.5, 0.4, 120, 120"
+                                      HorizontalOptions="FillAndExpand"
+                                      VerticalOptions="FillAndExpand"
+                                      Animation="{Binding Loader.ShowLoader, Converter={StaticResource CyclicLoadingLottieConverter}}"
+                                      IsPlaying="True"
+                                      Loop="True" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="EmptyLottieDataTemplate">
+                <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180"
+                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TaskLoaderView}}, Path=TaskLoaderNotifier}">
+
+                    <lottie:AnimationView HorizontalOptions="FillAndExpand"
+                                          VerticalOptions="FillAndExpand"
+                                          Animation="empty_state.json"
+                                          IsPlaying="True"
+                                          Loop="True" />
+
+                    <Label Style="{StaticResource TextBody}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Text="{loc:Translate Empty_Screen}"
+                           TextColor="White" />
+                    <Button Style="{StaticResource TextBody}"
+                            HeightRequest="40"
+                            Margin="0,20,0,0"
+                            Padding="25,0"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{StaticResource TopElementBackground}"
+                            Command="{Binding ReloadCommand}"
+                            Text="{loc:Translate ErrorButton_Retry}"
+                            TextColor="White" />
+                </StackLayout>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ErrorLottieDataTemplate">
+                <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180"
+                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TaskLoaderView}}, Path=TaskLoaderNotifier}">
+
+                    <lottie:AnimationView HorizontalOptions="FillAndExpand"
+                                          VerticalOptions="FillAndExpand"
+                                          Animation="{Binding Error, Converter={StaticResource ExceptionToLottieConverter}}"
+                                          IsPlaying="True"
+                                          Loop="True" />
+
+                    <Label Style="{StaticResource TextBody}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Text="{Binding Error, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                           TextColor="White" />
+                    <Button Style="{StaticResource TextBody}"
+                            HeightRequest="40"
+                            Margin="0,20,0,0"
+                            Padding="25,0"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{StaticResource TopElementBackground}"
+                            Command="{Binding ReloadCommand}"
+                            Text="{loc:Translate ErrorButton_Retry}"
+                            TextColor="White" />
+                </StackLayout>
+            </DataTemplate>
+
             <Style x:Key="TaskLoaderStyle" TargetType="customViews:TaskLoaderView">
                 <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
@@ -34,7 +101,12 @@
                 <Setter Property="BackgroundColor" Value="{StaticResource LightGreyBackground}" />
                 <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
                 <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
+
+                <Setter Property="LoadingView" Value="{StaticResource LoadingLottieDataTemplate}" />
+                <Setter Property="EmptyView" Value="{StaticResource EmptyLottieDataTemplate}" />
+                <Setter Property="ErrorView" Value="{StaticResource ErrorLottieDataTemplate}" />
             </Style>
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -64,72 +136,10 @@
                                          ValueFontFamily="{StaticResource FontAtariSt}" />
             </Frame>
 
+            <!--  All lottie views are specified in DataTemplates and Style above  -->
             <customViews:TaskLoaderView Grid.Row="2"
                                         Style="{StaticResource TaskLoaderStyle}"
                                         TaskLoaderNotifier="{Binding Loader}">
-                <customViews:TaskLoaderView.LoadingView>
-                    <lottie:AnimationView x:Name="LoadingLottie"
-                                          AbsoluteLayout.LayoutFlags="PositionProportional"
-                                          AbsoluteLayout.LayoutBounds="0.5, 0.4, 120, 120"
-                                          HorizontalOptions="FillAndExpand"
-                                          VerticalOptions="FillAndExpand"
-                                          Animation="{Binding Loader.ShowLoader, Converter={StaticResource CyclicLoadingLottieConverter}}"
-                                          AutoPlay="True"
-                                          Loop="True" />
-                </customViews:TaskLoaderView.LoadingView>
-
-                <customViews:TaskLoaderView.EmptyView>
-                    <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180">
-
-                        <lottie:AnimationView HorizontalOptions="FillAndExpand"
-                                              VerticalOptions="FillAndExpand"
-                                              Animation="empty_state.json"
-                                              AutoPlay="True"
-                                              Loop="True" />
-
-                        <Label Style="{StaticResource TextBody}"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"
-                               Text="{loc:Translate Empty_Screen}"
-                               TextColor="White" />
-                        <Button Style="{StaticResource TextBody}"
-                                HeightRequest="40"
-                                Margin="0,20,0,0"
-                                Padding="25,0"
-                                HorizontalOptions="Center"
-                                BackgroundColor="{StaticResource TopElementBackground}"
-                                Command="{Binding Loader.ReloadCommand}"
-                                Text="{loc:Translate ErrorButton_Retry}"
-                                TextColor="White" />
-                    </StackLayout>
-                </customViews:TaskLoaderView.EmptyView>
-
-                <customViews:TaskLoaderView.ErrorView>
-                    <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180">
-
-                        <lottie:AnimationView HorizontalOptions="FillAndExpand"
-                                              VerticalOptions="FillAndExpand"
-                                              Animation="{Binding Loader.Error, Converter={StaticResource ExceptionToLottieConverter}}"
-                                              AutoPlay="True"
-                                              Loop="True" />
-
-                        <Label Style="{StaticResource TextBody}"
-                               HorizontalOptions="Center"
-                               VerticalOptions="Center"
-                               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}"
-                               TextColor="White" />
-                        <Button Style="{StaticResource TextBody}"
-                                HeightRequest="40"
-                                Margin="0,20,0,0"
-                                Padding="25,0"
-                                HorizontalOptions="Center"
-                                BackgroundColor="{StaticResource TopElementBackground}"
-                                Command="{Binding Loader.ReloadCommand}"
-                                Text="{loc:Translate ErrorButton_Retry}"
-                                TextColor="White" />
-                    </StackLayout>
-                </customViews:TaskLoaderView.ErrorView>
-
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
                              RefreshColor="{StaticResource AccentColor}">
