@@ -41,6 +41,14 @@ namespace Sample.ViewModels
             Loader.Load(InitializeAsync);
         }
 
+        private async Task ChainTasks()
+        {
+            await Task.Delay(1000);
+            // The TaskCompleted property will never raise an exception
+            await Loader.CurrentLoadingTask.TaskCompleted;
+            await Task.Delay(1000);
+        }
+
         private async Task<List<Game>> InitializeAsync()
         {
             var result = _platform == GamePlatform.Computer
