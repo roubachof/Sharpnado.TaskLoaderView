@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-
+using Sharpnado.TaskLoaderView;
 using Xamarin.Forms;
 
 // XF min version 3.6.0.220655
@@ -8,6 +8,8 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 {
     public partial class TaskLoaderView : ContentView
     {
+        private const string Tag = "LoaderView";
+
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
@@ -28,6 +30,10 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
                 case nameof(TaskLoaderType):
                     OnTaskLoaderTypeSet();
+                    break;
+
+                case nameof(ResultView):
+                    UpdateResultView();
                     break;
 
                 case nameof(LoadingView):
@@ -91,6 +97,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
             OnTaskStartModeSet();
             OnTaskLoaderTypeSet();
+            UpdateResultView();
             UpdateLoadingView();
             UpdateErrorView();
             UpdateEmptyView();
@@ -125,10 +132,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
             if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
             {
-                DefaultLoader.IsVisible = false;
-                ResultView.SetBinding(
-                    ContentView.IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.IsRunningOrSuccessfullyCompleted), source: TaskLoaderNotifier));
+                BindResultView();
             }
         }
 
@@ -202,169 +206,107 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             EmptyStateLabel.Text = EmptyStateMessage;
         }
 
+        private void UpdateResultView()
+        {
+            if (TryCreateView(ResultView, ViewIndex.Result, ref _resultView))
+            {
+                BindResultView();
+            }
+        }
+
         private void UpdateNotStartedView()
         {
-            if (Container?.Children == null || NotStartedView == null)
+            if (TryCreateView(NotStartedView, ViewIndex.NotStarted, ref _notStartedView))
             {
-                return;
+                BindNotStartedView();
             }
-
-            if (_notStartedView != null)
-            {
-                Container.Children.Remove(_notStartedView);
-                _notStartedView.BindingContext = null;
-            }
-
-            _notStartedView = NotStartedView is DataTemplate dataTemplate
-                ? (View)dataTemplate.CreateContent()
-                : (View)NotStartedView;
-
-            var bounds = AbsoluteLayout.GetLayoutBounds(_notStartedView);
-            if (bounds == Rectangle.Zero)
-            {
-                // Apply default bounds
-                AbsoluteLayout.SetLayoutBounds(_notStartedView, new Rectangle(1, 1, 1, 1));
-                AbsoluteLayout.SetLayoutFlags(_notStartedView, AbsoluteLayoutFlags.All);
-            }
-
-            Container.Children.Insert((int)ViewIndex.NotStarted, _notStartedView);
-
-            BindNotStartedView();
         }
 
         private void UpdateLoadingView()
         {
-            if (Container?.Children == null || LoadingView == null)
+            if (TryCreateView(LoadingView, ViewIndex.Loader, ref _loadingView))
             {
-                return;
+                Container.Children.Remove(DefaultLoader);
+                DefaultLoader.BindingContext = null;
+
+                BindLoadingView();
             }
-
-            Container.Children.Remove(DefaultLoader);
-            DefaultLoader.BindingContext = null;
-
-            if (_loadingView != null)
-            {
-                Container.Children.Remove(_loadingView);
-                _loadingView.BindingContext = null;
-            }
-
-            _loadingView = LoadingView is DataTemplate dataTemplate
-                ? (View)dataTemplate.CreateContent()
-                : (View)LoadingView;
-
-            var bounds = AbsoluteLayout.GetLayoutBounds(_loadingView);
-            if (bounds == Rectangle.Zero)
-            {
-                // Apply default bounds
-                AbsoluteLayout.SetLayoutBounds(_loadingView, new Rectangle(1, 1, 1, 1));
-                AbsoluteLayout.SetLayoutFlags(_loadingView, AbsoluteLayoutFlags.All);
-            }
-
-            Container.Children.Insert((int)ViewIndex.Loader, _loadingView);
-
-            BindLoadingView();
         }
 
         private void UpdateEmptyView()
         {
-            if (Container?.Children == null || EmptyView == null)
+            if (TryCreateView(EmptyView, ViewIndex.Empty, ref _emptyView))
             {
-                return;
+                Container.Children.Remove(DefaultEmptyStateView);
+                DefaultEmptyStateView.BindingContext = null;
+
+                BindEmptyView();
             }
-
-            Container.Children.Remove(DefaultEmptyStateView);
-            DefaultEmptyStateView.BindingContext = null;
-
-            if (_emptyView != null)
-            {
-                Container.Children.Remove(_emptyView);
-                _emptyView.BindingContext = null;
-            }
-
-            _emptyView = EmptyView is DataTemplate dataTemplate
-                ? (View)dataTemplate.CreateContent()
-                : (View)EmptyView;
-
-            var bounds = AbsoluteLayout.GetLayoutBounds(_emptyView);
-            if (bounds == Rectangle.Zero)
-            {
-                // Apply default bounds
-                AbsoluteLayout.SetLayoutBounds(_emptyView, new Rectangle(1, 1, 1, 1));
-                AbsoluteLayout.SetLayoutFlags(_emptyView, AbsoluteLayoutFlags.All);
-            }
-
-            Container.Children.Insert((int)ViewIndex.Empty, _emptyView);
-
-            BindEmptyView();
         }
 
         private void UpdateErrorView()
         {
-            if (Container?.Children == null || ErrorView == null)
+            if (TryCreateView(ErrorView, ViewIndex.Error, ref _errorView))
             {
-                return;
+                Container.Children.Remove(DefaultErrorView);
+                DefaultErrorView.BindingContext = null;
+
+                BindErrorView();
             }
-
-            Container.Children.Remove(DefaultErrorView);
-            DefaultErrorView.BindingContext = null;
-
-            if (_errorView != null)
-            {
-                Container.Children.Remove(_errorView);
-                _errorView.BindingContext = null;
-            }
-
-            _errorView = ErrorView is DataTemplate dataTemplate
-                ? (View)dataTemplate.CreateContent()
-                : (View)ErrorView;
-
-            var bounds = AbsoluteLayout.GetLayoutBounds(_errorView);
-            if (bounds == Rectangle.Zero)
-            {
-                // Apply default bounds
-                AbsoluteLayout.SetLayoutBounds(_errorView, new Rectangle(1, 1, 1, 1));
-                AbsoluteLayout.SetLayoutFlags(_errorView, AbsoluteLayoutFlags.All);
-            }
-
-            Container.Children.Insert((int)ViewIndex.Error, _errorView);
-
-            BindErrorView();
         }
-
 
         private void UpdateErrorNotificationView()
         {
-            if (Container?.Children == null || ErrorNotificationView == null)
+            if (TryCreateView(
+                ErrorNotificationView,
+                ViewIndex.Notification,
+                ref _errorNotificationView,
+                AbsoluteLayoutFlags.PositionProportional | AbsoluteLayoutFlags.WidthProportional,
+                50))
             {
-                return;
+                Container.Children.Remove(DefaultErrorNotificationView);
+                DefaultErrorNotificationView.BindingContext = null;
+
+                BindErrorNotificationView();
+            }
+        }
+
+        private bool TryCreateView(
+            object source,
+            ViewIndex index,
+            ref View target,
+            AbsoluteLayoutFlags flags = AbsoluteLayoutFlags.All,
+            double height = 1)
+        {
+            if (Container?.Children == null || source == null)
+            {
+                return false;
             }
 
-            Container.Children.Remove(DefaultErrorNotificationView);
-            DefaultErrorNotificationView.BindingContext = null;
+            var loggableTarget = target;
+            InternalLogger.Debug(Tag, () => $"TryCreateView( source: {source}, index: {index}, target: {loggableTarget} )");
 
-            if (_errorNotificationView != null)
+            if (target != null)
             {
-                Container.Children.Remove(_errorNotificationView);
-                _errorNotificationView.BindingContext = null;
+                Container.Children.Remove(target);
+                target.BindingContext = null;
             }
 
-            _errorNotificationView = ErrorNotificationView is DataTemplate dataTemplate
+            target = source is DataTemplate dataTemplate
                 ? (View)dataTemplate.CreateContent()
-                : (View)ErrorNotificationView;
+                : (View)source;
+            target.IsVisible = false;
 
-            var bounds = AbsoluteLayout.GetLayoutBounds(_errorNotificationView);
-            if (bounds == Rectangle.Zero)
+            var bounds = AbsoluteLayout.GetLayoutBounds(target);
+            if (bounds.Width < 1 || bounds.Height < 1)
             {
                 // Apply default bounds
-                AbsoluteLayout.SetLayoutBounds(_errorNotificationView, new Rectangle(0, 1, 1, 50));
-                AbsoluteLayout.SetLayoutFlags(
-                    _errorNotificationView,
-                    AbsoluteLayoutFlags.PositionProportional | AbsoluteLayoutFlags.WidthProportional);
+                AbsoluteLayout.SetLayoutBounds(target, new Rectangle(1, 1, 1, height));
+                AbsoluteLayout.SetLayoutFlags(target, flags);
             }
 
-            Container.Children.Insert((int)ViewIndex.Notification, _errorNotificationView);
-
-            BindErrorNotificationView();
+            Container.Children.Insert((int)index, target);
+            return true;
         }
 
         private void UpdateNotificationBackgroundColor()
@@ -375,7 +317,6 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             }
 
             DefaultErrorNotificationView.BackgroundColor = NotificationBackgroundColor;
-            ErrorNotificationViewLabel.TextColor = ColorHelper.GetTextColorFromBackground(NotificationTextColor);
         }
 
         private void UpdateNotificationTextColor()
@@ -415,10 +356,9 @@ namespace Sharpnado.Presentation.Forms.CustomViews
                 return;
             }
 
-            ResultView.SetBinding(
-                ContentView.IsVisibleProperty,
-                new Binding(nameof(TaskLoaderNotifier.ShowResult), source: TaskLoaderNotifier));
+            InternalLogger.Debug(Tag, () => $"SetBindings() with TaskLoaderNotifier: {TaskLoaderNotifier}");
 
+            BindResultView();
             BindNotStartedView();
             BindLoadingView();
             BindEmptyView();
@@ -429,6 +369,29 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
             OnTaskStartModeSet();
         }
+
+        private void BindResultView()
+        {
+            if (TaskLoaderNotifier == null || _resultView == null)
+            {
+                return;
+            }
+
+            if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
+            {
+                DefaultLoader.IsVisible = false;
+                _resultView.SetBinding(
+                    ContentView.IsVisibleProperty,
+                    new Binding(nameof(TaskLoaderNotifier.IsRunningOrSuccessfullyCompleted), source: TaskLoaderNotifier));
+            }
+            else
+            {
+                _resultView.SetBinding(
+                    ContentView.IsVisibleProperty,
+                    new Binding(nameof(TaskLoaderNotifier.ShowResult), source: TaskLoaderNotifier));
+            }
+        }
+
 
         private void BindNotStartedView()
         {

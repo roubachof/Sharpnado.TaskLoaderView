@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Sharpnado.TaskLoaderView;
 using Sharpnado.Tasks;
 
 using Xamarin.Forms;
@@ -55,6 +56,8 @@ namespace Sharpnado.Presentation.Forms
 
     public abstract class TaskLoaderNotifierBase : ITaskLoaderNotifier
     {
+        protected const string Tag = "Notifier";
+
         private bool _showLoader;
         private bool _showRefresher;
         private bool _showResult;
@@ -151,6 +154,7 @@ namespace Sharpnado.Presentation.Forms
 
         public virtual void Reset()
         {
+            InternalLogger.Debug(Tag, () => $"Reset()");
             IsRunningOrSuccessfullyCompleted = ShowError = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = false;
             Error = null;
 
@@ -163,7 +167,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected void OnTaskCompleted(ITaskMonitor task)
         {
-            // Log.Info("Task completed");
+            InternalLogger.Debug(Tag, () => $"OnTaskCompleted()");
             ShowRefresher = ShowLoader = false;
 
             RaisePropertyChanged(nameof(IsCompleted));
@@ -173,7 +177,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected void OnTaskFaulted(ITaskMonitor faultedTask, bool isRefreshing)
         {
-            // Log.Info("Task completed with fault");
+            InternalLogger.Debug(Tag, () => $"OnTaskFaulted()");
             RaisePropertyChanged(nameof(IsFaulted));
 
             IsRunningOrSuccessfullyCompleted = false;
@@ -184,7 +188,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected virtual void OnTaskSuccessfullyCompleted(ITaskMonitor task)
         {
-            // Log.Info("Task successfully completed");
+            InternalLogger.Debug(Tag, () => $"OnTaskSuccessfullyCompleted()");
             RaisePropertyChanged(nameof(IsSuccessfullyCompleted));
 
             ShowResult = true;
@@ -192,6 +196,8 @@ namespace Sharpnado.Presentation.Forms
 
         protected virtual void Start(bool isRefreshing)
         {
+            InternalLogger.Debug(Tag, () => $"Start( isRefreshing: {isRefreshing} )");
+
             IsRunningOrSuccessfullyCompleted = ShowLoader = !isRefreshing;
             ShowRefresher = isRefreshing;
 
@@ -260,7 +266,8 @@ namespace Sharpnado.Presentation.Forms
 
         public void Load(Func<Task> loadingTaskSource, bool isRefreshing = false)
         {
-            // Log.Info("Load");
+            InternalLogger.Debug(Tag, () => $"Load( isRefreshing: {isRefreshing} )");
+
             lock (SyncRoot)
             {
                 if (CurrentLoadingTask != TaskMonitor.NotStartedTask && CurrentLoadingTask.IsNotCompleted)
@@ -349,7 +356,7 @@ namespace Sharpnado.Presentation.Forms
 
         public void Load(Func<Task<TData>> loadingTaskSource, bool isRefreshing = false)
         {
-            // Log.Info("Load");
+            InternalLogger.Debug(Tag, () => $"Load( isRefreshing: {isRefreshing} )");
             lock (SyncRoot)
             {
                 if (CurrentLoadingTask != TaskMonitor<TData>.NotStartedTask && CurrentLoadingTask.IsNotCompleted)
@@ -412,12 +419,12 @@ namespace Sharpnado.Presentation.Forms
 
         protected override void OnTaskSuccessfullyCompleted(ITaskMonitor task)
         {
-            // Log.Info("Task successfully completed");
+            InternalLogger.Debug(Tag, () => $"OnTaskSuccessfullyCompleted()");
             RaisePropertyChanged(nameof(IsSuccessfullyCompleted));
 
             if (!DisableEmptyState && (Result == null || (Result is ICollection collection && collection.Count == 0)))
             {
-                // Log.Info("Showing empty state");
+                InternalLogger.Debug(Tag, () => $"Showing empty state");
                 ShowEmptyState = true;
                 IsRunningOrSuccessfullyCompleted = false;
                 return;

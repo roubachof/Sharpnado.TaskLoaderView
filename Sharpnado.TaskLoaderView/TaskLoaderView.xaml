@@ -44,12 +44,6 @@
 
     <ContentView.Content>
         <AbsoluteLayout x:Name="Container">
-            <ContentView x:Name="ResultView"
-                         AbsoluteLayout.LayoutFlags="All"
-                         AbsoluteLayout.LayoutBounds="1, 1, 1, 1"
-                         HorizontalOptions="FillAndExpand"
-                         VerticalOptions="FillAndExpand"
-                         IsVisible="False" />
             <ActivityIndicator x:Name="DefaultLoader"
                                AbsoluteLayout.LayoutFlags="All"
                                AbsoluteLayout.LayoutBounds="1, 1, 1, 1"

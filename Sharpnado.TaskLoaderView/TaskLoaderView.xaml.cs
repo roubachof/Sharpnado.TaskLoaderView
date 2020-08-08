@@ -22,7 +22,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
         ResultAsLoadingView,
     }
 
-    [ContentProperty("Child")]
+    [ContentProperty("ResultView")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TaskLoaderView : ContentView
     {
@@ -104,6 +104,12 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             typeof(IValueConverter),
             typeof(TaskLoaderView));
 
+        public static readonly BindableProperty ResultViewProperty = BindableProperty.Create(
+            nameof(ResultView),
+            typeof(object),
+            typeof(TaskLoaderView),
+            validateValue: ValidateCustomView);
+
         public static readonly BindableProperty LoadingViewProperty = BindableProperty.Create(
             nameof(LoadingView),
             typeof(object),
@@ -135,6 +141,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private const string DefaultEmptyStateMessage = @"No result yet ¯\_(ツ)_/¯";
 
+        private View _resultView;
         private View _loadingView;
         private View _errorView;
         private View _emptyView;
@@ -221,6 +228,12 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             set => SetValue(ErrorNotificationViewProperty, value);
         }
 
+        public object ResultView
+        {
+            get => (object)GetValue(ResultViewProperty);
+            set => SetValue(ResultViewProperty, value);
+        }
+
         public object NotStartedView
         {
             get => (object)GetValue(NotStartedViewProperty);
@@ -303,20 +316,6 @@ namespace Sharpnado.Presentation.Forms.CustomViews
         {
             get => (IValueConverter)GetValue(ErrorMessageConverterProperty);
             set => SetValue(ErrorMessageConverterProperty, value);
-        }
-
-        public View Child
-        {
-            get => ResultView.Content;
-            set
-            {
-                if (Container.Children.Contains(value))
-                {
-                    return;
-                }
-
-                ResultView.Content = value;
-            }
         }
 
         private static bool ValidateCustomView(BindableObject bindable, object value)

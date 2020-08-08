@@ -7,9 +7,9 @@
     <RootNamespace>Sharpnado.Presentation.Forms</RootNamespace>
 
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>2.1.1.0</AssemblyVersion>
-    <AssemblyFileVersion>2.1.1.0</AssemblyFileVersion>
-    <Version>2.1.1.0</Version>
+    <AssemblyVersion>2.1.2.0</AssemblyVersion>
+    <AssemblyFileVersion>2.1.2.0</AssemblyFileVersion>
+    <Version>2.1.2.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
 
@@ -24,7 +24,7 @@
 
     <Title>TaskLoaderView: free yourself from IsBusy=true!</Title>
     <Summary>Free yourself from IsBusy=true! The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.</Summary>
-    <Description>Free yourself from IsBusy=true! 
+    <Description>Free yourself from IsBusy=true!
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
 Featuring:
@@ -51,13 +51,14 @@ Featuring:
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
     <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />
+    <PackageReference Include="Xamarin.Forms" Version="4.7.0.1260" />
+<!--    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />-->
   </ItemGroup>
 
   <ItemGroup>
