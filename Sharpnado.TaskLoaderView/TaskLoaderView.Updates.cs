@@ -392,7 +392,6 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             }
         }
 
-
         private void BindNotStartedView()
         {
             if (TaskLoaderNotifier == null)

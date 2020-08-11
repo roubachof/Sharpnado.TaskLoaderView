@@ -57,8 +57,8 @@ Featuring:
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Xamarin.Forms" Version="4.7.0.1260" />
-<!--    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />-->
+    <!-- <PackageReference Include="Xamarin.Forms" Version="4.7.0.1260" /> -->
+    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Sharpnado.TaskLoaderView;
@@ -49,6 +50,10 @@ namespace Sharpnado.Presentation.Forms
 
         ITaskMonitor CurrentLoadingTask { get; }
 
+        bool DisableEmptyState { get; }
+
+        TimeSpan AutoResetDelay { get; }
+
         void Load();
 
         void Reset();
@@ -70,7 +75,13 @@ namespace Sharpnado.Presentation.Forms
         private Exception _error;
 
         protected TaskLoaderNotifierBase(bool disableEmptyState = false)
+            : this(TimeSpan.Zero, disableEmptyState)
         {
+        }
+
+        protected TaskLoaderNotifierBase(TimeSpan autoResetDelay, bool disableEmptyState = false)
+        {
+            AutoResetDelay = autoResetDelay;
             DisableEmptyState = disableEmptyState;
 
             ResetCommand = new Command(Reset);
@@ -99,43 +110,85 @@ namespace Sharpnado.Presentation.Forms
         public bool IsRunningOrSuccessfullyCompleted
         {
             get => _isRunningOrSuccessfullyCompleted;
-            set => SetAndRaise(ref _isRunningOrSuccessfullyCompleted, value);
+            set
+            {
+                if (SetAndRaise(ref _isRunningOrSuccessfullyCompleted, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"IsRunningOrSuccessfullyCompleted: {_isRunningOrSuccessfullyCompleted}");
+                }
+            }
         }
 
         public bool ShowLoader
         {
             get => _showLoader;
-            set => SetAndRaise(ref _showLoader, value);
+            set
+            {
+                if (SetAndRaise(ref _showLoader, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowLoader: {_showLoader}");
+                }
+            }
         }
 
         public bool ShowRefresher
         {
             get => _showRefresher;
-            set => SetAndRaise(ref _showRefresher, value);
+            set
+            {
+                if (SetAndRaise(ref _showRefresher, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowRefresher: {_showRefresher}");
+                }
+            }
         }
 
         public bool ShowResult
         {
             get => _showResult;
-            set => SetAndRaise(ref _showResult, value);
+            set
+            {
+                if (SetAndRaise(ref _showResult, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowResult: {_showResult}");
+                }
+            }
         }
 
         public bool ShowError
         {
             get => _showError;
-            set => SetAndRaise(ref _showError, value);
+            set
+            {
+                if (SetAndRaise(ref _showError, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowError: {_showError}");
+                }
+            }
         }
 
         public bool ShowEmptyState
         {
             get => _showEmptyState;
-            set => SetAndRaise(ref _showEmptyState, value);
+            set
+            {
+                if (SetAndRaise(ref _showEmptyState, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowEmptyState: {_showEmptyState}");
+                }
+            }
         }
 
         public bool ShowErrorNotification
         {
             get => _showErrorNotification;
-            set => SetAndRaise(ref _showErrorNotification, value);
+            set
+            {
+                if (SetAndRaise(ref _showErrorNotification, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowErrorNotification: {_showErrorNotification}");
+                }
+            }
         }
 
         public Exception Error
@@ -146,7 +199,9 @@ namespace Sharpnado.Presentation.Forms
 
         public ITaskMonitor CurrentLoadingTask { get; protected set; }
 
-        protected bool DisableEmptyState { get; }
+        public bool DisableEmptyState { get; }
+
+        public TimeSpan AutoResetDelay { get; }
 
         protected object SyncRoot { get; } = new object();
 
@@ -173,6 +228,16 @@ namespace Sharpnado.Presentation.Forms
             RaisePropertyChanged(nameof(IsCompleted));
             RaisePropertyChanged(nameof(IsNotCompleted));
             RaisePropertyChanged(nameof(IsNotStarted));
+
+            if (AutoResetDelay > TimeSpan.Zero)
+            {
+                TaskMonitor.Create(
+                    async () =>
+                    {
+                        await Task.Delay(AutoResetDelay);
+                        Reset();
+                    });
+            }
         }
 
         protected void OnTaskFaulted(ITaskMonitor faultedTask, bool isRefreshing)

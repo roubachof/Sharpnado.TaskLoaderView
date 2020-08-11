@@ -1,19 +1,43 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Sharpnado.Presentation.Forms
 {
-    public abstract class TaskLoaderCommandBase : ICommand
+    public abstract class TaskLoaderCommandBase : INotifyPropertyChanged, ICommand
     {
         private readonly Func<object, bool> _canExecute;
+
+        private bool _canBeExecuted;
 
         protected TaskLoaderCommandBase(Func<object, bool> canExecute = null)
         {
             _canExecute = canExecute;
+
+            if (_canExecute != null)
+            {
+                CanBeExecuted = CanExecute(null);
+            }
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public event EventHandler CanExecuteChanged;
+
+        public bool CanBeExecuted
+        {
+            get => _canBeExecuted;
+            set
+            {
+                if (_canBeExecuted != value)
+                {
+                    _canBeExecuted = value;
+                    OnPropertyChanged(nameof(CanBeExecuted));
+                }
+            }
+        }
 
         protected abstract bool IsExecuting { get; }
 
@@ -21,12 +45,18 @@ namespace Sharpnado.Presentation.Forms
 
         public bool CanExecute(object parameter)
         {
-            return !IsExecuting && (_canExecute?.Invoke(null) ?? true);
+            return !IsExecuting && (_canExecute?.Invoke(parameter) ?? true);
         }
 
         public void RaiseCanExecuteChanged()
         {
+            CanBeExecuted = CanExecute(null);
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 
@@ -47,6 +77,11 @@ namespace Sharpnado.Presentation.Forms
 
         public override void Execute(object parameter)
         {
+            if (!CanExecute(parameter))
+            {
+                return;
+            }
+
             Notifier.Load(_taskSource);
         }
     }
@@ -68,6 +103,11 @@ namespace Sharpnado.Presentation.Forms
 
         public override void Execute(object parameter)
         {
+            if (!CanExecute(parameter))
+            {
+                return;
+            }
+
             Notifier.Load(() => _taskSource((T)parameter));
         }
     }
@@ -89,6 +129,11 @@ namespace Sharpnado.Presentation.Forms
 
         public override void Execute(object parameter)
         {
+            if (!CanExecute(parameter))
+            {
+                return;
+            }
+
             Notifier.Load(() => _taskSource((TParam)parameter));
         }
     }
