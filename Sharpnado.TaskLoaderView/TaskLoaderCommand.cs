@@ -12,8 +12,9 @@ namespace Sharpnado.Presentation.Forms
 
         private bool _canBeExecuted;
 
-        protected TaskLoaderCommandBase(Func<object, bool> canExecute = null)
+        protected TaskLoaderCommandBase(ITaskLoaderNotifier notifier, Func<object, bool> canExecute = null)
         {
+            Notifier = notifier;
             _canExecute = canExecute;
 
             if (_canExecute != null)
@@ -25,6 +26,8 @@ namespace Sharpnado.Presentation.Forms
         public event PropertyChangedEventHandler PropertyChanged;
 
         public event EventHandler CanExecuteChanged;
+
+        public ITaskLoaderNotifier Notifier { get; }
 
         public bool CanBeExecuted
         {
@@ -39,7 +42,7 @@ namespace Sharpnado.Presentation.Forms
             }
         }
 
-        protected abstract bool IsExecuting { get; }
+        public bool IsExecuting => !Notifier.IsNotStarted && Notifier.IsNotCompleted;
 
         public abstract void Execute(object parameter);
 
@@ -64,20 +67,36 @@ namespace Sharpnado.Presentation.Forms
     {
         private readonly Func<Task> _taskSource;
 
-        public TaskLoaderCommand(Func<Task> taskSource, Func<object, bool> canExecute = null)
-            : base(canExecute)
+        /// <summary>
+        /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
+        /// be called.
+        /// </summary>
+        /// <param name="taskSource">The Task to be executed.</param>
+        /// <param name="autoResetDelay">If > TimeSpan.Zero, upon completion and after expiration
+        /// of the autoResetDelay the TaskLoaderNotifier will be Reset.</param>
+        /// <param name="canExecute">The function determining if the command can be executed.</param>
+        public TaskLoaderCommand(Func<Task> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null)
+            : base(new TaskLoaderNotifier(autoResetDelay), canExecute)
         {
             _taskSource = taskSource;
-            Notifier = new TaskLoaderNotifier();
         }
 
-        public TaskLoaderNotifier Notifier { get; }
+        /// <summary>
+        /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
+        /// be called.
+        /// </summary>
+        /// <param name="taskSource">The Task to be executed.</param>
+        /// <param name="canExecute">The function determining if the command can be executed.</param>
+        public TaskLoaderCommand(Func<Task> taskSource, Func<object, bool> canExecute = null)
+            : this(taskSource, TimeSpan.Zero, canExecute)
+        {
+        }
 
-        protected override bool IsExecuting => !Notifier.IsNotStarted && Notifier.IsNotCompleted;
+        public new TaskLoaderNotifier Notifier => (TaskLoaderNotifier)base.Notifier;
 
         public override void Execute(object parameter)
         {
-            if (!CanExecute(parameter))
+            if (IsExecuting)
             {
                 return;
             }
@@ -90,20 +109,36 @@ namespace Sharpnado.Presentation.Forms
     {
         private readonly Func<T, Task> _taskSource;
 
-        public TaskLoaderCommand(Func<T, Task> taskSource, Func<object, bool> canExecute = null)
-            : base(canExecute)
+        /// <summary>
+        /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
+        /// be called.
+        /// </summary>
+        /// <param name="taskSource">The Task to be executed.</param>
+        /// <param name="autoResetDelay">If > TimeSpan.Zero, upon completion and after expiration
+        /// of the autoResetDelay the TaskLoaderNotifier will be Reset.</param>
+        /// <param name="canExecute">The function determining if the command can be executed.</param>
+        public TaskLoaderCommand(Func<T, Task> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null)
+            : base(new TaskLoaderNotifier(autoResetDelay), canExecute)
         {
             _taskSource = taskSource;
-            Notifier = new TaskLoaderNotifier();
         }
 
-        public TaskLoaderNotifier Notifier { get; }
+        /// <summary>
+        /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
+        /// be called.
+        /// </summary>
+        /// <param name="taskSource">The Task to be executed.</param>
+        /// <param name="canExecute">The function determining if the command can be executed.</param>
+        public TaskLoaderCommand(Func<T, Task> taskSource, Func<object, bool> canExecute = null)
+            : this(taskSource, TimeSpan.Zero, canExecute)
+        {
+        }
 
-        protected override bool IsExecuting => !Notifier.IsNotStarted && Notifier.IsNotCompleted;
+        public new TaskLoaderNotifier Notifier => (TaskLoaderNotifier)base.Notifier;
 
         public override void Execute(object parameter)
         {
-            if (!CanExecute(parameter))
+            if (IsExecuting)
             {
                 return;
             }
@@ -116,20 +151,36 @@ namespace Sharpnado.Presentation.Forms
     {
         private readonly Func<TParam, Task<TTask>> _taskSource;
 
-        public TaskLoaderCommand(Func<TParam, Task<TTask>> taskSource, Func<object, bool> canExecute = null)
-            : base(canExecute)
+        /// <summary>
+        /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
+        /// be called.
+        /// </summary>
+        /// <param name="taskSource">The Task to be executed.</param>
+        /// <param name="autoResetDelay">If > TimeSpan.Zero, upon completion and after expiration
+        /// of the autoResetDelay the TaskLoaderNotifier will be Reset.</param>
+        /// <param name="canExecute">The function determining if the command can be executed.</param>
+        public TaskLoaderCommand(Func<TParam, Task<TTask>> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null)
+            : base(new TaskLoaderNotifier<TTask>(autoResetDelay), canExecute)
         {
             _taskSource = taskSource;
-            Notifier = new TaskLoaderNotifier<TTask>();
         }
 
-        public TaskLoaderNotifier<TTask> Notifier { get; }
+        /// <summary>
+        /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
+        /// be called.
+        /// </summary>
+        /// <param name="taskSource">The Task to be executed.</param>
+        /// <param name="canExecute">The function determining if the command can be executed.</param>
+        public TaskLoaderCommand(Func<TParam, Task<TTask>> taskSource, Func<object, bool> canExecute = null)
+            : this(taskSource, TimeSpan.Zero, canExecute)
+        {
+        }
 
-        protected override bool IsExecuting => !Notifier.IsNotStarted && Notifier.IsNotCompleted;
+        public new TaskLoaderNotifier<TTask> Notifier => (TaskLoaderNotifier<TTask>)base.Notifier;
 
         public override void Execute(object parameter)
         {
-            if (!CanExecute(parameter))
+            if (IsExecuting)
             {
                 return;
             }

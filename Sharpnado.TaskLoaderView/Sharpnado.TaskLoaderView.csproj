@@ -7,9 +7,9 @@
     <RootNamespace>Sharpnado.Presentation.Forms</RootNamespace>
 
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>2.1.2.0</AssemblyVersion>
-    <AssemblyFileVersion>2.1.2.0</AssemblyFileVersion>
-    <Version>2.1.2.0</Version>
+    <AssemblyVersion>2.2.0.0</AssemblyVersion>
+    <AssemblyFileVersion>2.2.0.0</AssemblyFileVersion>
+    <Version>2.2.0.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
 
@@ -21,6 +21,8 @@
     <RepositoryUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</RepositoryUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/tlv_icon_tos.png</PackageIconUrl>
     <PackageTags>xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
+
+    <PackageReleaseNotes>Fix the behavior of TaskLoaderCommand, add CompositeTaskLoaderNotifier, add AutoResetDelay property.</PackageReleaseNotes>
 
     <Title>TaskLoaderView: free yourself from IsBusy=true!</Title>
     <Summary>Free yourself from IsBusy=true! The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.</Summary>
@@ -34,6 +36,7 @@ Featuring:
 * Any states are overridable with user custom views and easily positionned with AbsoluteLayout properties
 * Support for Xamarin.Forms.Skeleton nuget package
 * Support for refresh scenarios, and error while refreshing with the ErrorNotificationView
+* Supports Async mvvm ICommand through TaskLoaderCommand
 * Supports loading task on demand with the NotStarted state
 * TaskLoaderNotifier for the ViewModel side taking care of all the error handling and the IsBusy nonsense</Description>
 

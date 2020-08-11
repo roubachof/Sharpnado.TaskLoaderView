@@ -307,16 +307,23 @@ namespace Sharpnado.Presentation.Forms
         private Func<Task> _loadingTaskSource;
 
         public TaskLoaderNotifier()
+            : this(TimeSpan.Zero, null)
         {
-            CurrentLoadingTask = TaskMonitor.NotStartedTask;
-            ReloadCommand = new Command(() => Load(_loadingTaskSource));
-            RefreshCommand = new Command(() => Load(_loadingTaskSource, isRefreshing: true));
         }
 
         public TaskLoaderNotifier(Func<Task> loadingTaskSource)
-            : this()
+            : this(TimeSpan.Zero, loadingTaskSource)
+        {
+        }
+
+        public TaskLoaderNotifier(TimeSpan autoResetDelay, Func<Task> loadingTaskSource = null)
+            : base(autoResetDelay)
         {
             _loadingTaskSource = loadingTaskSource;
+
+            CurrentLoadingTask = TaskMonitor.NotStartedTask;
+            ReloadCommand = new Command(() => Load(_loadingTaskSource));
+            RefreshCommand = new Command(() => Load(_loadingTaskSource, isRefreshing: true));
         }
 
         public override bool IsNotStarted => CurrentLoadingTask == TaskMonitor.NotStartedTask;
@@ -385,22 +392,28 @@ namespace Sharpnado.Presentation.Forms
         private TData _result;
 
         public TaskLoaderNotifier(bool disableEmptyState = false)
-        : base(disableEmptyState)
+            : this(null, disableEmptyState, TimeSpan.Zero)
+        {
+        }
+
+        public TaskLoaderNotifier(TimeSpan autoResetDelay)
+            : this(null, false, autoResetDelay)
+        {
+        }
+
+        public TaskLoaderNotifier(Func<Task> loadingTaskSource)
+            : this((Func<Task<TData>>)loadingTaskSource, false, TimeSpan.Zero)
+        {
+        }
+
+        public TaskLoaderNotifier(Func<Task<TData>> loadingTaskSource, bool disableEmptyState, TimeSpan autoResetDelay)
+            : base(autoResetDelay, disableEmptyState)
         {
             CurrentLoadingTask = TaskMonitor<TData>.NotStartedTask;
             ReloadCommand = new Command(() => Load(_loadingTaskSource));
             RefreshCommand = new Command(() => Load(_loadingTaskSource, isRefreshing: true));
-        }
 
-        public TaskLoaderNotifier(Func<Task<TData>> loadingTaskSource, bool disableEmptyState = false)
-            : this(disableEmptyState)
-        {
             _loadingTaskSource = loadingTaskSource;
-        }
-
-        public TaskLoaderNotifier(Func<Task> loadingTaskSource)
-            : this((Func<Task<TData>>)loadingTaskSource)
-        {
         }
 
         public override bool IsNotStarted => CurrentLoadingTask == TaskMonitor<TData>.NotStartedTask;

@@ -9,6 +9,12 @@ using Xamarin.Forms;
 
 namespace Sharpnado.Presentation.Forms
 {
+    public enum CompositionAutoResetCondition
+    {
+        AnyCompleted = 0,
+        AllCompleted,
+    }
+
     public class CompositeTaskLoaderNotifier : ITaskLoaderNotifier
     {
         protected const string Tag = "CompositeNotifier";
@@ -26,7 +32,8 @@ namespace Sharpnado.Presentation.Forms
 
         private Exception _error;
 
-        public CompositeTaskLoaderNotifier(params ITaskLoaderNotifier[] taskLoaderNotifiers)
+        public CompositeTaskLoaderNotifier(
+            params ITaskLoaderNotifier[] taskLoaderNotifiers)
         {
             _loaders = taskLoaderNotifiers;
 
