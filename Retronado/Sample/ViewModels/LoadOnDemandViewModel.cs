@@ -23,6 +23,7 @@ namespace Sample.ViewModels
             // cts.Cancel();
 
             RandomGameLoaderCommand = new TaskLoaderCommand<object, Game>(_ => GetRandomGame(cts.Token));
+            RandomGameLoaderCommand.CanExecuteChanged += RandomGameLoaderCommandCanExecuteChanged;
         }
 
         public TaskLoaderCommand<object, Game> RandomGameLoaderCommand { get; }
@@ -37,6 +38,13 @@ namespace Sample.ViewModels
             }
 
             return await _retroGamingService.GetRandomGame();
+        }
+
+        private void RandomGameLoaderCommandCanExecuteChanged(object sender, EventArgs e)
+        {
+            bool canExecute = RandomGameLoaderCommand.CanExecute(null);
+            System.Diagnostics.Debug.WriteLine(
+                $"RandomGameLoaderCommandCanExecuteChanged() => CanBeExecute: {RandomGameLoaderCommand.CanBeExecuted}, IsExecuting: {RandomGameLoaderCommand.IsExecuting}, canExecute: {canExecute}");
         }
     }
 }
