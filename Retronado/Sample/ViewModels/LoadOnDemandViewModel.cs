@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Sample.Domain;
@@ -16,14 +17,19 @@ namespace Sample.ViewModels
         {
             _retroGamingService = retroGamingService;
 
-            RandomGameLoaderCommand = new TaskLoaderCommand<object, Game>(_ => GetRandomGame());
+            var cts = new CancellationTokenSource();
+
+            // For testing the TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true setting
+            // cts.Cancel();
+
+            RandomGameLoaderCommand = new TaskLoaderCommand<object, Game>(_ => GetRandomGame(cts.Token));
         }
 
         public TaskLoaderCommand<object, Game> RandomGameLoaderCommand { get; }
 
-        private async Task<Game> GetRandomGame()
+        private async Task<Game> GetRandomGame(CancellationToken token)
         {
-            await Task.Delay(TimeSpan.FromSeconds(4));
+            await Task.Delay(TimeSpan.FromSeconds(4), token);
 
             if (DateTime.Now.Millisecond % 2 == 0)
             {

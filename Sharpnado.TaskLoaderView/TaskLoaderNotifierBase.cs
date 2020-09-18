@@ -200,7 +200,16 @@ namespace Sharpnado.Presentation.Forms
             IsRunningOrSuccessfullyCompleted = false;
             ShowError = !isRefreshing;
             ShowErrorNotification = isRefreshing;
-            Error = faultedTask.InnerException;
+
+            var exception = faultedTask.InnerException;
+            if (exception == null && faultedTask.IsCanceled)
+            {
+                exception = new TaskCanceledException("This task has been canceled.");
+            }
+
+            exception ??= new UnknownException("An unknown error has occurred");
+
+            Error = exception;
         }
 
         protected virtual void OnTaskSuccessfullyCompleted(ITaskMonitor task)
@@ -251,6 +260,14 @@ namespace Sharpnado.Presentation.Forms
         private static string DefaultErrorHandler(Exception exception)
         {
             return "An unknown error occured";
+        }
+
+        private class UnknownException : Exception
+        {
+            public UnknownException(string message)
+                : base(message)
+            {
+            }
         }
     }
 }

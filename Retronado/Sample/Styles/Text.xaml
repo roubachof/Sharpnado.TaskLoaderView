@@ -52,42 +52,58 @@
         <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
     </Style>
 
-    <Style x:Key="TextHuge" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextHuge"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeHuge}" />
     </Style>
 
-    <Style x:Key="TextHeadline" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextHeadline"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeHeadline}" />
     </Style>
 
-    <Style x:Key="TextTitle" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextTitle"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeTitle}" />
     </Style>
 
-    <Style x:Key="TextSubhead" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextSubhead"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeSubhead}" />
     </Style>
 
-    <Style x:Key="TextSubheadSecondary" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextSubheadSecondary"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeSubhead}" />
     </Style>
 
-    <Style x:Key="TextBody" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextBody"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeBody}" />
     </Style>
 
-    <Style x:Key="TextBodySecondary" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextBodySecondary"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeBody}" />
     </Style>
 
-    <Style x:Key="TextCaption" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextCaption"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeCaption}" />
     </Style>
@@ -98,7 +114,9 @@
         <Setter Property="FontSize" Value="{StaticResource TextSizeSmallCaption}" />
     </Style>
 
-    <Style x:Key="TextCaptionSecondary" TargetType="Label" BasedOn="{StaticResource TextFamily}">
+    <Style x:Key="TextCaptionSecondary"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
         <Setter Property="FontSize" Value="{StaticResource TextSizeCaption}" />
     </Style>

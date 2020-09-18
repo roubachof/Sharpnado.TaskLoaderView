@@ -12,17 +12,11 @@ namespace Sample
         public App()
         {
             InitializeComponent();
-#if DEBUG
-            // HotReloader.Current.Run(this); //, new HotReloader.Configuration
-            // {
-                // optionaly you may specify EXTENSION's IP (ExtensionIpAddress)
-                // in case your PC/laptop and device are in different subnets
-                // e.g. Laptop - 10.10.102.16 AND Device - 10.10.9.12
-                // ExtensionIpAddress = IPAddress.Parse("10.0.2.2"), // use your PC/Laptop IP
-            // });
-#endif
+
             var entryPoint = new CoreEntryPoint();
             entryPoint.RegisterDependencies();
+
+            TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
 
             Initializer.Initialize(true, true);
             MainPage = new NavigationPage(new MainPage());
