@@ -321,7 +321,8 @@
                                                   VerticalOptions="FillAndExpand"
                                                   Animation="lottie_grey.json"
                                                   AutoPlay="True"
-                                                  Loop="True" />
+                                                  IsAnimating="True"
+                                                  RepeatMode="Infinite" />
 
                             <Button Grid.Row="3"
                                     Grid.Column="1"

@@ -158,7 +158,6 @@ namespace Sample.Navigation.Impl
         public async Task<IBindablePage> NavigateBackAsync(object parameter = null)
         {
             var page = (IBindablePage)await NavigationPage.PopAsync();
-            ((ANavigableViewModel)page.BindingContext).OnNavigated(parameter);
             return page;
         }
     }

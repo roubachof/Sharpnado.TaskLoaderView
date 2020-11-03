@@ -35,8 +35,8 @@ namespace Sample.Domain
 
         public RetroGamingService(ErrorEmulator errorEmulator)
         {
+            _igdbClient = RefitClient.Create();
             _errorEmulator = errorEmulator;
-            _igdbClient = RefitClient.Create("b4f8877672fb840873c1bf1b5fe611fb");
         }
 
         public async Task<Game> GetRandomGame()
@@ -54,14 +54,14 @@ namespace Sample.Domain
             watch.Start();
             var bounds = GetIdBounds();
             var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
-                                IGDB.Client.Endpoints.Games,
-                                query: string.Format(
-                                    GamesRequest,
-                                    string.Join(",", new[] { AtariPlatformId, AmigaPlatformId }),
-                                    bounds.LowerId,
-                                    bounds.HigherId,
-                                    20))
-                                 .ConfigureAwait(false);
+                    IGDBRestClient.Endpoints.Games,
+                    query: string.Format(
+                        GamesRequest,
+                        string.Join(",", new[] { AtariPlatformId, AmigaPlatformId }),
+                        bounds.LowerId,
+                        bounds.HigherId,
+                        20))
+                .ConfigureAwait(false);
 
             var result = igdbModels.Select(ToDomainEntity).ToList();
             watch.Stop();
@@ -104,14 +104,23 @@ namespace Sample.Domain
             watch.Start();
             var bounds = GetIdBounds();
             var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
-                                IGDB.Client.Endpoints.Games,
-                                query: string.Format(
-                                    GamesRequest,
-                                    string.Join(",", new[] { NesPlatformId, SmsPlatformId, MegadrivePlatformId, GameBoyPlatformId, Atari2600PlatformId }),
-                                    bounds.LowerId,
-                                    bounds.HigherId,
-                                    20))
-                                 .ConfigureAwait(false);
+                    IGDBRestClient.Endpoints.Games,
+                    query: string.Format(
+                        GamesRequest,
+                        string.Join(
+                            ",",
+                            new[]
+                            {
+                                NesPlatformId,
+                                SmsPlatformId,
+                                MegadrivePlatformId,
+                                GameBoyPlatformId,
+                                Atari2600PlatformId,
+                            }),
+                        bounds.LowerId,
+                        bounds.HigherId,
+                        20))
+                .ConfigureAwait(false);
 
             var result = igdbModels.Select(ToDomainEntity).ToList();
             watch.Stop();

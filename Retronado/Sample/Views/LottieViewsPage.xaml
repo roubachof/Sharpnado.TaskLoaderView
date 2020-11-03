@@ -29,8 +29,8 @@
                                       HorizontalOptions="FillAndExpand"
                                       VerticalOptions="FillAndExpand"
                                       Animation="{Binding Loader.ShowLoader, Converter={StaticResource CyclicLoadingLottieConverter}}"
-                                      IsPlaying="True"
-                                      Loop="True" />
+                                      IsAnimating="True"
+                                      RepeatMode="Infinite" />
             </DataTemplate>
 
             <DataTemplate x:Key="EmptyLottieDataTemplate">
@@ -41,8 +41,8 @@
                     <lottie:AnimationView HorizontalOptions="FillAndExpand"
                                           VerticalOptions="FillAndExpand"
                                           Animation="empty_state.json"
-                                          IsPlaying="True"
-                                          Loop="True" />
+                                          IsAnimating="True"
+                                          RepeatMode="Infinite" />
 
                     <Label Style="{StaticResource TextBody}"
                            HorizontalOptions="Center"
@@ -69,8 +69,8 @@
                     <lottie:AnimationView HorizontalOptions="FillAndExpand"
                                           VerticalOptions="FillAndExpand"
                                           Animation="{Binding Error, Converter={StaticResource ExceptionToLottieConverter}}"
-                                          IsPlaying="True"
-                                          Loop="True" />
+                                          IsAnimating="True"
+                                          RepeatMode="Infinite" />
 
                     <Label Style="{StaticResource TextBody}"
                            HorizontalOptions="Center"

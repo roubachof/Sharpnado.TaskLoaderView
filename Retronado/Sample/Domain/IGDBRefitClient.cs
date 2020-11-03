@@ -1,35 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+
+using IGDB;
 using IGDB.Models;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 using Refit;
 
-namespace IGDB
+using Sample.Infrastructure;
+
+namespace Sample.Domain
 {
     public interface IGDBApiRefit
     {
         /// <summary>
-        /// Queries a standard IGDB endpoint with an APIcalypse query. See endpoints in <see cref="IGDB.Client.Endpoints" />.
+        /// Queries a standard IGDB endpoint with an APIcalypse query. See endpoints in <see cref="IGDBRestClient.Endpoints" />.
         /// </summary>
-        /// <param name="endpoint">The IGDB endpoint name to query, see <see cref="IGDB.Client.Endpoints" /></param>
+        /// <param name="endpoint">The IGDB endpoint name to query, see <see cref="IGDBRestClient.Endpoints" /></param>
         /// <param name="query">The APIcalypse query to send</param>
         /// <typeparam name="T">The IGDB.Models.* entity to deserialize the response for.</typeparam>
         /// <returns>Array of IGDB models of the specified type</returns>
         [Post("/{endpoint}")]
         Task<T[]> QueryAsync<T>(
             string endpoint,
-            [Header("user-key")] string authToken,
+            [Header("Authorization")] string authToken,
+            [Header("Client-ID")] string clientId,
             [Body] string query = null);
-
-        /// <summary>
-        /// For authenticated requests, get authenticated user info
-        /// </summary>
-        /// <returns></returns>
-        [Get("/" + Client.Endpoints.Private.Me)]
-        Task<Me> GetPrivateMe();
 
         /// <summary>
         /// Returns your API key status with usage information
@@ -39,60 +39,79 @@ namespace IGDB
         Task<ApiStatus> GetApiStatus();
     }
 
+    internal class TokenManager
+    {
+        private readonly TwitchOAuthClient _twitchClient;
+        private readonly ITokenStore _tokenStore;
+
+        public TokenManager(ITokenStore tokenStore, TwitchOAuthClient twitchClient)
+        {
+            _tokenStore = tokenStore;
+            _twitchClient = twitchClient;
+        }
+
+        public async Task<TwitchAccessToken> AcquireTokenAsync()
+        {
+            var currentToken = await _tokenStore.GetTokenAsync();
+            if (currentToken?.HasTokenExpired() == false)
+            {
+                return currentToken;
+            }
+
+            return await RefreshTokenAsync();
+        }
+
+        public async Task<TwitchAccessToken> RefreshTokenAsync()
+        {
+            var accessToken = await _twitchClient.GetClientCredentialTokenAsync();
+            accessToken.TokenAcquiredAt = DateTimeOffset.UtcNow;
+            var storedToken = await _tokenStore.StoreTokenAsync(accessToken);
+
+            return storedToken;
+        }
+    }
+
     public class IGDBRestClient
     {
         private readonly IGDBApiRefit _refitService;
 
-        private readonly string _apiToken;
+        private readonly TokenManager _tokenManager;
 
-        public IGDBRestClient(IGDBApiRefit refitService, string apiToken)
+        private string _token;
+
+        public IGDBRestClient(IGDBApiRefit refitService)
         {
             _refitService = refitService;
-            _apiToken = apiToken;
+            string pipoId = "ebc5enrq0r5s2u7vain16detklybhj";
+            string superPipo = "ld17xxwvga5atlcjtf3crv44t4xxp7";
+
+            _tokenManager = new TokenManager(new InMemoryTokenStore(), new TwitchOAuthClient(pipoId, superPipo));
         }
 
-        public Task<T[]> QueryAsync<T>(
+        public async Task<T[]> QueryAsync<T>(
             string endpoint,
             [Body] string query = null)
         {
-            return _refitService.QueryAsync<T>(endpoint, _apiToken, query);
+            if (string.IsNullOrEmpty(_token))
+            {
+                await GetTokenAsync();
+            }
+
+            return await _refitService.QueryAsync<T>(endpoint, $"Bearer {_token}", "ebc5enrq0r5s2u7vain16detklybhj", query);
         }
-    }
 
-    public static class RefitClient
-    {
-        public static JsonSerializerSettings JsonSerializationConfig =>
-            new JsonSerializerSettings
-                {
-                    Converters =
-                        new List<JsonConverter>() { new IdentityConverter(), new UnixTimestampConverter(), },
-                    ContractResolver = new DefaultContractResolver()
-                        {
-                            NamingStrategy = new SnakeCaseNamingStrategy(),
-                        },
-                };
-
-        /// <summary>
-        /// Create a default IGDB API client with specified API key
-        /// </summary>
-        /// <param name="apiKey">Your private IGDB API key. Keep it secret, keep it safe!</param>
-        /// <returns></returns>
-        public static IGDBRestClient Create(string apiKey)
+        private async Task GetTokenAsync()
         {
-            return new IGDBRestClient(
-                RestService.For<IGDBApiRefit>(
-                    "https://api-v3.igdb.com",
-                    new RefitSettings { ContentSerializer = new JsonContentSerializer(JsonSerializationConfig) }),
-                apiKey);
-        }
+            var twitchToken = await _tokenManager.AcquireTokenAsync();
 
+            if (twitchToken?.AccessToken != null)
+            {
+                 _token = twitchToken.AccessToken;
+            }
+        }
 
         public static class Endpoints
         {
-            public const string Achievements = "achievements";
-
-            public const string AchievementIcons = "achievement_icons";
-
             public const string AgeRating = "age_ratings";
 
             public const string AgeRatingContentDescriptions = "age_rating_content_descriptions";
@@ -114,8 +133,6 @@ namespace IGDB
             public const string Covers = "covers";
 
             public const string ExternalGames = "external_games";
-
-            public const string Feeds = "feeds";
 
             public const string Franchies = "franchises";
 
@@ -143,13 +160,9 @@ namespace IGDB
 
             public const string MultiplayerModes = "multiplayer_modes";
 
-            public const string Pages = "pages";
-
-            public const string PageBackgrounds = "page_backgrounds";
-
-            public const string PageLogos = "page_logos";
-
             public const string Platforms = "platforms";
+
+            public const string PlatformFamilies = "platform_families";
 
             public const string PlatformLogos = "platform_logos";
 
@@ -163,16 +176,6 @@ namespace IGDB
 
             public const string PlayerPerspectives = "player_perspectives";
 
-            public const string ProductFamilies = "product_families";
-
-            public const string Pulses = "pulses";
-
-            public const string PulseGroups = "pulse_groups";
-
-            public const string PulseSources = "pulse_sources";
-
-            public const string PulseUrls = "pulse_urls";
-
             public const string ReleaseDates = "release_dates";
 
             public const string Screenshots = "screenshots";
@@ -181,30 +184,43 @@ namespace IGDB
 
             public const string Themes = "themes";
 
-            public const string Titles = "titles";
-
-            public const string TimeToBeats = "time_to_beats";
-
             public const string Websites = "websites";
+        }
+    }
 
-            public static class Private
+    public static class RefitClient
+    {
+        public static JsonSerializerSettings JsonSerializationConfig =>
+            new JsonSerializerSettings
+                {
+                    Converters =
+                        new List<JsonConverter>() { new IdentityConverter(), new UnixTimestampConverter(), },
+                    ContractResolver = new DefaultContractResolver()
+                        {
+                            NamingStrategy = new SnakeCaseNamingStrategy(),
+                        },
+                };
+
+        /// <summary>
+        /// Create a default IGDB API client with specified API key.
+        /// </summary>
+        /// <returns></returns>
+        public static IGDBRestClient Create()
+        {
+            // For logging
+            // var httpClient = new HttpClient(new HttpLoggingHandler())
+            var httpClient = new HttpClient()
             {
-                public const string FeedFollows = "private/feed_follows";
+                BaseAddress = new Uri("https://api.igdb.com/v4"),
+            };
 
-                public const string Follows = "private/follows";
-
-                public const string Lists = "private/lists";
-
-                public const string ListEntries = "private/list_entries";
-
-                public const string Me = "private/me";
-
-                public const string Rates = "private/rates";
-
-                public const string Reviews = "private/reviews";
-
-                public const string ReviewVideos = "private/review_videos";
-            }
+            return new IGDBRestClient(
+                RestService.For<IGDBApiRefit>(
+                    httpClient,
+                    new RefitSettings
+                    {
+                        ContentSerializer = new JsonContentSerializer(JsonSerializationConfig),
+                    }));
         }
     }
 }
