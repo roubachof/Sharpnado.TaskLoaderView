@@ -100,7 +100,7 @@
                    CornerRadius="5"
                    IsVisible="False">
                 <Frame.Behaviors>
-                    <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
+                    <nado:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
                 </Frame.Behaviors>
                 <Label x:Name="ErrorNotificationViewLabel" Style="{StaticResource TextSnackbar}" />
             </Frame>

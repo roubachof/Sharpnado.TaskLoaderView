@@ -6,6 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:behaviors="clr-namespace:Sharpnado.Presentation.Forms.Behaviors;assembly=Sharpnado.TaskLoaderView"
+             xmlns:forms="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
              xmlns:img="clr-namespace:Sample.Infrastructure;assembly=Sample"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
@@ -118,7 +119,7 @@
                           AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
                           Scale="0">
                         <Grid.Behaviors>
-                            <behaviors:TimedVisibilityBehavior VisibilityInSeconds="4" />
+                            <forms:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
                         </Grid.Behaviors>
                         <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
                         <Label Style="{StaticResource TextBody}"
