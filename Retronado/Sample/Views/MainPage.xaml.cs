@@ -63,5 +63,10 @@ namespace Sample.Views
         {
             TaskMonitor.Create(_navigationService.NavigateToViewAsync<DefaultViewsSkeletonPage>(GamePlatform.Computer));
         }
+
+        private void CommandsOnClicked(object sender, EventArgs e)
+        {
+            TaskMonitor.Create(_navigationService.NavigateToViewAsync<CommandsPage>(GamePlatform.Computer));
+        }
     }
 }

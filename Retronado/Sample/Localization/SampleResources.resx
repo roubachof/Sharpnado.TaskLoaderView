@@ -205,4 +205,13 @@ You can for example use it to start your task on demand.
   <data name="SkeletonLoading_Title" xml:space="preserve">
     <value>Skeleton loading</value>
   </data>
+  <data name="Commands_Description_1" xml:space="preserve">
+    <value>You can bind a `TaskLoaderCommand` to any views to display UI feedback matching your command task state.</value>
+  </data>
+  <data name="Commands_Description_2" xml:space="preserve">
+    <value>It works super well with `CompositeTaskLoaderNotifier` and `Snackbar` :)</value>
+  </data>
+  <data name="Commands_Title" xml:space="preserve">
+    <value>Commands/Snackbar</value>
+  </data>
 </root>

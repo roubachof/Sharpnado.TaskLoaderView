@@ -31,7 +31,17 @@ namespace Sample.Domain
 
     public class Game
     {
-        public Game(long id, string coverUrl, string screenshotUrl, DateTime firstReleaseDate, List<Genre> genres, List<Company> companies, string name, double? rating)
+        public Game(
+            long id,
+            string coverUrl,
+            string screenshotUrl,
+            DateTime firstReleaseDate,
+            List<Genre> genres,
+            List<Company> companies,
+            string name,
+            double? rating,
+            string summary,
+            string storyLine)
         {
             Id = id;
             CoverUrl = coverUrl;
@@ -41,7 +51,13 @@ namespace Sample.Domain
             Companies = companies;
             Name = name;
             Rating = rating;
+            Storyline = storyLine;
+            Summary = summary;
         }
+
+        public string Storyline { get; set; }
+
+        public string Summary { get; set; }
 
         public long Id { get; }
 

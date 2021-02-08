@@ -30,6 +30,7 @@
                 <Setter Property="Padding" Value="{StaticResource ThicknessLarge}" />
                 <Setter Property="CornerRadius" Value="10" />
                 <Setter Property="HasShadow" Value="False" />
+                <Setter Property="IsClippedToBounds" Value="True" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TosWindows}" />
             </Style>
             <Style x:Key="CardTitle"
@@ -328,6 +329,60 @@
                                     Grid.Column="1"
                                     Style="{StaticResource ButtonTextIt}"
                                     Clicked="ButtonLottieLayoutOnClicked" />
+                        </Grid>
+                    </Frame>
+                </Grid>
+                <Grid>
+                    <Frame Style="{StaticResource CardStyle}"
+                           BackgroundColor="Black"
+                           TranslationY="2" />
+                    <Frame Style="{StaticResource CardStyle}">
+                        <Grid RowSpacing="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="250" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="120" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource CardTitle}"
+                                   FontFamily="{StaticResource FontArcadeClassic}"
+                                   FontSize="36"
+                                   Text="{loc:Translate Commands_Title}" />
+
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate Commands_Description_1}" />
+
+                            <Image Grid.Row="2"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Margin="0"
+                                   Aspect="Fill"
+                                   Source="{local:ImageResource Sample.Images.tetris_snackbar_square.png}" />
+
+                            <Label Grid.Row="3"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="{StaticResource FontAtariSt}"
+                                   Text="{loc:Translate Commands_Description_2}" />
+
+                            <Button Grid.Row="4"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Clicked="CommandsOnClicked" />
                         </Grid>
                     </Frame>
                 </Grid>

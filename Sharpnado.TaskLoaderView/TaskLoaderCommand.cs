@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -14,6 +15,8 @@ namespace Sharpnado.Presentation.Forms
 
         private readonly WeakEventManager _weakEventManager = new WeakEventManager();
 
+        private readonly SynchronizationContext _synchronizationContext;
+
         private bool _canBeExecuted;
 
         protected TaskLoaderCommandBase(ITaskLoaderNotifier notifier, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = false)
@@ -22,6 +25,8 @@ namespace Sharpnado.Presentation.Forms
             _canExecute = canExecute;
 
             AutoRaiseCanExecuteChange = autoRaiseCanExecuteChange;
+
+            _synchronizationContext = SynchronizationContext.Current;
 
             if (_canExecute != null)
             {
@@ -95,7 +100,17 @@ namespace Sharpnado.Presentation.Forms
         public void RaiseCanExecuteChanged()
         {
             CanBeExecuted = CanExecute(null);
-            _weakEventManager.HandleEvent(this, EventArgs.Empty, nameof(CanExecuteChanged));
+
+            if (_synchronizationContext != null && _synchronizationContext != SynchronizationContext.Current)
+            {
+                _synchronizationContext.Post(
+                    _ => _weakEventManager.HandleEvent(this, EventArgs.Empty, nameof(CanExecuteChanged)),
+                    null);
+            }
+            else
+            {
+                _weakEventManager.HandleEvent(this, EventArgs.Empty, nameof(CanExecuteChanged));
+            }
         }
 
         protected abstract void ExecuteInternal(object parameter);
@@ -145,9 +160,13 @@ namespace Sharpnado.Presentation.Forms
         }
     }
 
-    public class TaskLoaderCommand<T> : TaskLoaderCommandBase
+    /// <summary>
+    /// Use this version when the TaskLoaderNotifier returns a plain Task.
+    /// </summary>
+    /// <typeparam name="TParam">The type of the parameter that will be pass as argument to the Execute method.</typeparam>
+    public class TaskLoaderCommand<TParam> : TaskLoaderCommandBase
     {
-        private readonly Func<T, Task> _taskSource;
+        private readonly Func<TParam, Task> _taskSource;
 
         /// <summary>
         /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
@@ -158,7 +177,7 @@ namespace Sharpnado.Presentation.Forms
         /// of the autoResetDelay the TaskLoaderNotifier will be Reset.</param>
         /// <param name="canExecute">The function determining if the command can be executed.</param>
         /// <param name="autoRaiseCanExecuteChange">If true, will raise automatically can execute before the task is running and after it is completed.</param>
-        public TaskLoaderCommand(Func<T, Task> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = false)
+        public TaskLoaderCommand(Func<TParam, Task> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = false)
             : base(new TaskLoaderNotifier(autoResetDelay), canExecute, autoRaiseCanExecuteChange)
         {
             _taskSource = taskSource;
@@ -171,7 +190,7 @@ namespace Sharpnado.Presentation.Forms
         /// <param name="taskSource">The Task to be executed.</param>
         /// <param name="canExecute">The function determining if the command can be executed.</param>
         /// <param name="autoRaiseCanExecuteChange">If true, will raise automatically can execute before the task is running and after it is completed.</param>
-        public TaskLoaderCommand(Func<T, Task> taskSource, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = true)
+        public TaskLoaderCommand(Func<TParam, Task> taskSource, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = true)
             : this(taskSource, TimeSpan.Zero, canExecute, autoRaiseCanExecuteChange)
         {
         }
@@ -180,13 +199,18 @@ namespace Sharpnado.Presentation.Forms
 
         protected override void ExecuteInternal(object parameter)
         {
-            Notifier.Load(() => _taskSource((T)parameter));
+            Notifier.Load(() => _taskSource((TParam)parameter));
         }
     }
 
-    public class TaskLoaderCommand<TParam, TTask> : TaskLoaderCommandBase
+    /// <summary>
+    /// Use this version when the TaskLoaderNotifier returns a generic Task{TReturningTask}.
+    /// </summary>
+    /// <typeparam name="TParam">The type of the parameter that will be pass as argument to the Execute method.</typeparam>
+    /// <typeparam name="TReturningTask">The type of the generic returning task..</typeparam>
+    public class TaskLoaderCommand<TParam, TReturningTask> : TaskLoaderCommandBase
     {
-        private readonly Func<TParam, Task<TTask>> _taskSource;
+        private readonly Func<TParam, Task<TReturningTask>> _taskSource;
 
         /// <summary>
         /// Create a TaskLoaderCommand with a TaskLoaderNotifier that will be started when the Execute method will
@@ -197,8 +221,8 @@ namespace Sharpnado.Presentation.Forms
         /// of the autoResetDelay the TaskLoaderNotifier will be Reset.</param>
         /// <param name="canExecute">The function determining if the command can be executed.</param>
         /// <param name="autoRaiseCanExecuteChange">If true, will raise automatically can execute before the task is running and after it is completed.</param>
-        public TaskLoaderCommand(Func<TParam, Task<TTask>> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = true)
-            : base(new TaskLoaderNotifier<TTask>(autoResetDelay), canExecute, autoRaiseCanExecuteChange)
+        public TaskLoaderCommand(Func<TParam, Task<TReturningTask>> taskSource, TimeSpan autoResetDelay, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = true)
+            : base(new TaskLoaderNotifier<TReturningTask>(autoResetDelay), canExecute, autoRaiseCanExecuteChange)
         {
             _taskSource = taskSource;
         }
@@ -210,12 +234,12 @@ namespace Sharpnado.Presentation.Forms
         /// <param name="taskSource">The Task to be executed.</param>
         /// <param name="canExecute">The function determining if the command can be executed.</param>
         /// <param name="autoRaiseCanExecuteChange">If true, will raise automatically can execute before the task is running and after it is completed.</param>
-        public TaskLoaderCommand(Func<TParam, Task<TTask>> taskSource, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = true)
+        public TaskLoaderCommand(Func<TParam, Task<TReturningTask>> taskSource, Func<object, bool> canExecute = null, bool autoRaiseCanExecuteChange = true)
             : this(taskSource, TimeSpan.Zero, canExecute, autoRaiseCanExecuteChange)
         {
         }
 
-        public new TaskLoaderNotifier<TTask> Notifier => (TaskLoaderNotifier<TTask>)base.Notifier;
+        public new TaskLoaderNotifier<TReturningTask> Notifier => (TaskLoaderNotifier<TReturningTask>)base.Notifier;
 
         protected override void ExecuteInternal(object parameter)
         {

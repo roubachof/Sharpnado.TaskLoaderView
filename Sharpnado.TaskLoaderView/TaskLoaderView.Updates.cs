@@ -166,7 +166,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
                 return;
             }
 
-            ErrorNotificationViewLabel.FontFamily = FontFamily;
+            DefaultErrorNotificationView.FontFamily = FontFamily;
             ErrorViewLabel.FontFamily = FontFamily;
             EmptyStateLabel.FontFamily = FontFamily;
         }
@@ -311,7 +311,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateNotificationBackgroundColor()
         {
-            if (ErrorNotificationViewLabel == null)
+            if (DefaultErrorNotificationView == null)
             {
                 return;
             }
@@ -321,12 +321,12 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         private void UpdateNotificationTextColor()
         {
-            if (ErrorNotificationViewLabel == null)
+            if (DefaultErrorNotificationView == null)
             {
                 return;
             }
 
-            ErrorNotificationViewLabel.TextColor = NotificationTextColor;
+            DefaultErrorNotificationView.TextColor = NotificationTextColor;
         }
 
         private void CreateFromTaskSource()
@@ -566,8 +566,8 @@ namespace Sharpnado.Presentation.Forms.CustomViews
                 Frame.IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
 
-            ErrorNotificationViewLabel.SetBinding(
-                Label.TextProperty,
+            DefaultErrorNotificationView.SetBinding(
+                Snackbar.TextProperty,
                 new Binding(nameof(TaskLoaderNotifier.Error), source: TaskLoaderNotifier, converter: ErrorMessageConverter));
         }
     }

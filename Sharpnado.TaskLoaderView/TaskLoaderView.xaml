@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:behaviors="clr-namespace:Sharpnado.Presentation.Forms.Behaviors;assembly=Sharpnado.TaskLoaderView"
              xmlns:nado="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
              d:DataContext="{d:DesignInstance nado:ITaskLoaderNotifier}">
 
@@ -31,13 +30,6 @@
             </Style>
             <Style x:Key="ViewSnackbar" TargetType="Frame">
                 <Setter Property="BackgroundColor" Value="{x:Static nado:ColorHelper.MaterialNotificationColor}" />
-            </Style>
-            <Style x:Key="TextSnackbar"
-                   BasedOn="{StaticResource TextCenter}"
-                   TargetType="Label">
-                <Setter Property="FontSize" Value="14" />
-                <Setter Property="LineBreakMode" Value="CharacterWrap" />
-                <Setter Property="TextColor" Value="{x:Static nado:ColorHelper.WhiteText}" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
@@ -91,19 +83,13 @@
             </StackLayout>
 
             <!--  Snackbar like error notification  -->
-            <Frame x:Name="DefaultErrorNotificationView"
-                   AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
-                   AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
-                   Style="{StaticResource ViewSnackbar}"
-                   Margin="15"
-                   Padding="15"
-                   CornerRadius="5"
-                   IsVisible="False">
-                <Frame.Behaviors>
-                    <nado:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
-                </Frame.Behaviors>
-                <Label x:Name="ErrorNotificationViewLabel" Style="{StaticResource TextSnackbar}" />
-            </Frame>
+            <nado:Snackbar x:Name="DefaultErrorNotificationView"
+                           AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+                           AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
+                           Style="{StaticResource ViewSnackbar}"
+                           Margin="15"
+                           IsVisible="False"
+                           Text="Super pipo AHAHAHAHAHAHA" />
         </AbsoluteLayout>
     </ContentView.Content>
 

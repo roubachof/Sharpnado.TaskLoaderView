@@ -32,6 +32,8 @@ namespace Sharpnado.Presentation.Forms
 
         private Exception _error;
 
+        private Exception _lastError;
+
         public CompositeTaskLoaderNotifier(
             params ITaskLoaderNotifier[] taskLoaderNotifiers)
         {
@@ -153,6 +155,12 @@ namespace Sharpnado.Presentation.Forms
             set => SetAndRaise(ref _error, value);
         }
 
+        public Exception LastError
+        {
+            get => _lastError;
+            set => SetAndRaise(ref _lastError, value);
+        }
+
         public ITaskMonitor CurrentLoadingTask { get; } = null;
 
         public bool DisableEmptyState { get; } = false;
@@ -227,6 +235,8 @@ namespace Sharpnado.Presentation.Forms
 
         private void LoaderOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            var taskNotifier = (ITaskLoaderNotifier)sender;
+
             switch (e.PropertyName)
             {
                 case nameof(IsRunningOrSuccessfullyCompleted):
@@ -250,17 +260,25 @@ namespace Sharpnado.Presentation.Forms
                     break;
 
                 case nameof(ShowError):
+                    LastError = taskNotifier.Error;
                     Error = IsFaulted
                         ? new AggregateException(
                             _loaders
                                 .Where(l => l.Error != null)
                                 .Select(l => l.Error))
                         : null;
-                    ShowError = _loaders.Any(l => l.ShowError);
+                    ShowError = taskNotifier.ShowError && _loaders.Any(l => l.ShowError);
                     break;
 
                 case nameof(ShowErrorNotification):
-                    ShowErrorNotification = _loaders.All(l => l.ShowErrorNotification);
+                    LastError = taskNotifier.Error;
+                    Error = IsFaulted
+                        ? new AggregateException(
+                            _loaders
+                                .Where(l => l.Error != null)
+                                .Select(l => l.Error))
+                        : null;
+                    ShowErrorNotification = taskNotifier.ShowErrorNotification && _loaders.Any(l => l.ShowErrorNotification);
                     break;
             }
         }

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Sample.Views.CommandsPage"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
+             xmlns:forms="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
+             xmlns:inf="clr-namespace:Sample.Infrastructure;assembly=Sample"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
+             xmlns:sho="http://sharpnado.com"
+             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
+             xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             ios:Page.UseSafeArea="true"
+             BackgroundColor="{StaticResource TopElementBackground}"
+             NavigationPage.HasNavigationBar="false">
+
+    <d:ContentPage.BindingContext>
+        <viewModels:CommandsPageViewModel />
+    </d:ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TaskLoaderStyle" TargetType="customViews:TaskLoaderView">
+                <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
+                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
+                <Setter Property="EmptyStateImageSource" Value="{inf:ImageResource Sample.Images.dougal.png}" />
+                <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
+                <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
+                <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />
+                <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
+                <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <views:NavigationToolBar Title="{loc:Translate Commands_Title}"
+                                     Grid.Row="0"
+                                     BackgroundColor="{StaticResource TopElementBackground}"
+                                     Theme="Standard" />
+
+            <customViews:TaskLoaderView Grid.Row="1"
+                                        Style="{StaticResource TaskLoaderStyle}"
+                                        TaskLoaderNotifier="{Binding Loader}">
+                <Grid RowDefinitions="300,*">
+                    <Image Grid.Row="0"
+                           skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                           skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                           Aspect="Fill"
+                           Source="{Binding Loader.Result.ScreenshotUrl}" />
+
+                    <sho:MaterialFrame Grid.Row="0"
+                                       Padding="15,5,15,30"
+                                       VerticalOptions="End"
+                                       CornerRadius="0"
+                                       MaterialBlurStyle="Dark"
+                                       MaterialTheme="AcrylicBlur">
+                        <Grid Padding="0"
+                              ColumnDefinitions="*,60"
+                              RowDefinitions="40,20,20"
+                              RowSpacing="0">
+                            <Label Grid.Row="0"
+                                   Grid.Column="0"
+                                   Style="{StaticResource GameName}"
+                                   Margin="0,0,10,0"
+                                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                   skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                   Text="{Binding Loader.Result.Name}" />
+
+                            <Label Grid.Row="1"
+                                   Style="{StaticResource GameCompany}"
+                                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                   skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                   Text="{Binding Loader.Result.MajorCompany}" />
+
+                            <Label Grid.Row="2"
+                                   Style="{StaticResource GameGenre}"
+                                   Text="{Binding Loader.Result.MajorGenre}" />
+
+                            <Image Grid.Row="0"
+                                   Grid.RowSpan="3"
+                                   Grid.Column="1"
+                                   Margin="0,10,0,0"
+                                   Source="{Binding Loader.Result.CoverUrl}" />
+
+                        </Grid>
+                    </sho:MaterialFrame>
+
+                    <Button Grid.Row="1"
+                            HeightRequest="40"
+                            Margin="0,-20,100,0"
+                            Padding="10"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Start"
+                            BackgroundColor="{StaticResource AccentColor}"
+                            Command="{Binding BuyGameCommand}"
+                            FontFamily="{StaticResource FontAtariSt}"
+                            Text="BUY IT"
+                            TextColor="{StaticResource TopElementBackground}" />
+
+                    <Button Grid.Row="1"
+                            HeightRequest="40"
+                            Margin="100,-20,0,0"
+                            Padding="10"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Start"
+                            BackgroundColor="{StaticResource AccentColor}"
+                            Command="{Binding PlayTheGameCommand}"
+                            FontFamily="{StaticResource FontAtariSt}"
+                            Text="PLAY IT"
+                            TextColor="{StaticResource TopElementBackground}" />
+
+
+                    <Label Grid.Row="1"
+                           Style="{StaticResource GameGenre}"
+                           Margin="15,45,15,0"
+                           Text="{Binding Loader.Result.Summary}"
+                           TextColor="White" />
+
+
+                </Grid>
+            </customViews:TaskLoaderView>
+
+            <AbsoluteLayout Grid.Row="1"
+                            BackgroundColor="#77002200"
+                            IsVisible="{Binding CompositeNotifier.ShowLoader}">
+                <Grid x:Name="ErrorNotificationView"
+                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                      AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+                      RowDefinitions="*,*">
+                    <Grid.Behaviors>
+                        <forms:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
+                    </Grid.Behaviors>
+                    <Image Grid.RowSpan="2"
+                           Aspect="Fill"
+                           Source="{inf:ImageResource Sample.Images.window_border.png}" />
+                    <Image x:Name="BusyImage"
+                           Margin="15,30,15,0"
+                           Aspect="AspectFit"
+                           Source="{inf:ImageResource Sample.Images.busy_bee_white_bg.png}" />
+                    <Label Grid.Row="1"
+                           Style="{StaticResource TextBody}"
+                           Margin="{StaticResource ThicknessLarge}"
+                           VerticalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           Text="{Binding LoadingText}" />
+                </Grid>
+            </AbsoluteLayout>
+
+            <forms:Snackbar Grid.Row="1"
+                            Margin="15"
+                            VerticalOptions="End"
+                            BackgroundColor="White"
+                            FontFamily="{StaticResource FontAtariSt}"
+                            IsVisible="{Binding CompositeNotifier.ShowError, Mode=TwoWay}"
+                            Text="{Binding CompositeNotifier.LastError, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                            TextColor="{StaticResource TextPrimaryColor}"
+                            TextHorizontalOptions="Start" />
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

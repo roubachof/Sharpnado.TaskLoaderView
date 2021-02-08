@@ -12,7 +12,9 @@ namespace Sample.Domain
 {
     public class RetroGamingService : IRetroGamingService
     {
-        private readonly ErrorEmulator _errorEmulator;
+        private const int MinId = 1;
+        private const int MaxId = 99999999;
+
         private const int AtariPlatformId = 63;
 
         private const int AmigaPlatformId = 16;
@@ -27,11 +29,20 @@ namespace Sample.Domain
 
         private const int SmsPlatformId = 64;
 
-        private const string GamesRequest = "fields name, genres.name, first_release_date, cover.image_id, involved_companies.company.name, rating, screenshots.image_id;"
-                                            + "sort popularity desc;"
-                                            + "where platforms = ({0}) & id >= {1} & id < {2};" + "limit {3};";
+        //private const string GamesRequest = "fields name, genres.name, summary, storyline, first_release_date, cover.image_id, involved_companies.company.name, rating, screenshots.image_id;"
+        //                                    //+ "sort rating desc;"
+        //                                    + "sort aggregated_rating desc;"
+        //                                    + "where platforms = ({0}) & id >= {1} & id < {2} & cover.image_id != null & screenshots.image_id != null;" + "limit {3};";
+
+        private const string GamesRequest = "fields name, genres.name, summary, storyline, first_release_date, cover.image_id, involved_companies.company.name, rating, screenshots.image_id;"
+            + "sort rating desc;"
+            + "where rating != null & platforms = ({0}) & cover.image_id != null & screenshots.image_id != null;" + "limit {1};";
+
+        private readonly ErrorEmulator _errorEmulator;
 
         private readonly IGDBRestClient _igdbClient;
+
+        private readonly Random _randomizer = new Random();
 
         public RetroGamingService(ErrorEmulator errorEmulator)
         {
@@ -39,28 +50,40 @@ namespace Sample.Domain
             _errorEmulator = errorEmulator;
         }
 
-        public async Task<Game> GetRandomGame()
+        public async Task<Game> GetRandomGame(bool mostPop = false)
         {
-            List<Game> result = DateTime.UtcNow.Millisecond % 2 == 0
-                                    ? await GetNesAndSmsGames()
-                                    : await GetAtariAndAmigaGames();
+            var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
+                    IGDBRestClient.Endpoints.Games,
+                    GetStringRequest(
+                        new[]
+                        {
+                            AtariPlatformId, // AmigaPlatformId,
+                        }))
+                .ConfigureAwait(false);
 
-            return result[0];
+            var result = igdbModels.Select(ToDomainEntity).ToList();
+
+            return result[_randomizer.Next(0, result.Count)];
         }
 
-        public async Task<List<Game>> GetAtariAndAmigaGames()
+        private string GetStringRequest(int[] platforms, int lowerId = MinId, int higherId = MaxId, int limit = 20)
+        {
+            return string.Format(
+                GamesRequest,
+                string.Join(",", platforms),
+                limit,
+                higherId,
+                limit);
+        }
+
+        public async Task<List<Game>> GetAtariAndAmigaGames(bool mostPop = false)
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            var bounds = GetIdBounds();
+            var bounds = mostPop ? (LowerId: MinId, HigherId: MaxId) : GetIdBounds();
             var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
                     IGDBRestClient.Endpoints.Games,
-                    query: string.Format(
-                        GamesRequest,
-                        string.Join(",", new[] { AtariPlatformId, AmigaPlatformId }),
-                        bounds.LowerId,
-                        bounds.HigherId,
-                        20))
+                    GetStringRequest(new[] { AtariPlatformId, AmigaPlatformId }, bounds.LowerId, bounds.HigherId))
                 .ConfigureAwait(false);
 
             var result = igdbModels.Select(ToDomainEntity).ToList();
@@ -98,28 +121,20 @@ namespace Sample.Domain
             return result;
         }
 
-        public async Task<List<Game>> GetNesAndSmsGames()
+        public async Task<List<Game>> GetNesAndSmsGames(bool mostPop = false)
         {
             Stopwatch watch = new Stopwatch();
             watch.Start();
-            var bounds = GetIdBounds();
+            var bounds = mostPop ? (LowerId: MinId, HigherId : MaxId) : GetIdBounds();
             var igdbModels = await _igdbClient.QueryAsync<IGDB.Models.Game>(
                     IGDBRestClient.Endpoints.Games,
-                    query: string.Format(
-                        GamesRequest,
-                        string.Join(
-                            ",",
-                            new[]
-                            {
-                                NesPlatformId,
-                                SmsPlatformId,
-                                MegadrivePlatformId,
-                                GameBoyPlatformId,
-                                Atari2600PlatformId,
-                            }),
+                    GetStringRequest(
+                        new[]
+                        {
+                            NesPlatformId, SmsPlatformId, MegadrivePlatformId, GameBoyPlatformId, Atari2600PlatformId,
+                        },
                         bounds.LowerId,
-                        bounds.HigherId,
-                        20))
+                        bounds.HigherId))
                 .ConfigureAwait(false);
 
             var result = igdbModels.Select(ToDomainEntity).ToList();
@@ -189,15 +204,19 @@ namespace Sample.Domain
                                                 ic => new Company(ic.Company.Value.Id.Value, ic.Company.Value.Name))
                                             .ToList();
 
+            DateTime firstRelease = igdbModel.FirstReleaseDate?.DateTime ?? DateTime.MinValue;
+
             return new Game(
                 igdbModel.Id.Value,
                 coverUrl,
                 screenshotUrl,
-                igdbModel.FirstReleaseDate.Value.DateTime,
+                firstRelease,
                 genres,
                 involvedCompanies,
                 igdbModel.Name,
-                igdbModel.Rating);
+                igdbModel.Rating,
+                igdbModel.Summary,
+                igdbModel.Storyline);
         }
     }
 }

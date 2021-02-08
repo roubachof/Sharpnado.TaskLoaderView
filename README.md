@@ -10,6 +10,7 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 
 * Default layout for all loading states (`Loading`, `Error`, `Success`, `Notification`, `Refresh`)
 * Stylable layouts including fonts, accent colors, error images, ...
+* Support for async `ICommand` with `TaskLoaderCommand` and `CompositeTaskLoaderNotifier`
 * Any states are overridable with user custom views and easily positioned with AbsoluteLayout properties
 * Support for `Xamarin.Forms.Skeleton` nuget package
 * Support for refresh scenarios, and error while refreshing with the `ErrorNotificationView`
@@ -542,8 +543,183 @@ If you are not loading a list but a simple object, you don't even have to use a 
 </sharpnado:TaskLoaderView>
 ```
 
-### Loading task on demand: NotStartedView 
+### Supports for MVVM async Command with TaskLoaderCommand and Snackbar
 
+You probably read many blogs about how you should implement a `AsyncCommand` instead of a regular `Command` for your `Task` based code.
+Of course, like all async mvvm patterns, the original idea comes from Stephen Cleary.
+
+But what if we could merge the power of `TaskLoaderNotifier` with the classic `ICommand` interface?
+
+The `TaskLoaderCommand` will take as parameter a function returning a `Task`, and will wrap it in a `NotifyTaskNotifier`. You can then bind your `TaskLoaderView` to the `NotifyTaskNotifier` exposed by your `TaskLoaderCommand`.
+
+It's in fact the missing piece to have a complete UI feedback to all our actions.
+
+#### The TaskLoaderView Snackbar
+
+We at Sharpnado, created a simple Snackbar component very simple with timer and customization:
+
+```xml
+<forms:Snackbar Grid.Row="1"
+                Margin="15"
+                VerticalOptions="End"
+                BackgroundColor="White"
+                DisplayDurationMilliseconds="3000"
+                FontFamily="{StaticResource FontAtariSt}"
+                IsVisible="{Binding BuyGameCommand.Notifier.ShowError, Mode=TwoWay}"
+                Text="{Binding  BuyGameCommand.Notifier.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                TextColor="{StaticResource TextPrimaryColor}"
+                TextHorizontalOptions="Start" />
+```
+
+You can then very simply bind a `TaskLoaderCommand` to your `Snackbar`:
+
+```csharp
+
+BuyGameCommand = new TaskLoaderCommand(BuyGame);
+
+private async Task BuyGame()
+{
+    LoadingText = "Proceeding to payment";
+    RaisePropertyChanged(nameof(LoadingText));
+
+    await Task.Delay(2000);
+    throw new LocalizedException($"Sorry, we only accept DogeCoin...{Environment.NewLine}BTW GameStop are still opened");
+}
+
+```
+
+Then when pressing "BUY IT", you will get this
+
+![](Docs/tetris_snackbar.png)
+
+
+
+As you can see you can change the auto dismiss timer as you like, but also the font size, color, family, etc...
+
+
+#### CompositeTaskLoaderNotifier: a love story with Commands and Snackbar
+
+So with the `TaskLoaderCommand` you knew you could bind any action to a UI component and have a great UI feedback.
+But thanks to the `CompositeTaskLoaderNotifier` you can now bind SEVERAL async Command states to ONE UI Component.
+
+It makes all your commands UI feedback sooooo easy.
+You can bind 1, 2, 3, 4, 423 commands to a unique `Snackbar` or/and a unique loading dialog \o/
+
+##### EXAMPLE
+
+Now look at that you just pass as parameters all the notifiers from your commands to the composite constructor:
+
+```csharp
+public class CommandsPageViewModel : ANavigableViewModel
+{
+    private readonly IRetroGamingService _retroGamingService;
+
+    public CommandsPageViewModel(INavigationService navigationService, IRetroGamingService retroGamingService)
+        : base(navigationService)
+    {
+        _retroGamingService = retroGamingService;
+
+        Loader = new TaskLoaderNotifier<Game>();
+
+        BuyGameCommand = new TaskLoaderCommand(BuyGame);
+        PlayTheGameCommand = new TaskLoaderCommand(PlayTheGame);
+
+        CompositeNotifier = new CompositeTaskLoaderNotifier(
+            BuyGameCommand.Notifier,
+            PlayTheGameCommand.Notifier);
+    }
+
+    public CompositeTaskLoaderNotifier CompositeNotifier { get; }
+
+    public TaskLoaderCommand BuyGameCommand { get; }
+
+    public TaskLoaderCommand PlayTheGameCommand { get; }
+
+    public TaskLoaderNotifier<Game> Loader { get; }
+
+    public string LoadingText { get; set; }
+
+    public override void OnNavigated(object parameter)
+    {
+        Loader.Load(() => GetRandomGame());
+    }
+
+    private async Task<Game> GetRandomGame()
+    {
+        await Task.Delay(TimeSpan.FromSeconds(2));
+
+        return await _retroGamingService.GetRandomGame(true);
+    }
+
+    private async Task BuyGame()
+    {
+        LoadingText = "Proceeding to payment";
+        RaisePropertyChanged(nameof(LoadingText));
+
+        await Task.Delay(2000);
+        throw new LocalizedException($"Sorry, we only accept DogeCoin...{Environment.NewLine}BTW GameStop are still opened");
+    }
+
+    private async Task PlayTheGame()
+    {
+        LoadingText = "Loading the game...";
+        RaisePropertyChanged(nameof(LoadingText));
+
+        await Task.Delay(2000);
+        throw new LocalizedException("AHAHAHA! Yeah right...");
+    }
+}
+```
+
+...bind the composite notifier to your loading dialog and snackbar... 
+
+```xml
+<!-- Loading dialog -->
+<AbsoluteLayout Grid.Row="1"
+                BackgroundColor="#77002200"
+                IsVisible="{Binding CompositeNotifier.ShowLoader}">
+    <Grid x:Name="ErrorNotificationView"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+            RowDefinitions="*,*">
+        <Grid.Behaviors>
+            <forms:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
+        </Grid.Behaviors>
+        <Image Grid.RowSpan="2"
+                Aspect="Fill"
+                Source="{inf:ImageResource Sample.Images.window_border.png}" />
+        <Image x:Name="BusyImage"
+                Margin="15,30,15,0"
+                Aspect="AspectFit"
+                Source="{inf:ImageResource Sample.Images.busy_bee_white_bg.png}" />
+        <Label Grid.Row="1"
+                Style="{StaticResource TextBody}"
+                Margin="{StaticResource ThicknessLarge}"
+                VerticalOptions="Center"
+                HorizontalTextAlignment="Center"
+                Text="{Binding LoadingText}" />
+    </Grid>
+</AbsoluteLayout>
+
+<!-- SNACKBAR -->
+<forms:Snackbar Grid.Row="1"
+                Margin="15"
+                VerticalOptions="End"
+                BackgroundColor="White"
+                FontFamily="{StaticResource FontAtariSt}"
+                IsVisible="{Binding CompositeNotifier.ShowError, Mode=TwoWay}"
+                Text="{Binding CompositeNotifier.LastError, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                TextColor="{StaticResource TextPrimaryColor}"
+                TextHorizontalOptions="Start" />
+```
+
+...and BAM, just chill and click.
+
+![](Docs/snackbar_mk.gif)
+
+#### Loading task on demand: NotStartedView and TaskLoaderCommand
+
+Another example of using `TaskLoaderCommand` is the ability to load views on demand.
 A `NotStartedView` state is also available so you can display a view before loading the `Task`.
 It is quite useful for load-on-demand.
 
@@ -559,28 +735,29 @@ Here `TaskLoaderType="ResultAsLoadingView"` is set cause we are using the skelet
                           ErrorImageConverter="{StaticResource ExceptionToImageSourceConverter}"
                           ErrorMessageConverter="{StaticResource ExceptionToErrorMessageConverter}"
                           FontFamily="{StaticResource FontAtariSt}"
-                          TaskLoaderNotifier="{Binding RandomGameLoader}"
+                          TaskLoaderNotifier="{Binding RandomGameLoaderCommand.Notifier}"
                           TaskLoaderType="ResultAsLoadingView"
                           TextColor="Black">
     <sharpnado:TaskLoaderView.NotStartedView>
         <Button AbsoluteLayout.LayoutFlags="PositionProportional"
                 AbsoluteLayout.LayoutBounds="0.5, 0.5, 120, 50"
                 Style="{StaticResource ButtonTextIt}"
-                Command="{Binding LoadRandomGameCommand}" />
+                Command="{Binding RandomGameLoaderCommand}" />
     </sharpnado:TaskLoaderView.NotStartedView>
 
     <Frame Style="{StaticResource CardStyle}"
-           Margin="-15,0,-15,-15"
-           Padding="0"
-           skeleton:Skeleton.Animation="Beat"
-           skeleton:Skeleton.IsBusy="{Binding RandomGameLoader.ShowLoader}"
-           skeleton:Skeleton.IsParent="True"
-           BackgroundColor="{DynamicResource CellBackgroundColor}"
-           CornerRadius="10"
-           IsClippedToBounds="True">
+            Margin="-15,0,-15,-15"
+            Padding="0"
+            skeleton:Skeleton.Animation="Fade"
+            skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
+            skeleton:Skeleton.IsParent="True"
+            BackgroundColor="{DynamicResource CellBackgroundColor}"
+            BindingContext="{Binding RandomGameLoaderCommand.Notifier}"
+            CornerRadius="10"
+            IsClippedToBounds="True">
         ...
     </Frame>
-</sharpnado:TaskLoaderView
+</sharpnado:TaskLoaderView>
 ```
 
 ```csharp
@@ -592,15 +769,10 @@ public class LoadOnDemandViewModel : Bindable
     {
         _retroGamingService = retroGamingService;
 
-        RandomGameLoader = new TaskLoaderNotifier<Game>();
-
-        LoadRandomGameCommand = new Command(
-            () => { RandomGameLoader.Load(GetRandomGame); });
+        RandomGameLoaderCommand = new TaskLoaderCommand<object, Game>(_ => GetRandomGame());
     }
 
-    public TaskLoaderNotifier<Game> RandomGameLoader { get; }
-
-    public ICommand LoadRandomGameCommand { get; }
+    public TaskLoaderCommand<object, Game> RandomGameLoaderCommand { get; }
 
     private async Task<Game> GetRandomGame()
     {

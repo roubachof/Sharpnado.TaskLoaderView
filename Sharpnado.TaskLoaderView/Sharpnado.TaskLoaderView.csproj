@@ -7,9 +7,9 @@
     <RootNamespace>Sharpnado.Presentation.Forms</RootNamespace>
 
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>2.2.1.0</AssemblyVersion>
-    <AssemblyFileVersion>2.2.1.0</AssemblyFileVersion>
-    <Version>2.2.1.0</Version>
+    <AssemblyVersion>2.3.0.0</AssemblyVersion>
+    <AssemblyFileVersion>2.3.0.0</AssemblyFileVersion>
+    <Version>2.3.0.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
 
@@ -22,7 +22,7 @@
     <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/tlv_icon_tos.png</PackageIconUrl>
     <PackageTags>xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
 
-    <PackageReleaseNotes>Fix TaskLoaderCommand, add CompositeTaskLoaderNotifier, add AutoResetDelay property.</PackageReleaseNotes>
+    <PackageReleaseNotes>Snackbar with TaskLoaderCommand and CompositeTaskLoaderNotifier</PackageReleaseNotes>
 
     <Title>TaskLoaderView: free yourself from IsBusy=true!</Title>
     <Summary>Free yourself from IsBusy=true! The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.</Summary>
@@ -32,6 +32,8 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 Featuring:
 
 * Default views for all loading states (Loading, Error, Success, Notification, Refresh)
+* Snackbar component
+* Compose notifiers with CompositeTaskLoaderNotifier
 * Stylable views including fonts, accent color, error images, ...
 * Any states are overridable with user custom views and easily positionned with AbsoluteLayout properties
 * Support for Xamarin.Forms.Skeleton nuget package
@@ -42,7 +44,7 @@ Featuring:
 
     <Owners>Jean-Marie Alfonsi</Owners>
     <Authors>Jean-Marie Alfonsi</Authors>
-    <Copyright>Copyright 2020 Sharpnado</Copyright>
+    <Copyright>Copyright 2021 Sharpnado</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
@@ -68,6 +70,12 @@ Featuring:
     <Compile Update="TaskLoaderView.Updates.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Snackbar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

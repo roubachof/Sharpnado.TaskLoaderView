@@ -224,37 +224,37 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         public object ErrorNotificationView
         {
-            get => (object)GetValue(ErrorNotificationViewProperty);
+            get => GetValue(ErrorNotificationViewProperty);
             set => SetValue(ErrorNotificationViewProperty, value);
         }
 
         public object ResultView
         {
-            get => (object)GetValue(ResultViewProperty);
+            get => GetValue(ResultViewProperty);
             set => SetValue(ResultViewProperty, value);
         }
 
         public object NotStartedView
         {
-            get => (object)GetValue(NotStartedViewProperty);
+            get => GetValue(NotStartedViewProperty);
             set => SetValue(NotStartedViewProperty, value);
         }
 
         public object EmptyView
         {
-            get => (object)GetValue(EmptyViewProperty);
+            get => GetValue(EmptyViewProperty);
             set => SetValue(EmptyViewProperty, value);
         }
 
         public object ErrorView
         {
-            get => (object)GetValue(ErrorViewProperty);
+            get => GetValue(ErrorViewProperty);
             set => SetValue(ErrorViewProperty, value);
         }
 
         public object LoadingView
         {
-            get => (object)GetValue(LoadingViewProperty);
+            get => GetValue(LoadingViewProperty);
             set => SetValue(LoadingViewProperty, value);
         }
 

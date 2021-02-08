@@ -162,8 +162,9 @@ namespace Sharpnado.Presentation.Forms
         public virtual void Reset()
         {
             InternalLogger.Debug(Tag, () => $"Reset()");
-            IsRunningOrSuccessfullyCompleted = ShowError = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = false;
+
             Error = null;
+            IsRunningOrSuccessfullyCompleted = ShowError = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = false;
 
             RaisePropertyChanged(nameof(IsCompleted));
             RaisePropertyChanged(nameof(IsNotCompleted));
@@ -197,10 +198,6 @@ namespace Sharpnado.Presentation.Forms
             InternalLogger.Debug(Tag, () => $"OnTaskFaulted()");
             RaisePropertyChanged(nameof(IsFaulted));
 
-            IsRunningOrSuccessfullyCompleted = false;
-            ShowError = !isRefreshing;
-            ShowErrorNotification = isRefreshing;
-
             var exception = faultedTask.InnerException;
             if (exception == null && faultedTask.IsCanceled)
             {
@@ -210,6 +207,10 @@ namespace Sharpnado.Presentation.Forms
             exception ??= new UnknownException("An unknown error has occurred");
 
             Error = exception;
+
+            IsRunningOrSuccessfullyCompleted = false;
+            ShowError = !isRefreshing;
+            ShowErrorNotification = isRefreshing;
         }
 
         protected virtual void OnTaskSuccessfullyCompleted(ITaskMonitor task)
@@ -224,14 +225,14 @@ namespace Sharpnado.Presentation.Forms
         {
             InternalLogger.Debug(Tag, () => $"Start( isRefreshing: {isRefreshing} )");
 
-            IsRunningOrSuccessfullyCompleted = ShowLoader = !isRefreshing;
-            ShowRefresher = isRefreshing;
-
             if (!isRefreshing)
             {
                 Error = null;
                 ShowError = ShowResult = ShowEmptyState = false;
             }
+
+            IsRunningOrSuccessfullyCompleted = ShowLoader = !isRefreshing;
+            ShowRefresher = isRefreshing;
 
             RaisePropertyChanged(nameof(IsNotStarted));
             RaisePropertyChanged(nameof(IsCompleted));

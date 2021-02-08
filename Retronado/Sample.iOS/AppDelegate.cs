@@ -27,6 +27,8 @@ namespace Sample.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            Sharpnado.MaterialFrame.iOS.iOSMaterialFrameRenderer.Init();
+
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 

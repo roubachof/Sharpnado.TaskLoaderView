@@ -1,9 +1,12 @@
 ﻿using System.Net;
 using Sample.Views;
-using Sharpnado.TaskLoaderView;
+
+using Sharpnado.MaterialFrame;
 using Sharpnado.Tasks;
 
 using Xamarin.Forms;
+
+using Initializer = Sharpnado.TaskLoaderView.Initializer;
 
 namespace Sample
 {
@@ -17,6 +20,8 @@ namespace Sample
             entryPoint.RegisterDependencies();
 
             TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
+
+            Sharpnado.MaterialFrame.Initializer.Initialize(false, false);
 
             Initializer.Initialize(true, true);
             MainPage = new NavigationPage(new MainPage());

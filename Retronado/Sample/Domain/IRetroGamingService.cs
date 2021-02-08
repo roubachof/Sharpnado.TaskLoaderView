@@ -11,10 +11,10 @@ namespace Sample.Domain
 
     public interface IRetroGamingService
     {
-        Task<List<Game>> GetAtariAndAmigaGames();
+        Task<List<Game>> GetAtariAndAmigaGames(bool mostPop = false);
 
-        Task<List<Game>> GetNesAndSmsGames();
+        Task<List<Game>> GetNesAndSmsGames(bool mostPop = false);
 
-        Task<Game> GetRandomGame();
+        Task<Game> GetRandomGame(bool mostPop = false);
     }
 }

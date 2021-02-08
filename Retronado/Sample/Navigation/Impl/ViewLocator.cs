@@ -21,6 +21,7 @@ namespace Sample.Navigation.Impl
                 (typeof(RetroGamesViewModel), typeof(DefaultViewsSkeletonPage)),
                 (typeof(RetroGamesViewModel), typeof(UserViewsPage)),
                 (typeof(RetroGamesViewModel), typeof(LottieViewsPage)),
+                (typeof(CommandsPageViewModel), typeof(CommandsPage)),
                 (typeof(RetroGamesIsBusyViewModel), typeof(DefaultIsBusyViewsPage)),
             };
 
