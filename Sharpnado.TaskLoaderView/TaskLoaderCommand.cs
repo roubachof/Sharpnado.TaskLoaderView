@@ -156,7 +156,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected override void ExecuteInternal(object parameter)
         {
-            Notifier.Load(_taskSource);
+            Notifier.Load(_ => _taskSource());
         }
     }
 
@@ -199,7 +199,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected override void ExecuteInternal(object parameter)
         {
-            Notifier.Load(() => _taskSource((TParam)parameter));
+            Notifier.Load(_ => _taskSource((TParam)parameter));
         }
     }
 
@@ -243,7 +243,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected override void ExecuteInternal(object parameter)
         {
-            Notifier.Load(() => _taskSource((TParam)parameter));
+            Notifier.Load(_ => _taskSource((TParam)parameter));
         }
     }
 }

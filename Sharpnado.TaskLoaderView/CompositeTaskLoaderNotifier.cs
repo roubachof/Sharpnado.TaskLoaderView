@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Sharpnado.TaskLoaderView;
 using Sharpnado.Tasks;
@@ -42,7 +43,8 @@ namespace Sharpnado.Presentation.Forms
             Subscribe();
 
             ResetCommand = new Command(Reset);
-            ReloadCommand = new Command(Load);
+            ReloadCommand = new Command(() => Load(isRefreshing: false));
+            RefreshCommand = new Command(() => Load(isRefreshing: true));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -167,19 +169,31 @@ namespace Sharpnado.Presentation.Forms
 
         public TimeSpan AutoResetDelay { get; } = TimeSpan.Zero;
 
-        public void Load()
+        public void Load(bool isRefreshing = false)
         {
             InternalLogger.Debug(Tag, () => $"Load()");
 
             foreach (var loader in _loaders)
             {
-                loader.Load();
+                loader.Load(isRefreshing);
             }
 
-            IsRunningOrSuccessfullyCompleted = ShowLoader = true;
+            if (!isRefreshing)
+            {
+                Error = null;
+                ShowError = ShowResult = ShowEmptyState = false;
+            }
 
-            Error = null;
-            ShowError = ShowResult = ShowEmptyState = false;
+            IsRunningOrSuccessfullyCompleted = true;
+            ShowLoader = !isRefreshing;
+            ShowRefresher = isRefreshing;
+
+            TaskMonitor.Create(
+                async () =>
+                {
+                    await Task.WhenAll(_loaders.Select(loader => loader.CurrentLoadingTask.TaskCompleted));
+                    ShowRefresher = false;
+                });
 
             RaisePropertyChanged(nameof(IsNotStarted));
             RaisePropertyChanged(nameof(IsCompleted));
@@ -245,10 +259,6 @@ namespace Sharpnado.Presentation.Forms
 
                 case nameof(ShowLoader):
                     ShowLoader = _loaders.Any(l => l.ShowLoader);
-                    break;
-
-                case nameof(ShowRefresher):
-                    ShowRefresher = _loaders.All(l => l.ShowRefresher);
                     break;
 
                 case nameof(ShowResult):

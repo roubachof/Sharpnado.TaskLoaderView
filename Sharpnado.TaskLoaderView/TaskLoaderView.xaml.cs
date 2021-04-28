@@ -198,9 +198,9 @@ namespace Sharpnado.Presentation.Forms.CustomViews
 
         public ICommand ResetCommand { get; }
 
-        public Func<Task> TaskSource
+        public Func<bool, Task> TaskSource
         {
-            get => (Func<Task>)GetValue(TaskSourceProperty);
+            get => (Func<bool, Task>)GetValue(TaskSourceProperty);
             set => SetValue(TaskSourceProperty, value);
         }
 

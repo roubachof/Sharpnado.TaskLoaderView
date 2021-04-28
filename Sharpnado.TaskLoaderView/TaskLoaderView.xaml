@@ -28,9 +28,6 @@
                 <Setter Property="FontSize" Value="14" />
                 <Setter Property="LineBreakMode" Value="CharacterWrap" />
             </Style>
-            <Style x:Key="ViewSnackbar" TargetType="Frame">
-                <Setter Property="BackgroundColor" Value="{x:Static nado:ColorHelper.MaterialNotificationColor}" />
-            </Style>
         </ResourceDictionary>
     </ContentView.Resources>
 
@@ -86,8 +83,11 @@
             <nado:Snackbar x:Name="DefaultErrorNotificationView"
                            AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
                            AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
-                           Style="{StaticResource ViewSnackbar}"
                            Margin="15"
+                           Padding="15"
+                           BackgroundColor="{x:Static nado:ColorHelper.MaterialNotificationColor}"
+                           CornerRadius="8"
+                           HasShadow="False"
                            IsVisible="False"
                            Text="Super pipo AHAHAHAHAHAHA" />
         </AbsoluteLayout>

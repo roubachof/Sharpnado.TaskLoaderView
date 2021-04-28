@@ -46,7 +46,7 @@
     <PackageReference Include="IGDB" Version="2.0.1" />
     <PackageReference Include="Refit" Version="5.2.1" />
     <PackageReference Include="Sharpnado.MaterialFrame" Version="1.1.3" />
-    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.1" />
+    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.2" />
     <PackageReference Include="SimpleInjector" Version="4.8.1" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>

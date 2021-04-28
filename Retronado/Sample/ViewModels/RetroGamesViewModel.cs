@@ -20,7 +20,7 @@ namespace Sample.ViewModels
         {
             _retroGamingService = retroGamingService;
 
-            ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator, () => Loader.Load(InitializeAsync));
+            ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator, () => Loader.Load(_ => InitializeAsync()));
 
             // TaskStartMode = Auto
             // Loader = new TaskLoaderNotifier<List<Game>>(InitializeAsync);
@@ -38,7 +38,7 @@ namespace Sample.ViewModels
             _platform = (GamePlatform)parameter;
 
             // TaskStartMode = Manual (Default mode)
-            Loader.Load(InitializeAsync);
+            Loader.Load(_ => InitializeAsync());
         }
 
         private async Task ChainTasks()

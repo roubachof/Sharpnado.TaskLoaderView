@@ -1,39 +1,46 @@
 using System;
 using System.Collections;
+using System.Reflection;
 using System.Threading.Tasks;
+
 using Sharpnado.TaskLoaderView;
 using Sharpnado.Tasks;
+
 using Xamarin.Forms;
 
 namespace Sharpnado.Presentation.Forms
 {
     public class TaskLoaderNotifier<TData> : TaskLoaderNotifierBase
     {
-        private Func<Task<TData>> _loadingTaskSource;
+        private Func<bool, Task<TData>> _loadingTaskSource;
 
         private TData _result;
 
-        public TaskLoaderNotifier(bool disableEmptyState = false)
-            : this(null, disableEmptyState, TimeSpan.Zero)
+        public TaskLoaderNotifier(bool disableEmptyState = false, string tag = null)
+            : this(null, disableEmptyState, TimeSpan.Zero, tag ?? $"TaskLoaderNotifier<{typeof(TData).GetTypeInfo().Name}>")
         {
         }
 
-        public TaskLoaderNotifier(TimeSpan autoResetDelay)
-            : this(null, false, autoResetDelay)
+        public TaskLoaderNotifier(TimeSpan autoResetDelay, string tag = null)
+            : this(null, false, autoResetDelay, tag ?? $"TaskLoaderNotifier<{typeof(TData).GetTypeInfo().Name}>")
         {
         }
 
-        public TaskLoaderNotifier(Func<Task> loadingTaskSource)
-            : this((Func<Task<TData>>)loadingTaskSource, false, TimeSpan.Zero)
+        public TaskLoaderNotifier(Func<bool, Task<TData>> loadingTaskSource, string tag = null)
+            : this(loadingTaskSource, false, TimeSpan.Zero, tag ?? $"TaskLoaderNotifier<{typeof(TData).GetTypeInfo().Name}>")
         {
         }
 
-        public TaskLoaderNotifier(Func<Task<TData>> loadingTaskSource, bool disableEmptyState, TimeSpan autoResetDelay)
-            : base(autoResetDelay, disableEmptyState)
+        public TaskLoaderNotifier(
+            Func<bool, Task<TData>> loadingTaskSource,
+            bool disableEmptyState,
+            TimeSpan autoResetDelay,
+            string tag = nameof(TaskLoaderNotifier<TData>))
+            : base(autoResetDelay, disableEmptyState, tag)
         {
             CurrentLoadingTask = TaskMonitor<TData>.NotStartedTask;
             ReloadCommand = new Command(() => Load(_loadingTaskSource));
-            RefreshCommand = new Command(() => Load(_loadingTaskSource, isRefreshing: true));
+            RefreshCommand = new Command(() => Load(_loadingTaskSource, true));
 
             _loadingTaskSource = loadingTaskSource;
         }
@@ -47,14 +54,14 @@ namespace Sharpnado.Presentation.Forms
         }
 
         /// <summary>
-        /// Load a task previously set.
+        ///     Load a task previously set.
         /// </summary>
-        public override void Load()
+        public override void Load(bool isRefreshing = false)
         {
-            Load(_loadingTaskSource);
+            Load(_loadingTaskSource, isRefreshing);
         }
 
-        public void Load(Func<Task<TData>> loadingTaskSource, bool isRefreshing = false)
+        public void Load(Func<bool, Task<TData>> loadingTaskSource, bool isRefreshing = false)
         {
             InternalLogger.Debug(Tag, () => $"Load( isRefreshing: {isRefreshing} )");
             lock (SyncRoot)
@@ -74,7 +81,7 @@ namespace Sharpnado.Presentation.Forms
                 _loadingTaskSource = loadingTaskSource;
 
                 CurrentLoadingTask = null;
-                CurrentLoadingTask = new TaskMonitor<TData>.Builder(_loadingTaskSource)
+                CurrentLoadingTask = new TaskMonitor<TData>.Builder(() => _loadingTaskSource(isRefreshing))
                     .WithName($"TaskLoaderNotifier<{nameof(TData)}>")
                     .WithWhenCompleted(OnTaskCompleted)
                     .WithWhenFaulted(faultedTask => OnTaskFaulted(faultedTask, isRefreshing))
@@ -101,7 +108,7 @@ namespace Sharpnado.Presentation.Forms
             }
 
             CurrentLoadingTask = TaskMonitor<TData>.NotStartedTask;
-            Result = default(TData);
+            Result = default;
 
             base.Reset();
 
@@ -119,12 +126,12 @@ namespace Sharpnado.Presentation.Forms
 
         protected override void OnTaskSuccessfullyCompleted(ITaskMonitor task)
         {
-            InternalLogger.Debug(Tag, () => $"OnTaskSuccessfullyCompleted()");
+            InternalLogger.Debug(Tag, () => "OnTaskSuccessfullyCompleted()");
             RaisePropertyChanged(nameof(IsSuccessfullyCompleted));
 
-            if (!DisableEmptyState && (Result == null || (Result is ICollection collection && collection.Count == 0)))
+            if (!DisableEmptyState && (Result is null or ICollection { Count: 0 }))
             {
-                InternalLogger.Debug(Tag, () => $"Showing empty state");
+                InternalLogger.Debug(Tag, () => "Showing empty state");
                 ShowEmptyState = true;
                 IsRunningOrSuccessfullyCompleted = false;
                 return;

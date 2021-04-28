@@ -46,7 +46,7 @@ namespace Sample.ViewModels
             // For testing the TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true setting
             // cts.Cancel();
 
-            Loader.Load(() => GetRandomGame(cts.Token));
+            Loader.Load(_ => GetRandomGame(cts.Token));
         }
 
         private async Task<Game> GetRandomGame(CancellationToken token)

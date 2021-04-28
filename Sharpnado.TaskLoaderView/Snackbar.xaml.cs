@@ -20,7 +20,7 @@ namespace Sharpnado.Presentation.Forms
             nameof(TextColor),
             typeof(Color),
             typeof(Snackbar),
-            defaultValue: Color.White);
+            defaultValue: ColorHelper.BlackText);
 
         public static readonly BindableProperty TextSizeProperty = BindableProperty.Create(
             nameof(TextSize),

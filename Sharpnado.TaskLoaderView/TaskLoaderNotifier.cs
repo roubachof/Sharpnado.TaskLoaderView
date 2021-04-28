@@ -8,20 +8,20 @@ namespace Sharpnado.Presentation.Forms
 {
     public class TaskLoaderNotifier : TaskLoaderNotifierBase
     {
-        private Func<Task> _loadingTaskSource;
+        private Func<bool, Task> _loadingTaskSource;
 
         public TaskLoaderNotifier()
             : this(TimeSpan.Zero, null)
         {
         }
 
-        public TaskLoaderNotifier(Func<Task> loadingTaskSource)
-            : this(TimeSpan.Zero, loadingTaskSource)
+        public TaskLoaderNotifier(Func<bool, Task> loadingTaskSource, string tag = "TaskLoaderNotifier")
+            : this(TimeSpan.Zero, loadingTaskSource, tag)
         {
         }
 
-        public TaskLoaderNotifier(TimeSpan autoResetDelay, Func<Task> loadingTaskSource = null)
-            : base(autoResetDelay)
+        public TaskLoaderNotifier(TimeSpan autoResetDelay, Func<bool, Task> loadingTaskSource = null, string tag = "TaskLoaderNotifier")
+            : base(autoResetDelay, false, tag)
         {
             _loadingTaskSource = loadingTaskSource;
 
@@ -35,12 +35,12 @@ namespace Sharpnado.Presentation.Forms
         /// <summary>
         /// Load a task previously set.
         /// </summary>
-        public override void Load()
+        public override void Load(bool isRefreshing = false)
         {
-            Load(_loadingTaskSource);
+            Load(_loadingTaskSource, isRefreshing);
         }
 
-        public void Load(Func<Task> loadingTaskSource, bool isRefreshing = false)
+        public void Load(Func<bool, Task> loadingTaskSource, bool isRefreshing = false)
         {
             InternalLogger.Debug(Tag, () => $"Load( isRefreshing: {isRefreshing} )");
 
@@ -55,7 +55,7 @@ namespace Sharpnado.Presentation.Forms
                 _loadingTaskSource = loadingTaskSource;
 
                 CurrentLoadingTask = null;
-                CurrentLoadingTask = new TaskMonitor.Builder(_loadingTaskSource)
+                CurrentLoadingTask = new TaskMonitor.Builder(() => _loadingTaskSource(isRefreshing))
                     .WithName("TaskLoaderNotifier")
                     .WithWhenCompleted(OnTaskCompleted)
                     .WithWhenFaulted(faultedTask => OnTaskFaulted(faultedTask, isRefreshing))

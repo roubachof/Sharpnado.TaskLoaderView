@@ -47,7 +47,7 @@ namespace Sharpnado.Presentation.Forms
 
         TimeSpan AutoResetDelay { get; }
 
-        void Load();
+        void Load(bool isRefreshing = false);
 
         void Reset();
     }

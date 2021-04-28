@@ -1,9 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Sharpnado.TaskLoaderView;
 using Sharpnado.Tasks;
 
@@ -13,31 +14,42 @@ namespace Sharpnado.Presentation.Forms
 {
     public abstract class TaskLoaderNotifierBase : ITaskLoaderNotifier
     {
-        protected const string Tag = "Notifier";
-
-        private bool _showLoader;
-        private bool _showRefresher;
-        private bool _showResult;
-        private bool _showError;
-        private bool _showEmptyState;
-        private bool _showErrorNotification;
+        private Exception _error;
 
         private bool _isRunningOrSuccessfullyCompleted;
 
-        private Exception _error;
+        private bool _showEmptyState;
 
-        protected TaskLoaderNotifierBase(bool disableEmptyState = false)
-            : this(TimeSpan.Zero, disableEmptyState)
+        private bool _showError;
+
+        private bool _showErrorNotification;
+
+        private bool _showLoader;
+
+        private bool _showRefresher;
+
+        private bool _showResult;
+
+        protected TaskLoaderNotifierBase(bool disableEmptyState = false, string tag = "TaskLoaderNotifier")
+            : this(TimeSpan.Zero, disableEmptyState, tag)
         {
         }
 
-        protected TaskLoaderNotifierBase(TimeSpan autoResetDelay, bool disableEmptyState = false)
+        protected TaskLoaderNotifierBase(
+            TimeSpan autoResetDelay,
+            bool disableEmptyState = false,
+            string tag = "TaskLoaderNotifier")
         {
             AutoResetDelay = autoResetDelay;
             DisableEmptyState = disableEmptyState;
+            Tag = tag;
 
             ResetCommand = new Command(Reset);
         }
+
+        public string Tag { get; }
+
+        protected object SyncRoot { get; } = new();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -66,7 +78,9 @@ namespace Sharpnado.Presentation.Forms
             {
                 if (SetAndRaise(ref _isRunningOrSuccessfullyCompleted, value))
                 {
-                    InternalLogger.Debug(Tag, () => $"IsRunningOrSuccessfullyCompleted: {_isRunningOrSuccessfullyCompleted}");
+                    InternalLogger.Debug(
+                        Tag,
+                        () => $"IsRunningOrSuccessfullyCompleted: {_isRunningOrSuccessfullyCompleted}");
                 }
             }
         }
@@ -155,16 +169,15 @@ namespace Sharpnado.Presentation.Forms
 
         public TimeSpan AutoResetDelay { get; }
 
-        protected object SyncRoot { get; } = new object();
-
-        public abstract void Load();
+        public abstract void Load(bool isRefreshing = false);
 
         public virtual void Reset()
         {
-            InternalLogger.Debug(Tag, () => $"Reset()");
+            InternalLogger.Debug(Tag, () => "Reset()");
 
             Error = null;
-            IsRunningOrSuccessfullyCompleted = ShowError = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = false;
+            IsRunningOrSuccessfullyCompleted =
+                ShowError = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = ShowErrorNotification = false;
 
             RaisePropertyChanged(nameof(IsCompleted));
             RaisePropertyChanged(nameof(IsNotCompleted));
@@ -173,9 +186,51 @@ namespace Sharpnado.Presentation.Forms
             RaisePropertyChanged(nameof(IsFaulted));
         }
 
+        public override string ToString()
+        {
+            var builder = new StringBuilder($"{Tag} => ");
+            if (ShowLoader)
+            {
+                builder.Append(nameof(ShowLoader));
+                builder.Append(" / ");
+            }
+
+            if (ShowResult)
+            {
+                builder.Append(nameof(ShowResult));
+                builder.Append(" / ");
+            }
+
+            if (ShowEmptyState)
+            {
+                builder.Append(nameof(ShowEmptyState));
+                builder.Append(" / ");
+            }
+
+            if (ShowError)
+            {
+                builder.Append(nameof(ShowError));
+                builder.Append(" / ");
+            }
+
+            if (ShowRefresher)
+            {
+                builder.Append(nameof(ShowRefresher));
+                builder.Append(" / ");
+            }
+
+            if (ShowErrorNotification)
+            {
+                builder.Append(nameof(ShowErrorNotification));
+                builder.Append(" / ");
+            }
+
+            return builder.ToString();
+        }
+
         protected void OnTaskCompleted(ITaskMonitor task)
         {
-            InternalLogger.Debug(Tag, () => $"OnTaskCompleted()");
+            InternalLogger.Debug(Tag, () => "OnTaskCompleted()");
             ShowRefresher = ShowLoader = false;
 
             RaisePropertyChanged(nameof(IsCompleted));
@@ -195,7 +250,7 @@ namespace Sharpnado.Presentation.Forms
 
         protected void OnTaskFaulted(ITaskMonitor faultedTask, bool isRefreshing)
         {
-            InternalLogger.Debug(Tag, () => $"OnTaskFaulted()");
+            InternalLogger.Debug(Tag, () => "OnTaskFaulted()");
             RaisePropertyChanged(nameof(IsFaulted));
 
             var exception = faultedTask.InnerException;
@@ -211,11 +266,13 @@ namespace Sharpnado.Presentation.Forms
             IsRunningOrSuccessfullyCompleted = false;
             ShowError = !isRefreshing;
             ShowErrorNotification = isRefreshing;
+
+            RaisePropertyChanged(nameof(ShowErrorNotification));
         }
 
         protected virtual void OnTaskSuccessfullyCompleted(ITaskMonitor task)
         {
-            InternalLogger.Debug(Tag, () => $"OnTaskSuccessfullyCompleted()");
+            InternalLogger.Debug(Tag, () => "OnTaskSuccessfullyCompleted()");
             RaisePropertyChanged(nameof(IsSuccessfullyCompleted));
 
             ShowResult = true;

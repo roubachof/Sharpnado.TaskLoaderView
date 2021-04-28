@@ -60,7 +60,7 @@ namespace Sharpnado.Presentation.Forms
 
         private static ICommand DoNothingCommand { get; } = new Command(DoNothing);
 
-        public void Load()
+        public void Load(bool isRefreshing = false)
         {
         }
 

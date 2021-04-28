@@ -3,11 +3,7 @@
        xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:forms="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
-       x:Name="RootLayout"
-       Padding="16"
-       BackgroundColor="#323232"
-       CornerRadius="8"
-       HasShadow="False">
+       x:Name="RootLayout">
     <ContentView.Behaviors>
         <forms:TimedVisibilityBehavior VisibilityInMilliseconds="{Binding Source={x:Reference RootLayout}, Path=DisplayDurationMilliseconds}" />
     </ContentView.Behaviors>
