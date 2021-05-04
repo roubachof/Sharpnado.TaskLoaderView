@@ -47,11 +47,9 @@ namespace Sharpnado.Presentation.Forms
             ResetCommand = new Command(Reset);
         }
 
-        public string Tag { get; }
-
-        protected object SyncRoot { get; } = new();
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Tag { get; }
 
         public ICommand ResetCommand { get; }
 
@@ -169,6 +167,8 @@ namespace Sharpnado.Presentation.Forms
 
         public TimeSpan AutoResetDelay { get; }
 
+        protected object SyncRoot { get; } = new();
+
         public abstract void Load(bool isRefreshing = false);
 
         public virtual void Reset()
@@ -231,6 +231,12 @@ namespace Sharpnado.Presentation.Forms
         protected void OnTaskCompleted(ITaskMonitor task)
         {
             InternalLogger.Debug(Tag, () => "OnTaskCompleted()");
+            if (CurrentLoadingTask != task && task.IsCanceled)
+            {
+                InternalLogger.Info("A previous task has been canceled: discarding the updates");
+                return;
+            }
+
             ShowRefresher = ShowLoader = false;
 
             RaisePropertyChanged(nameof(IsCompleted));

@@ -68,8 +68,8 @@ namespace Sharpnado.Presentation.Forms
             {
                 if (CurrentLoadingTask != TaskMonitor<TData>.NotStartedTask && CurrentLoadingTask.IsNotCompleted)
                 {
-                    // Log.Warn("A loading task is currently running: discarding this call");
-                    return;
+                    InternalLogger.Warn("A loading task is currently running: discarding previous call");
+                    Reset();
                 }
 
                 if (CurrentLoadingTask == TaskMonitor<TData>.NotStartedTask && loadingTaskSource == null)
