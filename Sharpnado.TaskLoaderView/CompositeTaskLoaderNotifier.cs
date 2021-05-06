@@ -261,6 +261,10 @@ namespace Sharpnado.Presentation.Forms
                     ShowLoader = _loaders.Any(l => l.ShowLoader);
                     break;
 
+                case nameof(ShowRefresher):
+                    ShowRefresher = _loaders.Any(l => l.ShowRefresher);
+                    break;
+
                 case nameof(ShowResult):
                     ShowResult = _loaders.All(l => l.ShowResult);
                     break;
