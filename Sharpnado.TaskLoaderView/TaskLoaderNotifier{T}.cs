@@ -61,6 +61,12 @@ namespace Sharpnado.Presentation.Forms
             Load(_loadingTaskSource, isRefreshing);
         }
 
+        public void UpdateLoadingTaskSource(Func<bool, Task<TData>> loadingTaskSource)
+        {
+            InternalLogger.Debug(Tag, () => $"UpdateLoadingTaskSource()");
+            _loadingTaskSource = loadingTaskSource;
+        }
+
         public void Load(Func<bool, Task<TData>> loadingTaskSource, bool isRefreshing = false)
         {
             InternalLogger.Debug(Tag, () => $"Load( isRefreshing: {isRefreshing} )");
@@ -69,7 +75,7 @@ namespace Sharpnado.Presentation.Forms
                 if (CurrentLoadingTask != TaskMonitor<TData>.NotStartedTask && CurrentLoadingTask.IsNotCompleted)
                 {
                     InternalLogger.Warn("A loading task is currently running: discarding previous call");
-                    Reset();
+                    OnTaskOverloaded();
                 }
 
                 if (CurrentLoadingTask == TaskMonitor<TData>.NotStartedTask && loadingTaskSource == null)

@@ -10,15 +10,18 @@ using Xamarin.Forms;
 
 namespace Sharpnado.Presentation.Forms
 {
-    public enum CompositionAutoResetCondition
+    public enum ShowRefresherFromChildrenStrategy
     {
-        AnyCompleted = 0,
-        AllCompleted,
+        Never = 0,
+        WhenAll,
+        WhenAny,
     }
 
     public class CompositeTaskLoaderNotifier : ITaskLoaderNotifier
     {
         protected const string Tag = "CompositeNotifier";
+
+        private readonly ShowRefresherFromChildrenStrategy _showRefresherFromChildrenStrategy;
 
         private readonly ITaskLoaderNotifier[] _loaders;
 
@@ -35,9 +38,16 @@ namespace Sharpnado.Presentation.Forms
 
         private Exception _lastError;
 
+        public CompositeTaskLoaderNotifier(params ITaskLoaderNotifier[] taskLoaderNotifiers)
+            : this(ShowRefresherFromChildrenStrategy.Never, taskLoaderNotifiers)
+        {
+        }
+
         public CompositeTaskLoaderNotifier(
+            ShowRefresherFromChildrenStrategy showRefresherFromChildrenStrategy,
             params ITaskLoaderNotifier[] taskLoaderNotifiers)
         {
+            _showRefresherFromChildrenStrategy = showRefresherFromChildrenStrategy;
             _loaders = taskLoaderNotifiers;
 
             Subscribe();
@@ -169,6 +179,11 @@ namespace Sharpnado.Presentation.Forms
 
         public TimeSpan AutoResetDelay { get; } = TimeSpan.Zero;
 
+        public void OnTaskOverloaded()
+        {
+            InternalLogger.Debug(Tag, () => $"OnTaskOverloaded() : let the child tasks handle their states");
+        }
+
         public void Load(bool isRefreshing = false)
         {
             InternalLogger.Debug(Tag, () => $"Load()");
@@ -262,7 +277,16 @@ namespace Sharpnado.Presentation.Forms
                     break;
 
                 case nameof(ShowRefresher):
-                    ShowRefresher = _loaders.Any(l => l.ShowRefresher);
+                    switch (_showRefresherFromChildrenStrategy)
+                    {
+                        case ShowRefresherFromChildrenStrategy.WhenAny:
+                            ShowLoader = _loaders.Any(l => l.ShowLoader);
+                            break;
+                        case ShowRefresherFromChildrenStrategy.WhenAll:
+                            ShowLoader = _loaders.All(l => l.ShowLoader);
+                            break;
+                    }
+
                     break;
 
                 case nameof(ShowResult):

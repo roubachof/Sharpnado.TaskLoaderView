@@ -50,5 +50,7 @@ namespace Sharpnado.Presentation.Forms
         void Load(bool isRefreshing = false);
 
         void Reset();
+
+        void OnTaskOverloaded();
     }
 }

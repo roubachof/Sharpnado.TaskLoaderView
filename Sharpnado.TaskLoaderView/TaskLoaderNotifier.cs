@@ -32,6 +32,12 @@ namespace Sharpnado.Presentation.Forms
 
         public override bool IsNotStarted => CurrentLoadingTask == TaskMonitor.NotStartedTask;
 
+        public void UpdateLoadingTaskSource(Func<bool, Task> loadingTaskSource)
+        {
+            InternalLogger.Debug(Tag, () => $"UpdateLoadingTaskSource()");
+            _loadingTaskSource = loadingTaskSource;
+        }
+
         /// <summary>
         /// Load a task previously set.
         /// </summary>
@@ -49,7 +55,7 @@ namespace Sharpnado.Presentation.Forms
                 if (CurrentLoadingTask != TaskMonitor.NotStartedTask && CurrentLoadingTask.IsNotCompleted)
                 {
                     InternalLogger.Warn("A loading task is currently running: discarding previous call");
-                    Reset();
+                    OnTaskOverloaded();
                     return;
                 }
 

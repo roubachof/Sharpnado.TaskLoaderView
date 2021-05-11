@@ -68,6 +68,10 @@ namespace Sharpnado.Presentation.Forms
         {
         }
 
+        public void OnTaskOverloaded()
+        {
+        }
+
         private static void DoNothing()
         {
         }

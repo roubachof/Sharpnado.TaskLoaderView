@@ -186,6 +186,20 @@ namespace Sharpnado.Presentation.Forms
             RaisePropertyChanged(nameof(IsFaulted));
         }
 
+        /// <summary>
+        /// We'll need to just cancel the current task and keep all the states cause a new task will be loaded 
+        /// </summary>
+        public void OnTaskOverloaded()
+        {
+            lock (SyncRoot)
+            {
+                if (!IsNotStarted)
+                {
+                    CurrentLoadingTask?.CancelCallbacks();
+                }
+            }
+        }
+
         public override string ToString()
         {
             var builder = new StringBuilder($"{Tag} => ");
