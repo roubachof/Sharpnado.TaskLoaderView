@@ -24,7 +24,7 @@
 
     <PackageReleaseNotes>
       Fix Snackbar BackgroundColor and CompositeLoader behavior.
-BREAKING CHANGE: the task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}. 
+BREAKING CHANGE: the task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}.
 You can simply change your calls from Loader.Load(() => InitializeAsync()); to Loader.Load(_ => InitializeAsync());
 The booleand that is passed now to your task source is a boolean indicating if the notifier is refreshing.
 You can use it for invalidating your cache for example.
@@ -52,8 +52,8 @@ When the Refresh command will be called, it will pass automatically the isRefres
     <Description>Free yourself from IsBusy=true!
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
-BREAKING CHANGE Version 2.4.0: 
-The task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}. 
+BREAKING CHANGE Version 2.4.0:
+The task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}.
 You can simply change your calls from Loader.Load(() => InitializeAsync()) to Loader.Load(_ => InitializeAsync()) to ignore it if you like.
 
 The boolean that is passed now to your task source is a boolean indicating if the notifier is refreshing.
@@ -105,8 +105,8 @@ Featuring:
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <!-- <PackageReference Include="Xamarin.Forms" Version="4.7.0.1260" /> -->
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />
+      <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+<!--    <PackageReference Include="Xamarin.Forms" Version="3.6.0.220655" />-->
   </ItemGroup>
 
   <ItemGroup>
