@@ -135,7 +135,7 @@ namespace Sharpnado.Presentation.Forms
             InternalLogger.Debug(Tag, () => "OnTaskSuccessfullyCompleted()");
             RaisePropertyChanged(nameof(IsSuccessfullyCompleted));
 
-            if (!DisableEmptyState && (Result is null or ICollection { Count: 0 }))
+            if (!DisableEmptyState && (Result == null || (Result is ICollection collection && collection.Count == 0)))
             {
                 InternalLogger.Debug(Tag, () => "Showing empty state");
                 ShowEmptyState = true;

@@ -167,7 +167,7 @@ namespace Sharpnado.Presentation.Forms
 
         public TimeSpan AutoResetDelay { get; }
 
-        protected object SyncRoot { get; } = new();
+        protected object SyncRoot { get; } = new object();
 
         public abstract void Load(bool isRefreshing = false);
 
