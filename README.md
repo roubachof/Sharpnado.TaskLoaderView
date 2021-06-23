@@ -22,6 +22,32 @@ It has been tested on **Android**, **iOS** and **UWP** platforms through the `Re
 
 It uses the Sharpnado's [TaskMonitor](https://github.com/roubachof/Sharpnado.TaskMonitor).
 
+## 2.4.0 BREAKING CHANGES
+
+The task source given to `TaskLoaderNotifier` is now a `Func<bool, Task>` (or a `Func<bool, Task<T>>`) instead of a `Func<Task>`.
+You can simply change your calls from `Loader.Load(() => InitializeAsync())` to `Loader.Load(_ => InitializeAsync())`
+The boolean passed now to your task source is a boolean indicating if the notifier is refreshing.
+You can use it for invalidating your cache for example.
+
+```csharp
+Loader.Load(LoadItems);
+
+public Task LoadItems(bool isRefreshing)
+{
+    if (isRefreshing || !_cache.ContainsItems())
+    {
+         _cache.InvalidateItems();
+         var items = _httpService.GetItems()
+         _cache.PutItems(items);
+         return items;
+    }
+
+    return _cache.GetItems();
+}
+```
+
+When the `RefreshCommand` will be called, it will pass automatically the isRefreshing boolean set to true to your task source.
+
 ## `TaskLoaderView` features
 
 ### Default state views
