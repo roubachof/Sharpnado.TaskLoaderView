@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView x:Class="Sample.Views.ErrorEmulatorView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels"
+             x:DataType="viewModels:ErrorEmulatorViewModel"
+             x:Name="RootView">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ErrorPickerStyle" TargetType="Picker">
+                <Setter Property="Margin" Value="{StaticResource PickerMargin}" />
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <ContentView.Content>
+        <StackLayout Padding="15,0"
+                     Orientation="Horizontal"
+                     Spacing="10">
+
+            <Label x:Name="Label"
+                   Style="{StaticResource TextTitle}"
+                   VerticalOptions="Center"
+                   Text="{loc:Translate ErrorEmulator_Title}">
+                <Label.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS" Value="0,2,0,0" />
+                    </OnPlatform>
+                </Label.Margin>
+            </Label>
+
+            <Picker x:Name="Picker"
+                    Style="{StaticResource ErrorPickerStyle}"
+                    BackgroundColor="Transparent"
+                    ItemsSource="{Binding ErrorTypes}"
+                    SelectedIndex="{Binding SelectedIndex}"
+                    TextColor="{StaticResource TosBackground}" />
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

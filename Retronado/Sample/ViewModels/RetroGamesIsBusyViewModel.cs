@@ -10,8 +10,6 @@ using Sample.Localization;
 using Sample.Navigation;
 using Sample.Services;
 
-using Sharpnado.Presentation.Forms;
-
 using Xamarin.Forms;
 
 namespace Sample.ViewModels

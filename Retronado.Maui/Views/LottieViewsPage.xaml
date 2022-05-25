@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Sample.Views.LottieViewsPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:inf="clr-namespace:Sample.Infrastructure"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels"
+             xmlns:views="clr-namespace:Sample.Views"
+             xmlns:customViews="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
+             ios:Page.UseSafeArea="true"
+             BackgroundColor="{StaticResource LightGreyBackground}"
+             x:DataType="viewModels:RetroGamesViewModel"
+             NavigationPage.HasNavigationBar="false">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="LoadingLottieDataTemplate">
+                <lottie:AnimationView x:Name="LoadingLottie"
+                                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                                      AbsoluteLayout.LayoutBounds="0.5, 0.4, 120, 120"
+                                      HorizontalOptions="FillAndExpand"
+                                      VerticalOptions="FillAndExpand"
+                                      Animation="{Binding Loader.ShowLoader, Converter={StaticResource CyclicLoadingLottieConverter}}"
+                                      IsAnimating="True"
+                                      RepeatMode="Infinite" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="EmptyLottieDataTemplate">
+                <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180"
+                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TaskLoaderView}}, Path=TaskLoaderNotifier}">
+
+                    <lottie:AnimationView HorizontalOptions="FillAndExpand"
+                                          VerticalOptions="FillAndExpand"
+                                          Animation="empty_state.json"
+                                          IsAnimating="True"
+                                          RepeatMode="Infinite" />
+
+                    <Label Style="{StaticResource TextBody}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Text="{loc:Translate Empty_Screen}"
+                           TextColor="White" />
+                    <Button Style="{StaticResource TextBody}"
+                            HeightRequest="40"
+                            Margin="0,20,0,0"
+                            Padding="25,0"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{StaticResource TopElementBackground}"
+                            Command="{Binding ReloadCommand}"
+                            Text="{loc:Translate ErrorButton_Retry}"
+                            TextColor="White" />
+                </StackLayout>
+            </DataTemplate>
+
+            <DataTemplate x:Key="ErrorLottieDataTemplate">
+                <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180"
+                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TaskLoaderView}}, Path=TaskLoaderNotifier}">
+
+                    <lottie:AnimationView HorizontalOptions="FillAndExpand"
+                                          VerticalOptions="FillAndExpand"
+                                          Animation="{Binding Error, Converter={StaticResource ExceptionToLottieConverter}}"
+                                          IsAnimating="True"
+                                          RepeatMode="Infinite" />
+
+                    <Label Style="{StaticResource TextBody}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Text="{Binding Error, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                           TextColor="White" />
+                    <Button Style="{StaticResource TextBody}"
+                            HeightRequest="40"
+                            Margin="0,20,0,0"
+                            Padding="25,0"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{StaticResource TopElementBackground}"
+                            Command="{Binding ReloadCommand}"
+                            Text="{loc:Translate ErrorButton_Retry}"
+                            TextColor="White" />
+                </StackLayout>
+            </DataTemplate>
+
+            <Style x:Key="TaskLoaderStyle" TargetType="customViews:TaskLoaderView">
+                <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="FontFamily" Value="FontAtariSt" />
+                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
+                <Setter Property="EmptyStateImageSource" Value="dougal.png" />
+                <Setter Property="RetryButtonText" Value="{loc:Translate ErrorButton_Retry}" />
+                <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
+                <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
+                <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource LightGreyBackground}" />
+                <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
+                <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
+
+                <Setter Property="LoadingView" Value="{StaticResource LoadingLottieDataTemplate}" />
+                <Setter Property="EmptyView" Value="{StaticResource EmptyLottieDataTemplate}" />
+                <Setter Property="ErrorView" Value="{StaticResource ErrorLottieDataTemplate}" />
+            </Style>
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <views:NavigationToolBar Title="{loc:Translate DefaultLayout_Title}"
+                                     Grid.Row="0"
+                                     BackgroundColor="{StaticResource TopElementBackground}"
+                                     Theme="Standard" />
+
+            <Frame Grid.Row="1"
+                   Margin="15,15,15,8"
+                   Padding="0"
+                   BackgroundColor="{StaticResource TopElementBackground}"
+                   CornerRadius="5"
+                   IsClippedToBounds="True">
+                <views:ErrorEmulatorView AccentColor="{StaticResource TextWhitePrimaryColor}"
+                                         BindingContext="{Binding ErrorEmulatorViewModel}"
+                                         LabelColor="{StaticResource TextWhitePrimaryColor}"
+                                         LabelFontFamily="FontArcadeClassic"
+                                         ValueFontFamily="FontAtariSt" />
+            </Frame>
+
+            <!--  All lottie views are specified in DataTemplates and Style above  -->
+            <customViews:TaskLoaderView Grid.Row="2"
+                                        Style="{StaticResource TaskLoaderStyle}"
+                                        TaskLoaderNotifier="{Binding Loader}">
+                <RefreshView Command="{Binding Loader.RefreshCommand}"
+                             IsRefreshing="{Binding Loader.ShowRefresher}"
+                             RefreshColor="{StaticResource AccentColor}">
+                    <ListView BackgroundColor="Transparent"
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              Header=""
+                              ItemTemplate="{StaticResource GameDataTemplate}"
+                              ItemsSource="{Binding Loader.Result}"
+                              RowHeight="140"
+                              SelectionMode="None"
+                              SeparatorVisibility="None" />
+                </RefreshView>
+            </customViews:TaskLoaderView>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Sample.Views.UserViewsPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:img="clr-namespace:Sample.Infrastructure"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels"
+             xmlns:views="clr-namespace:Sample.Views"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
+             ios:Page.UseSafeArea="true"
+             BackgroundColor="{StaticResource TosBackground}"
+             x:DataType="viewModels:RetroGamesViewModel"
+             NavigationPage.HasNavigationBar="false">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TaskLoaderStyle" TargetType="taskLoaderView:TaskLoaderView">
+                <Setter Property="AccentColor" Value="White" />
+                <Setter Property="FontFamily" Value="FontAtariSt" />
+                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
+                <Setter Property="EmptyStateImageSource" Value="dougal.png" />
+                <Setter Property="RetryButtonText" Value="{loc:Translate ErrorButton_Retry}" />
+                <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
+                <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
+                <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />
+                <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
+                <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
+            </Style>
+            <Style x:Key="ErrorBombStyle" TargetType="Image">
+                <Setter Property="Aspect" Value="AspectFit" />
+                <Setter Property="Margin" Value="-15,0,0,0" />
+                <Setter Property="Source" Value="bomb.png" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="3" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  Toolbar  -->
+            <views:NavigationToolBar Title="{loc:Translate CustomLayout_Title}"
+                                     Grid.Row="0"
+                                     BackgroundColor="{StaticResource TosWindows}" />
+
+            <views:ErrorEmulatorView Grid.Row="1"
+                                     AccentColor="{StaticResource AccentColor}"
+                                     BackgroundColor="{StaticResource TosWindows}"
+                                     BindingContext="{Binding ErrorEmulatorViewModel}"
+                                     LabelColor="{StaticResource TextPrimaryColor}"
+                                     LabelFontFamily="FontArcadeClassic"
+                                     ValueFontFamily="FontAtariSt" />
+
+            <BoxView Grid.Row="2" BackgroundColor="Black" />
+
+            <taskLoaderView:TaskLoaderView x:Name="TaskLoaderView"
+                                      Grid.Row="3"
+                                      Style="{StaticResource TaskLoaderStyle}"
+                                      TaskLoaderNotifier="{Binding Loader}">
+
+                <taskLoaderView:TaskLoaderView.LoadingView>
+                    <Image x:Name="BusyImage"
+                           AbsoluteLayout.LayoutFlags="PositionProportional"
+                           AbsoluteLayout.LayoutBounds="0.5, 0.5, 60, 60"
+                           Aspect="AspectFit"
+                           Source="busy_bee_white_bg.png" />
+                </taskLoaderView:TaskLoaderView.LoadingView>
+
+                <taskLoaderView:TaskLoaderView.ErrorView>
+                    <DataTemplate>
+                        <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                              AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
+                              Padding="15,0,0,0"
+                              BackgroundColor="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60" />
+                                <RowDefinition Height="30" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Row="0"
+                                   Grid.Column="0"
+                                   Style="{StaticResource ErrorBombStyle}" />
+                            <Image Grid.Row="0"
+                                   Grid.Column="1"
+                                   Style="{StaticResource ErrorBombStyle}" />
+                            <Image Grid.Row="0"
+                                   Grid.Column="2"
+                                   Style="{StaticResource ErrorBombStyle}" />
+                            <Label Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="3"
+                                   Style="{StaticResource TextBody}"
+                                   Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                        </Grid>
+                    </DataTemplate>
+                </taskLoaderView:TaskLoaderView.ErrorView>
+
+                <taskLoaderView:TaskLoaderView.ErrorNotificationView>
+                    <Grid x:Name="ErrorNotificationView"
+                          AbsoluteLayout.LayoutFlags="PositionProportional"
+                          AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+                          Scale="0">
+                        <Grid.Behaviors>
+                            <taskLoaderView:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
+                        </Grid.Behaviors>
+                        <Image Aspect="Fill" Source="window_border.png" />
+                        <Label Style="{StaticResource TextBody}"
+                               Margin="{StaticResource ThicknessLarge}"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                    </Grid>
+                </taskLoaderView:TaskLoaderView.ErrorNotificationView>
+
+                <RefreshView Command="{Binding Loader.RefreshCommand}"
+                             IsRefreshing="{Binding Loader.ShowRefresher}"
+                             RefreshColor="{StaticResource AccentColor}">
+                    <ListView BackgroundColor="Transparent"
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              Header=""
+                              ItemTemplate="{StaticResource GameDataTemplate}"
+                              ItemsSource="{Binding Loader.Result}"
+                              RowHeight="140"
+                              SelectionMode="None"
+                              SeparatorVisibility="None" />
+                </RefreshView>
+            </taskLoaderView:TaskLoaderView>
+
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

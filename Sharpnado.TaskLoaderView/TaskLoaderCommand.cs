@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 using Xamarin.Forms;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     public abstract class TaskLoaderCommandBase : INotifyPropertyChanged, ICommand
     {

@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 using Sample.Domain;
 using Sample.Services;
-
-using Sharpnado.Presentation.Forms;
+using Sharpnado.TaskLoaderView;
 
 namespace Sample.ViewModels
 {

@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<Frame x:Class="Sharpnado.Presentation.Forms.Snackbar"
+<Frame x:Class="Sharpnado.TaskLoaderView.Snackbar"
        xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:forms="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
+       xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
        x:Name="RootLayout">
     <ContentView.Behaviors>
-        <forms:TimedVisibilityBehavior VisibilityInMilliseconds="{Binding Source={x:Reference RootLayout}, Path=DisplayDurationMilliseconds}" />
+        <taskLoaderView:TimedVisibilityBehavior VisibilityInMilliseconds="{Binding Source={x:Reference RootLayout}, Path=DisplayDurationMilliseconds}" />
     </ContentView.Behaviors>
     <Label HorizontalOptions="{Binding Source={x:Reference RootLayout}, Path=TextHorizontalOptions}"
            VerticalOptions="Center"

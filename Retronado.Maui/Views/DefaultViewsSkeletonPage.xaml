@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="Sample.Views.DefaultViewsSkeletonPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:domain="clr-namespace:Sample.Domain"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:sk="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:viewModels="clr-namespace:Sample.ViewModels"
+             xmlns:views="clr-namespace:Sample.Views"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
+             ios:Page.UseSafeArea="true"
+             BackgroundColor="{StaticResource LightGreyBackground}"
+             x:DataType="viewModels:RetroGamesViewModel"
+             NavigationPage.HasNavigationBar="false">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="TaskLoaderStyle" TargetType="taskLoaderView:TaskLoaderView">
+                <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="FontFamily" Value="FontAtariSt" />
+                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
+                <Setter Property="EmptyStateImageSource" Value="dougal.png" />
+                <Setter Property="RetryButtonText" Value="{loc:Translate ErrorButton_Retry}" />
+                <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
+                <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
+                <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource LightGreyBackground}" />
+                <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
+                <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
+            </Style>
+
+            <Style x:Key="ListGameStyle" TargetType="ListView">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="Header" Value="" />
+                <Setter Property="RowHeight" Value="140" />
+                <Setter Property="SelectionMode" Value="None" />
+                <Setter Property="SeparatorVisibility" Value="None" />
+            </Style>
+
+            <DataTemplate x:Key="GameSkeletonViewCell">
+                <ViewCell>
+                    <Grid x:DataType="domain:Game">
+                        <Frame Margin="15,10,15,10"
+                               BackgroundColor="{StaticResource GreyBackground}"
+                               CornerRadius="5"
+                               HasShadow="False"
+                               TranslationY="2" />
+                        <Frame Margin="15,10,15,10"
+                               Padding="0"
+                               sk:Skeleton.BackgroundColor="{StaticResource TopElementBackground}"
+                               sk:Skeleton.IsBusy="{Binding TaskLoaderNotifier.ShowLoader, Source={x:Reference GamesTaskLoader}}"
+                               sk:Skeleton.IsParent="True"
+                               BackgroundColor="{DynamicResource CellBackgroundColor}"
+                               CornerRadius="5"
+                               HasShadow="False"
+                               IsClippedToBounds="True">
+                            <Grid Padding="0,0,10,0" ColumnSpacing="{StaticResource SpacingMedium}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="10" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="3*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Grid.Row="0"
+                                       Grid.RowSpan="5"
+                                       Grid.Column="0"
+                                       sk:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                       sk:Skeleton.IsBusy="{Binding TaskLoaderNotifier.ShowLoader, Source={x:Reference GamesTaskLoader}}"
+                                       Aspect="AspectFill"
+                                       Source="{Binding CoverUrl}" />
+
+                                <Label Grid.Row="0"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource GameName}"
+                                       sk:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                       sk:Skeleton.IsBusy="{Binding TaskLoaderNotifier.ShowLoader, Source={x:Reference GamesTaskLoader}}"
+                                       Text="{Binding Name}" />
+
+                                <Label Grid.Row="1"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource GameCompany}"
+                                       sk:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                       sk:Skeleton.IsBusy="{Binding TaskLoaderNotifier.ShowLoader, Source={x:Reference GamesTaskLoader}}"
+                                       Text="{Binding MajorCompany}" />
+
+                                <Label Grid.Row="2"
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       Style="{StaticResource GameGenre}"
+                                       sk:Skeleton.Hide="True"
+                                       sk:Skeleton.IsBusy="{Binding TaskLoaderNotifier.ShowLoader, Source={x:Reference GamesTaskLoader}}"
+                                       Text="{Binding MajorGenre}" />
+
+                                <Label Grid.Row="3"
+                                       Grid.Column="1"
+                                       Style="{StaticResource GameReleaseDate}"
+                                       sk:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                       sk:Skeleton.IsBusy="{Binding TaskLoaderNotifier.ShowLoader, Source={x:Reference GamesTaskLoader}}"
+                                       Text="{Binding DisplayableFirstReleaseDate}" />
+
+                                <Label Grid.Row="3"
+                                       Grid.Column="2"
+                                       Style="{StaticResource GameRating}"
+                                       sk:Skeleton.Hide="True"
+                                       IsVisible="{Binding HasRating}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span FontFamily="FontKarmatic" Text="R  " />
+                                            <Span Text="{Binding DisplayableRating}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+
+                            </Grid>
+                        </Frame>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="80" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <views:NavigationToolBar Title="{loc:Translate SkeletonLoading_Title}"
+                                     Grid.Row="0"
+                                     BackgroundColor="{StaticResource TopElementBackground}"
+                                     Theme="Standard" />
+
+            <Frame Grid.Row="1"
+                   Margin="15,15,15,8"
+                   Padding="0"
+                   BackgroundColor="{StaticResource TopElementBackground}"
+                   CornerRadius="5"
+                   IsClippedToBounds="True">
+                <views:ErrorEmulatorView AccentColor="{StaticResource TextWhitePrimaryColor}"
+                                         BindingContext="{Binding ErrorEmulatorViewModel}"
+                                         LabelColor="{StaticResource TextWhitePrimaryColor}"
+                                         LabelFontFamily="FontArcadeClassic"
+                                         ValueFontFamily="FontAtariSt" />
+            </Frame>
+
+            <taskLoaderView:TaskLoaderView x:Name="GamesTaskLoader"
+                                        Grid.Row="2"
+                                        Style="{StaticResource TaskLoaderStyle}"
+                                        TaskLoaderNotifier="{Binding Loader}">
+                <taskLoaderView:TaskLoaderView.LoadingView>
+                    <ListView Style="{StaticResource ListGameStyle}"
+                              sk:Skeleton.Animation="Fade"
+                              sk:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                              sk:Skeleton.IsParent="True"
+                              ItemTemplate="{StaticResource GameSkeletonViewCell}"
+                              ItemsSource="{x:Static views:Skeletons.Games}"
+                              VerticalScrollBarVisibility="Never" />
+                </taskLoaderView:TaskLoaderView.LoadingView>
+
+
+                <RefreshView Command="{Binding Loader.RefreshCommand}"
+                             IsRefreshing="{Binding Loader.ShowRefresher}"
+                             RefreshColor="{StaticResource AccentColor}">
+                    <ListView Style="{StaticResource ListGameStyle}"
+                              CachingStrategy="RecycleElementAndDataTemplate"
+                              ItemTemplate="{StaticResource GameSkeletonViewCell}"
+                              ItemsSource="{Binding Loader.Result}" />
+                </RefreshView>
+            </taskLoaderView:TaskLoaderView>
+        </Grid>
+    </ContentPage.Content>
+
+</ContentPage>

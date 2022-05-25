@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Text;
-using Sharpnado.Presentation.Forms;
-
-[assembly:InternalsVisibleTo("Sharpnado.Presentation.Forms")]
 
 namespace Sharpnado.TaskLoaderView
 {

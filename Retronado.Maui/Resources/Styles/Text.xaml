@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <OnPlatform x:Key="FontArcadeDefaultPadding" x:TypeArguments="Thickness">
+        <OnPlatform.Platforms>
+            <On Platform="Android" Value="0" />
+            <On Platform="iOS" Value="0,6,0,0" />
+            <On Platform="UWP" Value="0" />
+        </OnPlatform.Platforms>
+    </OnPlatform>
+
+
+    <system:Double x:Key="TextSizeHuge">32</system:Double>
+    <system:Double x:Key="TextSizeHeadline">20</system:Double>
+    <system:Double x:Key="TextSizeTitle">18</system:Double>
+    <system:Double x:Key="TextSizeSubhead">16</system:Double>
+    <system:Double x:Key="TextSizeBody">14</system:Double>
+    <system:Double x:Key="TextSizeCaption">12</system:Double>
+    <system:Double x:Key="TextSizeSmallCaption">11</system:Double>
+
+    <Style x:Key="TextFamily" TargetType="Label">
+        <Setter Property="FontFamily" Value="FontAtariSt" />
+    </Style>
+
+    <Style x:Key="TextHuge"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeHuge}" />
+    </Style>
+
+    <Style x:Key="TextHeadline"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeHeadline}" />
+    </Style>
+
+    <Style x:Key="TextTitle"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeTitle}" />
+    </Style>
+
+    <Style x:Key="TextSubhead"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeSubhead}" />
+    </Style>
+
+    <Style x:Key="TextSubheadSecondary"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeSubhead}" />
+    </Style>
+
+    <Style x:Key="TextBody"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeBody}" />
+    </Style>
+
+    <Style x:Key="TextBodySecondary"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeBody}" />
+    </Style>
+
+    <Style x:Key="TextCaption"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeCaption}" />
+    </Style>
+
+    <Style x:Key="TextSmallCaption"
+           BasedOn="{StaticResource TextCaption}"
+           TargetType="Label">
+        <Setter Property="FontSize" Value="{StaticResource TextSizeSmallCaption}" />
+    </Style>
+
+    <Style x:Key="TextCaptionSecondary"
+           BasedOn="{StaticResource TextFamily}"
+           TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextSecondaryColor}" />
+        <Setter Property="FontSize" Value="{StaticResource TextSizeCaption}" />
+    </Style>
+
+</ResourceDictionary>

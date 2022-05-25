@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     public class ColorHelper
     {
@@ -16,7 +16,12 @@ namespace Sharpnado.Presentation.Forms
         public static Color GetTextColorFromBackground(Color color)
         {
             // Counting the perceptive luminance - human eye favors green color...
+
+            #if NET6_0_OR_GREATER
+            double luminance = (0.299 * color.Red * 255 + 0.587 * color.Green * 255 + 0.114 * color.Blue * 255) / 255;
+            #else
             double luminance = (0.299 * color.R * 255 + 0.587 * color.G * 255 + 0.114 * color.B * 255) / 255;
+            #endif
 
             return luminance > 0.5 ? BlackText : WhiteText;
         }

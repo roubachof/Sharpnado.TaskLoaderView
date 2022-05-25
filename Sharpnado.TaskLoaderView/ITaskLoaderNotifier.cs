@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Input;
 using Sharpnado.Tasks;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     public interface ITaskLoaderNotifier : INotifyPropertyChanged
     {

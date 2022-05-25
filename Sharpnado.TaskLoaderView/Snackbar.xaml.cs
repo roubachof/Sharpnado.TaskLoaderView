@@ -1,7 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class Snackbar : Frame

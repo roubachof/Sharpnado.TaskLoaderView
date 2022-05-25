@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Sharpnado.Tasks;
 using Xamarin.Forms;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     public class NotStartedTaskLoaderNotifier : ITaskLoaderNotifier
     {

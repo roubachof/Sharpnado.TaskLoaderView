@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+
+#if NET6_0_OR_GREATER
+using Microsoft.Maui.Layouts;
+#endif
+
 using Sharpnado.TaskLoaderView;
 using Xamarin.Forms;
 
 // XF min version 3.6.0.220655
-namespace Sharpnado.Presentation.Forms.CustomViews
+namespace Sharpnado.TaskLoaderView
 {
     public partial class TaskLoaderView : ContentView
     {
@@ -301,7 +306,11 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             if (bounds.Width < 1 || bounds.Height < 1)
             {
                 // Apply default bounds
+#if NET6_0_OR_GREATER
+                AbsoluteLayout.SetLayoutBounds(target, new Rect(1, 1, 1, height));
+#else
                 AbsoluteLayout.SetLayoutBounds(target, new Rectangle(1, 1, 1, height));
+#endif
                 AbsoluteLayout.SetLayoutFlags(target, flags);
             }
 
@@ -501,7 +510,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             }
 
             DefaultEmptyStateView.SetBinding(
-                Label.IsVisibleProperty,
+                IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));
 
             EmptyStateImage.IsVisible = EmptyStateImageSource != null;
@@ -524,7 +533,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             }
 
             DefaultErrorView.SetBinding(
-                StackLayout.IsVisibleProperty,
+                IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
 
             ErrorViewImage.IsVisible = ErrorImageConverter != null;
@@ -563,7 +572,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             }
 
             DefaultErrorNotificationView.SetBinding(
-                Frame.IsVisibleProperty,
+                IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
 
             DefaultErrorNotificationView.SetBinding(

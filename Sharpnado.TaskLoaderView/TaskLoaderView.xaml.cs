@@ -8,7 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 // XF min version 3.6.0.220655
-namespace Sharpnado.Presentation.Forms.CustomViews
+namespace Sharpnado.TaskLoaderView
 {
     public enum TaskStartMode
     {
@@ -63,7 +63,11 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             nameof(AccentColor),
             typeof(Color),
             typeof(TaskLoaderView),
+#if NET6_0_OR_GREATER
+            defaultValue: Colors.DodgerBlue);
+#else
             defaultValue: Color.Accent);
+#endif
 
         public static readonly BindableProperty NotificationBackgroundColorProperty = BindableProperty.Create(
             nameof(NotificationBackgroundColor),
@@ -170,7 +174,7 @@ namespace Sharpnado.Presentation.Forms.CustomViews
             ResetCommand = new Command(
                 () =>
                     {
-                        foreach (var child in Container.Children)
+                        foreach (View child in Container.Children)
                         {
                             child.IsVisible = _notStartedView == child;
                         }

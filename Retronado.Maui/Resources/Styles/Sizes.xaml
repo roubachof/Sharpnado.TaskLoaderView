@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <system:Double x:Key="SpacingSmall">5</system:Double>
+    <system:Double x:Key="SpacingMedium">10</system:Double>
+    <system:Double x:Key="SpacingLarge">15</system:Double>
+
+    <Thickness x:Key="ThicknessSmall">5</Thickness>
+    <Thickness x:Key="ThicknessMedium">10</Thickness>
+    <Thickness x:Key="ThicknessLarge">15</Thickness>
+
+    <OnPlatform x:Key="GridLengthNavigationBarHeight" x:TypeArguments="GridLength">
+        <OnPlatform.Platforms>
+            <On Platform="Android" Value="56" />
+            <On Platform="iOS" Value="44" />
+            <On Platform="UWP" Value="50" />
+        </OnPlatform.Platforms>
+    </OnPlatform>
+
+    <system:Double x:Key="ToolBarHeight">70</system:Double>
+
+</ResourceDictionary>

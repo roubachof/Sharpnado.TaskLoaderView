@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentView x:Class="Sharpnado.Presentation.Forms.CustomViews.TaskLoaderView"
+<ContentView x:Class="Sharpnado.TaskLoaderView.TaskLoaderView"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:nado="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
-             d:DataContext="{d:DesignInstance nado:ITaskLoaderNotifier}">
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
+             d:DataContext="{d:DesignInstance taskLoaderView:ITaskLoaderNotifier}">
 
     <ContentView.Resources>
         <ResourceDictionary>
@@ -15,12 +15,12 @@
                 <Setter Property="MinimumWidthRequest" Value="64" />
                 <Setter Property="Padding" Value="15,0" />
                 <Setter Property="BackgroundColor" Value="Accent" />
-                <Setter Property="TextColor" Value="{x:Static nado:ColorHelper.WhiteText}" />
+                <Setter Property="TextColor" Value="{x:Static taskLoaderView:ColorHelper.WhiteText}" />
             </Style>
             <Style x:Key="TextCenter" TargetType="Label">
                 <Setter Property="HorizontalTextAlignment" Value="Center" />
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="TextColor" Value="{x:Static nado:ColorHelper.BlackText}" />
+                <Setter Property="TextColor" Value="{x:Static taskLoaderView:ColorHelper.BlackText}" />
             </Style>
             <Style x:Key="TextError"
                    BasedOn="{StaticResource TextCenter}"
@@ -80,12 +80,12 @@
             </StackLayout>
 
             <!--  Snackbar like error notification  -->
-            <nado:Snackbar x:Name="DefaultErrorNotificationView"
+            <taskLoaderView:Snackbar x:Name="DefaultErrorNotificationView"
                            AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
                            AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
                            Margin="15"
                            Padding="15"
-                           BackgroundColor="{x:Static nado:ColorHelper.MaterialNotificationColor}"
+                           BackgroundColor="{x:Static taskLoaderView:ColorHelper.MaterialNotificationColor}"
                            CornerRadius="8"
                            HasShadow="False"
                            IsVisible="False"

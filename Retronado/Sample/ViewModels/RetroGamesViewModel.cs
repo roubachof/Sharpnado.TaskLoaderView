@@ -5,7 +5,7 @@ using Sample.Domain;
 using Sample.Infrastructure;
 using Sample.Navigation;
 
-using Sharpnado.Presentation.Forms;
+using Sharpnado.TaskLoaderView;
 
 namespace Sample.ViewModels
 {

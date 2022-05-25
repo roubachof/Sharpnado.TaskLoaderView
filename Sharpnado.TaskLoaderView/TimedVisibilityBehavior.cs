@@ -2,7 +2,7 @@
 
 using Xamarin.Forms;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     public class TimedVisibilityBehavior : Behavior<View>
     {

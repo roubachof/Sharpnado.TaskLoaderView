@@ -3,7 +3,7 @@ using System.Globalization;
 
 using Xamarin.Forms;
 
-namespace Sharpnado.Presentation.Forms
+namespace Sharpnado.TaskLoaderView
 {
     public class DefaultErrorMessageConverter : IValueConverter
     {
