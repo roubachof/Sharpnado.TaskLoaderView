@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
 
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converters="clr-namespace:Sample.Converters"
-                    xmlns:localization="clr-namespace:Sample.Localization"
                     xmlns:views="clr-namespace:Sample.Views"
-                    xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView">
+                    xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
+                    xmlns:loc="clr-namespace:Sample.Resources.Localization">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml" />
@@ -29,14 +29,6 @@
         <Setter Property="FontFamily" Value="FontArcadeClassic" />
     </Style>
 
-    <OnPlatform x:Key="PickerMargin" x:TypeArguments="Thickness">
-        <OnPlatform.Platforms>
-            <On Platform="Android" Value="0,8,0,5" />
-            <On Platform="iOS" Value="0" />
-            <On Platform="UWP" Value="0,-13,0,13" />
-        </OnPlatform.Platforms>
-    </OnPlatform>
-
     <Style ApplyToDerivedTypes="True" TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationBarColor}" />
         <Setter Property="BarTextColor" Value="{StaticResource BarTextColor}" />
@@ -50,12 +42,12 @@
     <converters:ExceptionToErrorMessageConverter x:Key="ExceptionToErrorMessageConverter" />
     <converters:CyclicLoadingLottieConverter x:Key="CyclicLoadingLottieConverter" />
     <converters:ExceptionToLottieConverter x:Key="ExceptionToLottieConverter" />
-    <converters:StringToImageSourceResourceConverter x:Key="StringToImageSourceResourceConverter" />
+    <!-- <converters:StringToImageSourceResourceConverter x:Key="StringToImageSourceResourceConverter" /> -->
     <converters:ListCountToVisibilityConverter x:Key="ListCountToVisibilityConverter" />
 
     <Style TargetType="taskLoaderView:TaskLoaderView">
         <Setter Property="AccentColor" Value="{StaticResource PrimaryColor}" />
-        <Setter Property="RetryButtonText" Value="{localization:Translate ErrorButton_Retry}" />
+        <Setter Property="RetryButtonText" Value="{x:Static loc:SampleResources.ErrorButton_Retry}" />
         <Setter Property="TextColor" Value="{StaticResource OnSurfaceColor}" />
     </Style>
 

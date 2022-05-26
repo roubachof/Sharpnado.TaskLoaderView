@@ -2,10 +2,8 @@
 <ContentPage x:Class="Sample.Views.CommandsPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:inf="clr-namespace:Sample.Infrastructure"
-             xmlns:loc="clr-namespace:Sample.Localization"
-             xmlns:sho="http://sharpnado.com"
-             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:loc="clr-namespace:Sample.Resources.Localization"
+             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
@@ -20,7 +18,7 @@
             <Style x:Key="TaskLoaderStyle" TargetType="tlv:TaskLoaderView">
                 <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="FontAtariSt" />
-                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
+                <Setter Property="EmptyStateMessage" Value="{x:Static loc:SampleResources.Empty_Screen}" />
                 <Setter Property="EmptyStateImageSource" Value="dougal.png" />
                 <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
                 <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
@@ -38,7 +36,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <views:NavigationToolBar Title="{loc:Translate Commands_Title}"
+            <views:NavigationToolBar Title="{x:Static loc:SampleResources.Commands_Title}"
                                      Grid.Row="0"
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />
@@ -53,12 +51,11 @@
                            Aspect="Fill"
                            Source="{Binding Loader.Result.ScreenshotUrl}" />
 
-                    <sho:MaterialFrame Grid.Row="0"
+                    <Frame Grid.Row="0"
                                        Padding="15,5,15,30"
                                        VerticalOptions="End"
                                        CornerRadius="0"
-                                       MaterialBlurStyle="Dark"
-                                       MaterialTheme="AcrylicBlur">
+                                       BackgroundColor="{StaticResource DarkOverlay}">
                         <Grid Padding="0"
                               ColumnDefinitions="*,60"
                               RowDefinitions="40,20,20"
@@ -88,7 +85,7 @@
                                    Source="{Binding Loader.Result.CoverUrl}" />
 
                         </Grid>
-                    </sho:MaterialFrame>
+                    </Frame>
 
                     <Button Grid.Row="1"
                             HeightRequest="40"

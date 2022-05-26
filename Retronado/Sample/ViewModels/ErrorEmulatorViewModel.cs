@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Sample.Infrastructure;
-using Sample.Localization;
+using Sample.Resources.Localization;
 
 namespace Sample.ViewModels
 {

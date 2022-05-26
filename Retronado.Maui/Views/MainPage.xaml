@@ -2,12 +2,9 @@
 <ContentPage x:Class="Sample.Views.MainPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:domain="clr-namespace:Sample.Domain"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             xmlns:loc="clr-namespace:Sample.Localization"
-             xmlns:local="clr-namespace:Sample.Infrastructure"
-             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
-             xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
+             xmlns:loc="clr-namespace:Sample.Resources.Localization"
+             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              ios:Page.UseSafeArea="true"
@@ -42,7 +39,7 @@
                 <Setter Property="BorderWidth" Value="3" />
                 <Setter Property="CornerRadius" Value="5" />
                 <Setter Property="FontSize" Value="24" />
-                <Setter Property="Text" Value="{loc:Translate Button_TestIt}" />
+                <Setter Property="Text" Value="{x:Static loc:SampleResources.Button_TestIt}" />
                 <Setter Property="TextColor" Value="Black" />
             </Style>
         </ResourceDictionary>
@@ -76,7 +73,7 @@
                        VerticalOptions="Center"
                        FontFamily="FontKarmatic"
                        FontSize="28"
-                       Text="{loc:Translate Title_TaskLoaderView}" />
+                       Text="{x:Static loc:SampleResources.Title_TaskLoaderView}" />
                 <Image Grid.Row="1"
                        Grid.Column="1"
                        WidthRequest="60"
@@ -132,14 +129,14 @@
                                    Style="{StaticResource CardTitle}"
                                    FontFamily="FontArcadeClassic"
                                    FontSize="36"
-                                   Text="{loc:Translate DefaultLayout_Title}" />
+                                   Text="{x:Static loc:SampleResources.DefaultLayout_Title}" />
 
                             <Label Grid.Row="1"
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate DefaultLayout_Description_1}" />
+                                   Text="{x:Static loc:SampleResources.DefaultLayout_Description_1}" />
 
                             <Image Grid.Row="2"
                                    Grid.Column="0"
@@ -153,7 +150,7 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate DefaultLayout_Description_2}" />
+                                   Text="{x:Static loc:SampleResources.DefaultLayout_Description_2}" />
 
                             <Button Grid.Row="4"
                                     Grid.Column="1"
@@ -186,14 +183,14 @@
                                    Style="{StaticResource CardTitle}"
                                    FontFamily="FontArcadeClassic"
                                    FontSize="36"
-                                   Text="{loc:Translate CustomLayout_Title}" />
+                                   Text="{x:Static loc:SampleResources.CustomLayout_Title}" />
 
                             <Label Grid.Row="1"
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate CustomLayout_Description_1}" />
+                                   Text="{x:Static loc:SampleResources.CustomLayout_Description_1}" />
 
                             <Image Grid.Row="2"
                                    Grid.Column="0"
@@ -207,7 +204,7 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate CustomLayout_Description_2}" />
+                                   Text="{x:Static loc:SampleResources.CustomLayout_Description_2}" />
 
                             <Button Grid.Row="4"
                                     Grid.Column="1"
@@ -240,14 +237,14 @@
                                    Style="{StaticResource CardTitle}"
                                    FontFamily="FontArcadeClassic"
                                    FontSize="36"
-                                   Text="{loc:Translate SkeletonLoading_Title}" />
+                                   Text="{x:Static loc:SampleResources.SkeletonLoading_Title}" />
 
                             <Label Grid.Row="1"
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate SkeletonLoading_Description_1}" />
+                                   Text="{x:Static loc:SampleResources.SkeletonLoading_Description_1}" />
 
                             <Image Grid.Row="2"
                                    Grid.Column="0"
@@ -261,7 +258,7 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate SkeletonLoading_Description_2}" />
+                                   Text="{x:Static loc:SampleResources.SkeletonLoading_Description_2}" />
 
                             <Button Grid.Row="4"
                                     Grid.Column="1"
@@ -294,14 +291,14 @@
                                    Style="{StaticResource CardTitle}"
                                    FontFamily="FontArcadeClassic"
                                    FontSize="36"
-                                   Text="{loc:Translate Lottie_Title}" />
+                                   Text="{x:Static loc:SampleResources.Lottie_Title}" />
 
                             <Label Grid.Row="1"
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate Lottie_Description}" />
+                                   Text="{x:Static loc:SampleResources.Lottie_Description}" />
 
                             <BoxView Grid.Row="2"
                                      Grid.Column="0"
@@ -309,22 +306,44 @@
                                      Margin="-15,-10,-15,10"
                                      Color="{StaticResource LightGreyBackground}" />
 
-                            <lottie:AnimationView x:Name="animationView"
+                            <Frame x:Name="animationView"
                                                   Grid.Row="2"
                                                   Grid.Column="0"
                                                   Grid.ColumnSpan="2"
                                                   Margin="-15,-10,-15,10"
                                                   HorizontalOptions="FillAndExpand"
-                                                  VerticalOptions="FillAndExpand"
-                                                  Animation="lottie_grey.json"
-                                                  AutoPlay="True"
-                                                  IsAnimating="True"
-                                                  RepeatMode="Infinite" />
+                                                  VerticalOptions="FillAndExpand">
+                                <Image Source="richmond.png"
+                                       WidthRequest="60" 
+                                       HeightRequest="60" 
+                                       VerticalOptions="Center" 
+                                       HorizontalOptions="Center" />
+                            </Frame>
+                            
+                            
+                            <!-- <lottie:AnimationView x:Name="animationView" -->
+                            <!--                       Grid.Row="2" -->
+                            <!--                       Grid.Column="0" -->
+                            <!--                       Grid.ColumnSpan="2" -->
+                            <!--                       Margin="-15,-10,-15,10" -->
+                            <!--                       HorizontalOptions="FillAndExpand" -->
+                            <!--                       VerticalOptions="FillAndExpand" -->
+                            <!--                       Animation="lottie_grey.json" -->
+                            <!--                       AutoPlay="True" -->
+                            <!--                       IsAnimating="True" -->
+                            <!--                       RepeatMode="Infinite" /> -->
 
-                            <Button Grid.Row="3"
-                                    Grid.Column="1"
-                                    Style="{StaticResource ButtonTextIt}"
-                                    Clicked="ButtonLottieLayoutOnClicked" />
+                            <Label Grid.Row="3"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Style="{StaticResource TextBody}"
+                                   FontFamily="FontAtariSt"
+                                   Text="Unfortunately, Lottie has not been ported to MAUI yet..." />
+                            
+                            <!-- <Button Grid.Row="3" -->
+                            <!--         Grid.Column="1" -->
+                            <!--         Style="{StaticResource ButtonTextIt}" -->
+                            <!--         Clicked="ButtonLottieLayoutOnClicked" /> -->
                         </Grid>
                     </Frame>
                 </Grid>
@@ -352,14 +371,14 @@
                                    Style="{StaticResource CardTitle}"
                                    FontFamily="FontArcadeClassic"
                                    FontSize="36"
-                                   Text="{loc:Translate Commands_Title}" />
+                                   Text="{x:Static loc:SampleResources.Commands_Title}" />
 
                             <Label Grid.Row="1"
                                    Grid.Column="0"
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate Commands_Description_1}" />
+                                   Text="{x:Static loc:SampleResources.Commands_Description_1}" />
 
                             <Image Grid.Row="2"
                                    Grid.Column="0"
@@ -373,7 +392,7 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate Commands_Description_2}" />
+                                   Text="{x:Static loc:SampleResources.Commands_Description_2}" />
 
                             <Button Grid.Row="4"
                                     Grid.Column="1"
@@ -386,7 +405,9 @@
                     <Frame Style="{StaticResource CardStyle}"
                            BackgroundColor="Black"
                            TranslationY="2" />
-                    <Frame x:Name="LoadOnDemandCard" Style="{StaticResource CardStyle}" x:DataType="viewModels:LoadOnDemandViewModel">
+                    <Frame x:Name="LoadOnDemandCard" 
+                           Style="{StaticResource CardStyle}" 
+                           x:DataType="viewModels:LoadOnDemandViewModel">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -403,7 +424,7 @@
                                    Style="{StaticResource CardTitle}"
                                    FontFamily="FontArcadeClassic"
                                    FontSize="36"
-                                   Text="{loc:Translate NotStartedView_Title}" />
+                                   Text="{x:Static loc:SampleResources.NotStartedView_Title}" />
 
                             <Button Grid.Row="0"
                                     Grid.Column="1"
@@ -416,7 +437,7 @@
                                    Grid.ColumnSpan="2"
                                    Style="{StaticResource TextBody}"
                                    FontFamily="FontAtariSt"
-                                   Text="{loc:Translate NotStartedView_Description}" />
+                                   Text="{x:Static loc:SampleResources.NotStartedView_Description}" />
 
                             <taskLoaderView:TaskLoaderView Grid.Row="2"
                                                       Grid.Column="0"
@@ -435,14 +456,16 @@
                                             Command="{Binding RandomGameLoaderCommand}" />
                                 </taskLoaderView:TaskLoaderView.NotStartedView>
 
-                                <Frame Style="{StaticResource CardStyle}"
+                                <ContentView CompressedLayout.IsHeadless="True" 
+                                             BindingContext="{Binding RandomGameLoaderCommand.Notifier}">
+                                    <Frame Style="{StaticResource CardStyle}"
+                                           x:DataType="{x:Null}"
                                        Margin="-15,0,-15,-15"
                                        Padding="0"
-                                       skeleton:Skeleton.Animation="Fade"
+                                       skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
                                        skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
                                        skeleton:Skeleton.IsParent="True"
                                        BackgroundColor="{DynamicResource CellBackgroundColor}"
-                                       BindingContext="{Binding RandomGameLoaderCommand.Notifier}"
                                        CornerRadius="10"
                                        IsClippedToBounds="True">
                                     <Grid>
@@ -478,6 +501,7 @@
                                                Text="{Binding Result.MajorGenre}" />
                                     </Grid>
                                 </Frame>
+                                </ContentView>
                             </taskLoaderView:TaskLoaderView>
 
                         </Grid>

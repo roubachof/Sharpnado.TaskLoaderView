@@ -6,16 +6,16 @@ namespace Retronado.Maui;
 
 public partial class App : Application
 {
-	public App()
-	{
-		InitializeComponent();
+    public App()
+    {
+        InitializeComponent();
 
-		var entryPoint = new CoreEntryPoint();
-		entryPoint.RegisterDependencies();
+        var entryPoint = new CoreEntryPoint();
+        entryPoint.RegisterDependencies();
 
-		TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
+        TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
 
-		Initializer.Initialize(true, true);
-		MainPage = new NavigationPage(new MainPage());
-	}
+        Initializer.Initialize(true, true);
+        MainPage = new NavigationPage(new MainPage());
+    }
 }

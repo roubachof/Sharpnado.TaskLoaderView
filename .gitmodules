@@ -1,0 +1,3 @@
+[submodule "Maui.Skeleton"]
+	path = Maui.Skeleton
+	url = https://github.com/roubachof/Maui.Skeleton.git

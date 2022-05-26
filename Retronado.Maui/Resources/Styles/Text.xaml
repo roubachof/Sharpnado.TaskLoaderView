@@ -9,14 +9,6 @@
         <ResourceDictionary Source="Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <OnPlatform x:Key="FontArcadeDefaultPadding" x:TypeArguments="Thickness">
-        <OnPlatform.Platforms>
-            <On Platform="Android" Value="0" />
-            <On Platform="iOS" Value="0,6,0,0" />
-            <On Platform="UWP" Value="0" />
-        </OnPlatform.Platforms>
-    </OnPlatform>
-
 
     <system:Double x:Key="TextSizeHuge">32</system:Double>
     <system:Double x:Key="TextSizeHeadline">20</system:Double>

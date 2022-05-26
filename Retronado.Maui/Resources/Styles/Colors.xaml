@@ -11,6 +11,8 @@
     <Color x:Key="DarkElevation2dp">#212121</Color>
     <Color x:Key="DarkElevation4dp">#272727</Color>
 
+    <Color x:Key="DarkOverlay">#70212121</Color>
+    
     <Color x:Key="TosWindows">White</Color>
 
     <!--<Color x:Key="PrimaryColor">#7777CC</Color>

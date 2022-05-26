@@ -3,7 +3,7 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:inf="clr-namespace:Sample.Infrastructure"
-             xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:loc="clr-namespace:Sample.Resources.Localization"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
@@ -18,7 +18,7 @@
             <Style x:Key="TaskLoaderStyle" TargetType="taskLoaderView:TaskLoaderView">
                 <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="FontAtariSt" />
-                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
+                <Setter Property="EmptyStateMessage" Value="{x:Static loc:SampleResources.Empty_Screen}" />
                 <Setter Property="EmptyStateImageSource" Value="dougal.png" />
                 <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
                 <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
@@ -38,7 +38,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <views:NavigationToolBar Title="{loc:Translate DefaultLayout_Title}"
+            <views:NavigationToolBar Title="{x:Static loc:SampleResources.DefaultLayout_Title}"
                                      Grid.Row="0"
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />

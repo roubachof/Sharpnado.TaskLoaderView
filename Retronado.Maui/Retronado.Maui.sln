@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Retronado.Maui", "Retronado
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpnado.Maui.TaskLoaderView", "..\Sharpnado.Maui.TaskLoaderView\Sharpnado.Maui.TaskLoaderView.csproj", "{5865B4BF-9608-4D03-A2F7-4805448BCDB7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maui.Skeleton", "..\Maui.Skeleton\Maui.Skeleton\Maui.Skeleton.csproj", "{755E904F-41CD-4232-95D2-64F75DCD3B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{5865B4BF-9608-4D03-A2F7-4805448BCDB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5865B4BF-9608-4D03-A2F7-4805448BCDB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5865B4BF-9608-4D03-A2F7-4805448BCDB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{755E904F-41CD-4232-95D2-64F75DCD3B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{755E904F-41CD-4232-95D2-64F75DCD3B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{755E904F-41CD-4232-95D2-64F75DCD3B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{755E904F-41CD-4232-95D2-64F75DCD3B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
