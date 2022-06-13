@@ -1,4 +1,5 @@
 ﻿using Sample;
+using Sample.Views;
 using Sharpnado.TaskLoaderView;
 using Sharpnado.Tasks;
 

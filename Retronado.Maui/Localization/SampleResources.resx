@@ -34,7 +34,7 @@
     <value>Unknown Error thrown</value>
   </data>
   <data name="Error_Business" xml:space="preserve">
-    <value>"It's not me, it's the backend."</value>
+    <value>\"It's not me, it's the backend.\"</value>
     <comment>server.png</comment>
   </data>
   <data name="Error_Network" xml:space="preserve">
@@ -42,7 +42,7 @@
     <comment>the_internet.png</comment>
   </data>
   <data name="Error_Unknown" xml:space="preserve">
-    <value>"An ill wind is blowing..."</value>
+    <value>\"An ill wind is blowing...\"</value>
     <comment>richmond.jpg</comment>
   </data>
   <data name="DefaultLayout_Description_1" xml:space="preserve">

@@ -27,6 +27,15 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DebugType>pdbonly</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType />
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Color="#512BD4" ForegroundFile="Resources\AppIcon\appiconfg.svg" Include="Resources\AppIcon\appicon.svg" />
@@ -40,10 +49,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Properties\launchSettings.json">
-	    <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-	  </EmbeddedResource>
+		<EmbeddedResource Include="Properties\launchSettings.json">
+			<Generator>MSBuild:UpdateGeneratedFiles</Generator>
+		</EmbeddedResource>
 	</ItemGroup>
+	
 	<ItemGroup>
 		<MauiXaml Update="Resources\Styles\Colors.xaml">
 			<SubType>Designer</SubType>
@@ -64,10 +74,15 @@
 			<SubType>Designer</SubType>
 		</MauiXaml>
 	</ItemGroup>
-
 	<ItemGroup>
-	  <None Remove="Resources\Localization\" />
-	  <None Remove="Properties\launchSettings.json" />
+		<None Remove="Resources\Localization\" />
+		<None Remove="Properties\launchSettings.json" />
+		<EmbeddedResource Remove="Localization\SampleResources.resx" />
+		<None Include="Localization\SampleResources.resx">
+		  <UseVocaDbResManager>true</UseVocaDbResManager>
+		  <GenerateResource>false</GenerateResource>
+		  <Generator>ResXFileCodeGenerator</Generator>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="..\Retronado\Sample\Converters\CyclicLoadingLottieConverter.cs">
@@ -192,6 +207,26 @@
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
+		<Compile Update="Localization\ResourceValues.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>ResourceValues.generated.cs</LastGenOutput>
+		</Compile>
+		<Compile Update="Localization\ResourceKeys.tt">
+			<Generator>TextTemplatingFileGenerator</Generator>
+			<LastGenOutput>ResourceKeys.generated.cs</LastGenOutput>
+		</Compile>
+		<Compile Update="Localization\ResourceKeys.generated.cs">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>ResourceKeys.tt</DependentUpon>
+		</Compile>
+		<Compile Update="Localization\ResourceValues.generated.cs">
+			<AutoGen>True</AutoGen>
+			<DesignTime>True</DesignTime>
+			<DependentUpon>ResourceValues.tt</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.3" />
 		<PackageReference Include="IGDB" Version="2.0.1" />
 		<PackageReference Include="Refit" Version="5.2.1" />
@@ -200,6 +235,10 @@
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="VocaDb.ResXFileCodeGenerator" Version="3.1.1">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
@@ -211,11 +250,6 @@
 		<None Include="Views\LottieViewsPage.xaml" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Resources\Localization\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <EmbeddedResource Update="Resources\Localization\SampleResources.resx">
-	    <Generator>ResXFileCodeGenerator</Generator>
-	  </EmbeddedResource>
+		<Folder Include="Resources\Localization" />
 	</ItemGroup>
 </Project>

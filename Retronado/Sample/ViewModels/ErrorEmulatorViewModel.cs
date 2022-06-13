@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using ResourceGenerator.Resources;
 using Sample.Infrastructure;
-using Sample.Resources.Localization;
+using Sample.Localization;
 
 namespace Sample.ViewModels
 {

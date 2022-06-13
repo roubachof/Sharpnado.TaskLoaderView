@@ -6,7 +6,7 @@
                     xmlns:converters="clr-namespace:Sample.Converters"
                     xmlns:views="clr-namespace:Sample.Views"
                     xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
-                    xmlns:loc="clr-namespace:Sample.Resources.Localization">
+                    xmlns:loc="clr-namespace:Sample.Localization">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml" />

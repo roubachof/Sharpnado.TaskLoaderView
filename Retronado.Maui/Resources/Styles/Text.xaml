@@ -18,6 +18,10 @@
     <system:Double x:Key="TextSizeCaption">12</system:Double>
     <system:Double x:Key="TextSizeSmallCaption">11</system:Double>
 
+    <Style TargetType="Button">
+        <Setter Property="FontFamily" Value="FontAtariSt" />
+    </Style>
+
     <Style x:Key="TextFamily" TargetType="Label">
         <Setter Property="FontFamily" Value="FontAtariSt" />
     </Style>

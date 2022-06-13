@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <?xaml-comp compile="true" ?>
 
-<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+<ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:system="clr-namespace:System;assembly=System.Runtime"
                     xmlns:styles="clr-namespace:Sample.Styles"
@@ -23,7 +23,7 @@
     <system:Double x:Key="SizeTabIcon">24</system:Double>
 
     <FontImageSource x:Key="IconFloppy"
-                     FontFamily="Fon"
+                     FontFamily="FontAwesome"
                      Glyph="{x:Static styles:IconFont.Save}"
                      Size="{StaticResource SizeMediumSmallIcon}"
                      Color="{StaticResource SecondaryColor}" />

@@ -9,12 +9,9 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("Font-Awesome-5-Free-Solid-900.otf", "FontAwesome");
                 fonts.AddFont("ka1.ttf", "FontKarmatic");
-                fonts.AddFont("atarist.ttf", "FontKarmatic");
-                fonts.AddFont("ka1.ttf", "FontKarmatic");
-                fonts.AddFont("ka1.ttf", "FontKarmatic");
+                fonts.AddFont("atarist.ttf", "FontAtariSt");
             });
 
         builder.Services.AddLocalization();

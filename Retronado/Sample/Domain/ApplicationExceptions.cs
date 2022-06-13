@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Sample.Resources.Localization;
+using Sample.Localization;
 
 namespace Sample.Services
 {

@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 using Sample.Domain;
 using Sample.Infrastructure;
-using Sample.Resources.Localization;
+using Sample.Localization;
 using Sample.Navigation;
 using Sample.Services;
 
