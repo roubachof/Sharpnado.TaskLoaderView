@@ -5,12 +5,12 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:inf="clr-namespace:Sample.Infrastructure;assembly=Sample"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource LightGreyBackground}"
              NavigationPage.HasNavigationBar="false">
@@ -21,7 +21,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="TaskLoaderStyle" TargetType="customViews:TaskLoaderView">
+            <Style x:Key="TaskLoaderStyle" TargetType="tlv:TaskLoaderView">
                 <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
                 <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
@@ -62,7 +62,7 @@
                                          ValueFontFamily="{StaticResource FontAtariSt}" />
             </Frame>
 
-            <customViews:TaskLoaderView Grid.Row="2"
+            <tlv:TaskLoaderView Grid.Row="2"
                                         Style="{StaticResource TaskLoaderStyle}"
                                         TaskLoaderNotifier="{Binding Loader}">
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
@@ -77,7 +77,7 @@
                               SelectionMode="None"
                               SeparatorVisibility="None" />
                 </RefreshView>
-            </customViews:TaskLoaderView>
+            </tlv:TaskLoaderView>
         </Grid>
     </ContentPage.Content>
 

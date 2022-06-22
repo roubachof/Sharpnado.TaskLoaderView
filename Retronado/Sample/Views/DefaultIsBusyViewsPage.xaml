@@ -13,6 +13,7 @@
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource LightGreyBackground}"
              NavigationPage.HasNavigationBar="false">
@@ -139,7 +140,7 @@
                        CornerRadius="5"
                        IsVisible="{Binding HasRefreshError}">
                     <Frame.Behaviors>
-                        <forms:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
+                        <taskLoaderView:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
                     </Frame.Behaviors>
                     <Label Style="{StaticResource TextSnackbar}" Text="{Binding ErrorMessage}" />
                 </Frame>

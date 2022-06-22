@@ -12,6 +12,7 @@
              xmlns:sharpnado="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource TosBackground}"
              NavigationPage.HasNavigationBar="false">
@@ -22,7 +23,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="TaskLoaderStyle" TargetType="sharpnado:TaskLoaderView">
+            <Style x:Key="TaskLoaderStyle" TargetType="taskLoaderView:TaskLoaderView">
                 <Setter Property="AccentColor" Value="White" />
                 <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
                 <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
@@ -66,20 +67,20 @@
 
             <BoxView Grid.Row="2" BackgroundColor="Black" />
 
-            <sharpnado:TaskLoaderView x:Name="TaskLoaderView"
+            <taskLoaderView:TaskLoaderView x:Name="TaskLoaderView"
                                       Grid.Row="3"
                                       Style="{StaticResource TaskLoaderStyle}"
                                       TaskLoaderNotifier="{Binding Loader}">
 
-                <sharpnado:TaskLoaderView.LoadingView>
+                <taskLoaderView:TaskLoaderView.LoadingView>
                     <Image x:Name="BusyImage"
                            AbsoluteLayout.LayoutFlags="PositionProportional"
                            AbsoluteLayout.LayoutBounds="0.5, 0.5, 60, 60"
                            Aspect="AspectFit"
                            Source="{img:ImageResource Sample.Images.busy_bee_white_bg.png}" />
-                </sharpnado:TaskLoaderView.LoadingView>
+                </taskLoaderView:TaskLoaderView.LoadingView>
 
-                <sharpnado:TaskLoaderView.ErrorView>
+                <taskLoaderView:TaskLoaderView.ErrorView>
                     <DataTemplate>
                         <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
                               AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
@@ -110,15 +111,15 @@
                                    Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
                         </Grid>
                     </DataTemplate>
-                </sharpnado:TaskLoaderView.ErrorView>
+                </taskLoaderView:TaskLoaderView.ErrorView>
 
-                <sharpnado:TaskLoaderView.ErrorNotificationView>
+                <taskLoaderView:TaskLoaderView.ErrorNotificationView>
                     <Grid x:Name="ErrorNotificationView"
                           AbsoluteLayout.LayoutFlags="PositionProportional"
                           AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
                           Scale="0">
                         <Grid.Behaviors>
-                            <forms:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
+                            <taskLoaderView:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
                         </Grid.Behaviors>
                         <Image Aspect="Fill" Source="{img:ImageResource Sample.Images.window_border.png}" />
                         <Label Style="{StaticResource TextBody}"
@@ -127,7 +128,7 @@
                                HorizontalTextAlignment="Center"
                                Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
                     </Grid>
-                </sharpnado:TaskLoaderView.ErrorNotificationView>
+                </taskLoaderView:TaskLoaderView.ErrorNotificationView>
 
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
@@ -141,7 +142,7 @@
                               SelectionMode="None"
                               SeparatorVisibility="None" />
                 </RefreshView>
-            </sharpnado:TaskLoaderView>
+            </taskLoaderView:TaskLoaderView>
 
         </Grid>
     </ContentPage.Content>

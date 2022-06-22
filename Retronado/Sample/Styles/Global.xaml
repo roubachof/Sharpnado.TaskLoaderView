@@ -4,9 +4,9 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converters="clr-namespace:Sample.Converters;assembly=Sample"
-                    xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
                     xmlns:localization="clr-namespace:Sample.Localization;assembly=Sample"
-                    xmlns:views="clr-namespace:Sample.Views;assembly=Sample">
+                    xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+                    xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml" />
@@ -53,7 +53,7 @@
     <converters:StringToImageSourceResourceConverter x:Key="StringToImageSourceResourceConverter" />
     <converters:ListCountToVisibilityConverter x:Key="ListCountToVisibilityConverter" />
 
-    <Style TargetType="customViews:TaskLoaderView">
+    <Style TargetType="taskLoaderView:TaskLoaderView">
         <Setter Property="AccentColor" Value="{StaticResource PrimaryColor}" />
         <Setter Property="RetryButtonText" Value="{localization:Translate ErrorButton_Retry}" />
         <Setter Property="TextColor" Value="{StaticResource OnSurfaceColor}" />

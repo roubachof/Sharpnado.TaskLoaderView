@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+
+#if NET6_0_OR_GREATER
 using ResourceGenerator.Resources;
+#endif
 using Sample.Infrastructure;
 using Sample.Localization;
 

@@ -20,7 +20,7 @@
 
     <PackageProjectUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</PackageProjectUrl>
     <RepositoryUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/tlv_icon_tos.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/maui_logo.png</PackageIconUrl>
     <PackageTags>maui, netmaui, xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
     <PackageReleaseNotes>First .Net MAUI (.net 6) release \o/
       </PackageReleaseNotes>
@@ -57,7 +57,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType/>
+    <DebugType />
   </PropertyGroup>
 
   <ItemGroup>
@@ -103,14 +103,16 @@
     <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderView.xaml.cs">
       <Link>TaskLoaderView.xaml.cs</Link>
     </Compile>
+    <Compile Include="..\Sharpnado.TaskLoaderView\TemplatedTaskLoader.cs">
+      <Link>TemplatedTaskLoader.cs</Link>
+    </Compile>
     <Compile Include="..\Sharpnado.TaskLoaderView\TimedVisibilityBehavior.cs">
       <Link>TimedVisibilityBehavior.cs</Link>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="1.0.0-*"/>
-    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.2"/>
+    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

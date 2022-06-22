@@ -5,10 +5,11 @@ using Sample.Infrastructure;
 using Sample.Services;
 
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Sample.Converters
 {
-    public class ExceptionToImageSourceConverter : IValueConverter
+    public class ExceptionToImageSourceConverter : IValueConverter, IMarkupExtension
     {
         private static ImageResourceExtension imageResourceExtension;
 
@@ -47,6 +48,11 @@ namespace Sample.Converters
         {
             // One-Way converter only
             throw new NotImplementedException();
+        }
+
+        public object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
         }
     }
 }

@@ -4,7 +4,7 @@
     <AssemblyName>Sharpnado.TaskLoaderView</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
     <CodeAnalysisRuleSet>StyleCopRules.ruleset</CodeAnalysisRuleSet>
-    <RootNamespace>Sharpnado.Presentation.Forms</RootNamespace>
+    <RootNamespace>Sharpnado.TaskLoaderView</RootNamespace>
 
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
     <AssemblyVersion>2.4.0.0</AssemblyVersion>
@@ -25,7 +25,7 @@
     <PackageReleaseNotes>
       Fix Snackbar BackgroundColor and CompositeLoader behavior.
 BREAKING CHANGE: the task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}.
-You can simply change your calls from Loader.Load(() => InitializeAsync()); to Loader.Load(_ => InitializeAsync());
+You can simply change your calls from Loader.Load(() =&gt; InitializeAsync()); to Loader.Load(_ =&gt; InitializeAsync());
 The booleand that is passed now to your task source is a boolean indicating if the notifier is refreshing.
 You can use it for invalidating your cache for example.
 
@@ -54,7 +54,7 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 
 BREAKING CHANGE Version 2.4.0:
 The task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}.
-You can simply change your calls from Loader.Load(() => InitializeAsync()) to Loader.Load(_ => InitializeAsync()) to ignore it if you like.
+You can simply change your calls from Loader.Load(() =&gt; InitializeAsync()) to Loader.Load(_ =&gt; InitializeAsync()) to ignore it if you like.
 
 The boolean that is passed now to your task source is a boolean indicating if the notifier is refreshing.
 You can use it for invalidating your cache, for example:

@@ -2,10 +2,6 @@
 <ContentPage x:Class="Sample.Views.DefaultViewsSkeletonPage"
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
-             xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:domain="clr-namespace:Sample.Domain;assembly=Sample"
              xmlns:inf="clr-namespace:Sample.Infrastructure;assembly=Sample"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
@@ -13,17 +9,15 @@
              xmlns:sk="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
              ios:Page.UseSafeArea="true"
+             x:DataType="viewModels:RetroGamesViewModel"
              BackgroundColor="{StaticResource LightGreyBackground}"
              NavigationPage.HasNavigationBar="false">
 
-    <d:ContentPage.BindingContext>
-        <viewModels:RetroGamesViewModel />
-    </d:ContentPage.BindingContext>
-
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="TaskLoaderStyle" TargetType="customViews:TaskLoaderView">
+            <Style x:Key="TaskLoaderStyle" TargetType="tlv:TaskLoaderView">
                 <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
                 <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
@@ -47,10 +41,7 @@
 
             <DataTemplate x:Key="GameSkeletonViewCell">
                 <ViewCell>
-                    <Grid>
-                        <d:Grid.BindingContext>
-                            <domain:Game />
-                        </d:Grid.BindingContext>
+                    <Grid x:DataType="domain:Game">
                         <Frame Margin="15,10,15,10"
                                BackgroundColor="{StaticResource GreyBackground}"
                                CornerRadius="5"
@@ -165,11 +156,11 @@
                                          ValueFontFamily="{StaticResource FontAtariSt}" />
             </Frame>
 
-            <customViews:TaskLoaderView x:Name="GamesTaskLoader"
+            <tlv:TaskLoaderView x:Name="GamesTaskLoader"
                                         Grid.Row="2"
                                         Style="{StaticResource TaskLoaderStyle}"
                                         TaskLoaderNotifier="{Binding Loader}">
-                <customViews:TaskLoaderView.LoadingView>
+                <tlv:TaskLoaderView.LoadingView>
                     <ListView Style="{StaticResource ListGameStyle}"
                               sk:Skeleton.Animation="Fade"
                               sk:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
@@ -177,7 +168,7 @@
                               ItemTemplate="{StaticResource GameSkeletonViewCell}"
                               ItemsSource="{x:Static views:Skeletons.Games}"
                               VerticalScrollBarVisibility="Never" />
-                </customViews:TaskLoaderView.LoadingView>
+                </tlv:TaskLoaderView.LoadingView>
 
 
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
@@ -188,7 +179,7 @@
                               ItemTemplate="{StaticResource GameSkeletonViewCell}"
                               ItemsSource="{Binding Loader.Result}" />
                 </RefreshView>
-            </customViews:TaskLoaderView>
+            </tlv:TaskLoaderView>
         </Grid>
     </ContentPage.Content>
 

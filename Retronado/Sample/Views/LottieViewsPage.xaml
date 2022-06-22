@@ -5,13 +5,13 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             xmlns:customViews="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:inf="clr-namespace:Sample.Infrastructure;assembly=Sample"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
+             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource LightGreyBackground}"
              NavigationPage.HasNavigationBar="false">
@@ -36,7 +36,7 @@
             <DataTemplate x:Key="EmptyLottieDataTemplate">
                 <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional"
                              AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180"
-                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TaskLoaderView}}, Path=TaskLoaderNotifier}">
+                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TaskLoaderView}}, Path=TaskLoaderNotifier}">
 
                     <lottie:AnimationView HorizontalOptions="FillAndExpand"
                                           VerticalOptions="FillAndExpand"
@@ -64,7 +64,7 @@
             <DataTemplate x:Key="ErrorLottieDataTemplate">
                 <StackLayout AbsoluteLayout.LayoutFlags="PositionProportional"
                              AbsoluteLayout.LayoutBounds="0.5, 0.4, 300, 180"
-                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TaskLoaderView}}, Path=TaskLoaderNotifier}">
+                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TaskLoaderView}}, Path=TaskLoaderNotifier}">
 
                     <lottie:AnimationView HorizontalOptions="FillAndExpand"
                                           VerticalOptions="FillAndExpand"
@@ -89,7 +89,7 @@
                 </StackLayout>
             </DataTemplate>
 
-            <Style x:Key="TaskLoaderStyle" TargetType="customViews:TaskLoaderView">
+            <Style x:Key="TaskLoaderStyle" TargetType="tlv:TaskLoaderView">
                 <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
                 <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
                 <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
@@ -137,7 +137,7 @@
             </Frame>
 
             <!--  All lottie views are specified in DataTemplates and Style above  -->
-            <customViews:TaskLoaderView Grid.Row="2"
+            <tlv:TaskLoaderView Grid.Row="2"
                                         Style="{StaticResource TaskLoaderStyle}"
                                         TaskLoaderNotifier="{Binding Loader}">
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
@@ -152,7 +152,7 @@
                               SelectionMode="None"
                               SeparatorVisibility="None" />
                 </RefreshView>
-            </customViews:TaskLoaderView>
+            </tlv:TaskLoaderView>
         </Grid>
     </ContentPage.Content>
 

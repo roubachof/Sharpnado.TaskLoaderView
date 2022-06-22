@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Windows.Input;
 using Sample.Domain;
 using Sample.Navigation;
 using Sample.Services;
@@ -23,9 +23,10 @@ namespace Sample.ViewModels
             BuyGameCommand = new TaskLoaderCommand(BuyGame);
             PlayTheGameCommand = new TaskLoaderCommand(PlayTheGame);
 
-            CompositeNotifier = new CompositeTaskLoaderNotifier(
-                BuyGameCommand.Notifier,
-                PlayTheGameCommand.Notifier);
+            CompositeNotifier = CompositeTaskLoaderNotifier.ForCommands()
+                .WithLoaders(Loader)
+                .WithCommands(BuyGameCommand, PlayTheGameCommand)
+                .Build();
         }
 
         public CompositeTaskLoaderNotifier CompositeNotifier { get; }
@@ -45,12 +46,22 @@ namespace Sample.ViewModels
             // For testing the TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true setting
             // cts.Cancel();
 
-            Loader.Load(_ => GetRandomGame(cts.Token));
+            Loader.Load(isRefreshing => GetRandomGame(cts.Token, isRefreshing));
         }
 
-        private async Task<Game> GetRandomGame(CancellationToken token)
+        private async Task<Game> GetRandomGame(CancellationToken token, bool isRefreshing)
         {
             await Task.Delay(TimeSpan.FromSeconds(2), token);
+
+            if (isRefreshing)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (DateTime.Now.Second % 2 == 0)
+            {
+                throw new InvalidOperationException();
+            }
 
             return await _retroGamingService.GetRandomGame(true);
         }

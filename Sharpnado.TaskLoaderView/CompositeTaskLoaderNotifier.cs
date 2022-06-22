@@ -17,7 +17,7 @@ namespace Sharpnado.TaskLoaderView
         WhenAny,
     }
 
-    public class CompositeTaskLoaderNotifier : ITaskLoaderNotifier
+    public partial class CompositeTaskLoaderNotifier : ITaskLoaderNotifier
     {
         protected const string Tag = "CompositeNotifier";
 
@@ -25,12 +25,15 @@ namespace Sharpnado.TaskLoaderView
 
         private readonly ITaskLoaderNotifier[] _loaders;
 
+        private readonly ITaskLoaderNotifier[] _mainLoaders = Array.Empty<ITaskLoaderNotifier>();
+
         private bool _showLoader;
         private bool _showRefresher;
         private bool _showResult;
         private bool _showError;
         private bool _showEmptyState;
         private bool _showErrorNotification;
+        private bool _showAnyError;
 
         private bool _isRunningOrSuccessfullyCompleted;
 
@@ -55,6 +58,14 @@ namespace Sharpnado.TaskLoaderView
             ResetCommand = new Command(Reset);
             ReloadCommand = new Command(() => Load(isRefreshing: false));
             RefreshCommand = new Command(() => Load(isRefreshing: true));
+        }
+
+        private CompositeTaskLoaderNotifier(
+            ITaskLoaderNotifier[] mainLoaders,
+            ITaskLoaderNotifier[] taskLoaderNotifiers)
+            : this(mainLoaders.Concat(taskLoaderNotifiers).ToArray())
+        {
+            _mainLoaders = mainLoaders;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -125,18 +136,6 @@ namespace Sharpnado.TaskLoaderView
             }
         }
 
-        public bool ShowError
-        {
-            get => _showError;
-            set
-            {
-                if (SetAndRaise(ref _showError, value))
-                {
-                    InternalLogger.Debug(Tag, () => $"ShowError: {_showError}");
-                }
-            }
-        }
-
         public bool ShowEmptyState
         {
             get => _showEmptyState;
@@ -149,6 +148,19 @@ namespace Sharpnado.TaskLoaderView
             }
         }
 
+        public bool ShowError
+        {
+            get => _showError;
+            set
+            {
+                if (SetAndRaise(ref _showError, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowError: {_showError}");
+                    ShowAnyError = ShowErrorNotification || ShowError;
+                }
+            }
+        }
+
         public bool ShowErrorNotification
         {
             get => _showErrorNotification;
@@ -157,6 +169,19 @@ namespace Sharpnado.TaskLoaderView
                 if (SetAndRaise(ref _showErrorNotification, value))
                 {
                     InternalLogger.Debug(Tag, () => $"ShowErrorNotification: {_showErrorNotification}");
+                    ShowAnyError = ShowErrorNotification || ShowError;
+                }
+            }
+        }
+
+        public bool ShowAnyError
+        {
+            get => _showAnyError;
+            set
+            {
+                if (SetAndRaise(ref _showAnyError, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"ShowAnyError: {_showAnyError}");
                 }
             }
         }
@@ -170,7 +195,14 @@ namespace Sharpnado.TaskLoaderView
         public Exception LastError
         {
             get => _lastError;
-            set => SetAndRaise(ref _lastError, value);
+            set
+            {
+                if (SetAndRaise(ref _lastError, value))
+                {
+                    InternalLogger.Debug(Tag, () => $"LastError: {_lastError}");
+                }
+            }
+
         }
 
         public ITaskMonitor CurrentLoadingTask { get; } = null;
@@ -178,6 +210,11 @@ namespace Sharpnado.TaskLoaderView
         public bool DisableEmptyState { get; } = false;
 
         public TimeSpan AutoResetDelay { get; } = TimeSpan.Zero;
+
+        public static Builder ForCommands()
+        {
+            return new Builder();
+        }
 
         public void OnTaskOverloaded()
         {
@@ -196,7 +233,7 @@ namespace Sharpnado.TaskLoaderView
             if (!isRefreshing)
             {
                 Error = null;
-                ShowError = ShowResult = ShowEmptyState = false;
+                ShowErrorNotification = ShowError = ShowResult = ShowEmptyState = false;
             }
 
             IsRunningOrSuccessfullyCompleted = true;
@@ -225,8 +262,10 @@ namespace Sharpnado.TaskLoaderView
                 loader.Reset();
             }
 
-            IsRunningOrSuccessfullyCompleted = ShowError = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = false;
+            IsRunningOrSuccessfullyCompleted = ShowError =
+                ShowErrorNotification = ShowResult = ShowEmptyState = ShowLoader = ShowRefresher = false;
             Error = null;
+            LastError = null;
 
             RaisePropertyChanged(nameof(IsCompleted));
             RaisePropertyChanged(nameof(IsNotCompleted));
@@ -273,7 +312,7 @@ namespace Sharpnado.TaskLoaderView
                     break;
 
                 case nameof(ShowLoader):
-                    ShowLoader = _loaders.Any(l => l.ShowLoader);
+                    ShowLoader = _loaders.Any(l => l.ShowLoader && !_mainLoaders.Contains(l));
                     break;
 
                 case nameof(ShowRefresher):
@@ -298,17 +337,27 @@ namespace Sharpnado.TaskLoaderView
                     break;
 
                 case nameof(ShowError):
+                    if (_mainLoaders.Contains(taskNotifier))
+                    {
+                        return;
+                    }
+
+                    ShowError = taskNotifier.ShowError
+                        && _loaders.Any(l => l.ShowError && !_mainLoaders.Contains(l));
+
                     LastError = taskNotifier.Error;
                     Error = IsFaulted
                         ? new AggregateException(
                             _loaders
-                                .Where(l => l.Error != null)
+                                .Where(l => l.Error != null && !_mainLoaders.Contains(l))
                                 .Select(l => l.Error))
                         : null;
-                    ShowError = taskNotifier.ShowError && _loaders.Any(l => l.ShowError);
                     break;
 
                 case nameof(ShowErrorNotification):
+                    ShowErrorNotification = taskNotifier.ShowErrorNotification
+                        && _loaders.Any(l => l.ShowErrorNotification);
+
                     LastError = taskNotifier.Error;
                     Error = IsFaulted
                         ? new AggregateException(
@@ -316,7 +365,6 @@ namespace Sharpnado.TaskLoaderView
                                 .Where(l => l.Error != null)
                                 .Select(l => l.Error))
                         : null;
-                    ShowErrorNotification = taskNotifier.ShowErrorNotification && _loaders.Any(l => l.ShowErrorNotification);
                     break;
             }
         }

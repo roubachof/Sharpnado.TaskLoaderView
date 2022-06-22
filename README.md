@@ -1,6 +1,11 @@
 # TaskLoaderView 2.0: Let's burn IsBusy=true!
 
-<img src="Docs/tlv_icon_tos.png" width="200" />
+
+<img src="Docs/maui_logo.png" height="200" />
+
+<img src="Docs/tlv_icon_tos.png" height="200" />
+
+
 
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
@@ -21,6 +26,91 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 It has been tested on **Android**, **iOS** and **UWP** platforms through the `Retronado` sample app.
 
 It uses the Sharpnado's [TaskMonitor](https://github.com/roubachof/Sharpnado.TaskMonitor).
+
+## 2.5.0 MAUI support \o/ and TemplatedTaskLoader
+
+Version 2.5.0 now supports .Net MAUI.
+
+New `TemplatedTaskLoader`: it does the same job as the `TaskLoaderView` but using `ControlTemplate` instead of a absolute layout of views.
+
+```xml
+ <cv:TemplatedTaskLoader x:Name="LoaderView"
+                         Grid.Row="1"
+                         Style="{StaticResource TemplatedLoaderLongLoading}"
+                         TaskLoaderNotifier="{Binding Loader}">
+    <cv:TemplatedTaskLoader.ResultControlTemplate>
+        <ControlTemplate>
+            ...
+        </ControlTemplate>
+    </cv:TemplatedTaskLoader.ResultControlTemplate>
+    <cv:TemplatedTaskLoader.ErrorControlTemplate>
+        <ControlTemplate>
+            ...
+        </ControlTemplate>
+    </cv:TemplatedTaskLoader.ErrorControlTemplate>
+    <cv:TemplatedTaskLoader.LoadingControlTemplate>
+        <ControlTemplate>
+            ...
+        </ControlTemplate>
+    </cv:TemplatedTaskLoader.LoadingControlTemplate>
+</cv:TemplatedTaskLoader>
+
+...
+
+<Style x:Key="TemplatedLoaderLongLoading"
+       TargetType="customViews:TemplatedTaskLoader">
+    <Setter Property="LoadingControlTemplate" Value="{StaticResource LottieRocketControlTemplate}" />
+    <Setter Property="ErrorControlTemplate" Value="{StaticResource ErrorViewControlTemplate}" />
+</Style>
+
+<ControlTemplate x:Key="LottieRocketControlTemplate">
+    <forms:AnimationView HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         HeightRequest="200"
+                         WidthRequest="200"
+                         Animation="delivery_truck_animation.json"
+                         IsAnimating="{Binding Source={RelativeSource AncestorType={x:Type customViews:TemplatedTaskLoader}},
+                                                       Path=TaskLoaderNotifier.ShowLoader}"
+                         RepeatMode="Infinite" />
+
+<ControlTemplate x:Key="ErrorViewControlTemplate">
+    <StackLayout HorizontalOptions="Center"
+                 VerticalOptions="Center"
+                 BindingContext="{Binding Source={RelativeSource AncestorType={x:Type customViews:TemplatedTaskLoader}},
+                                          Path=TaskLoaderNotifier}"
+                 IsVisible="False"
+                 Orientation="Vertical"
+                 Spacing="10">
+        <Frame Style="{StaticResource FrameCircle}"
+               WidthRequest="{StaticResource SizeTaskLoaderIcon}"
+               HeightRequest="{StaticResource SizeTaskLoaderIcon}"
+               Margin="0,0,0,10"
+               BackgroundColor="{StaticResource ColorPrimary}">
+            <Image HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Source="{Binding Error,
+                                    Converter={converters:ExceptionToImageSourceConverter}}" />
+        </Frame>
+        <Label Style="{StaticResource TextBodySecondary}"
+               WidthRequest="300"
+               Margin="0,0,0,20"
+               HorizontalTextAlignment="Center"
+               LineBreakMode="WordWrap"
+               MaxLines="2"
+               Text="{Binding Error,
+                              Converter={converters:ExceptionToErrorMessageConverter}}" />
+        <sho:Shadows CornerRadius="10"
+                     Shades="{StaticResource ShadowAccentBottom}">
+            <Button Style="{StaticResource ButtonAccent}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="End"
+                    Command="{Binding ReloadCommand}"
+                    Text="{x:Static loc:GlobalResources.Common_Retry}" />
+        </sho:Shadows>
+    </StackLayout>
+</ControlTemplate>
+</ControlTemplate>
+```
 
 ## 2.4.0 BREAKING CHANGES
 

@@ -6,14 +6,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:domain="clr-namespace:Sample.Domain"
-             xmlns:forms="clr-namespace:Sharpnado.Presentation.Forms;assembly=Sharpnado.TaskLoaderView"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              xmlns:loc="clr-namespace:Sample.Localization;assembly=Sample"
              xmlns:local="clr-namespace:Sample.Infrastructure;assembly=Sample"
              xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
-             xmlns:sharpnado="clr-namespace:Sharpnado.Presentation.Forms.CustomViews;assembly=Sharpnado.TaskLoaderView"
              xmlns:skeleton="clr-namespace:Xamarin.Forms.Skeleton;assembly=Xamarin.Forms.Skeleton"
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
+             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource TosBackground}"
              NavigationPage.HasNavigationBar="False">
@@ -425,7 +424,7 @@
                                    FontFamily="{StaticResource FontAtariSt}"
                                    Text="{loc:Translate NotStartedView_Description}" />
 
-                            <sharpnado:TaskLoaderView Grid.Row="2"
+                            <tlv:TaskLoaderView Grid.Row="2"
                                                       Grid.Column="0"
                                                       Grid.ColumnSpan="2"
                                                       AccentColor="{StaticResource AccentColor}"
@@ -435,12 +434,12 @@
                                                       TaskLoaderNotifier="{Binding RandomGameLoaderCommand.Notifier}"
                                                       TaskLoaderType="ResultAsLoadingView"
                                                       TextColor="Black">
-                                <sharpnado:TaskLoaderView.NotStartedView>
+                                <tlv:TaskLoaderView.NotStartedView>
                                     <Button AbsoluteLayout.LayoutFlags="PositionProportional"
                                             AbsoluteLayout.LayoutBounds="0.5, 0.5, 120, 50"
                                             Style="{StaticResource ButtonTextIt}"
                                             Command="{Binding RandomGameLoaderCommand}" />
-                                </sharpnado:TaskLoaderView.NotStartedView>
+                                </tlv:TaskLoaderView.NotStartedView>
 
                                 <Frame Style="{StaticResource CardStyle}"
                                        Margin="-15,0,-15,-15"
@@ -485,7 +484,7 @@
                                                Text="{Binding Result.MajorGenre}" />
                                     </Grid>
                                 </Frame>
-                            </sharpnado:TaskLoaderView>
+                            </tlv:TaskLoaderView>
 
                         </Grid>
                     </Frame>

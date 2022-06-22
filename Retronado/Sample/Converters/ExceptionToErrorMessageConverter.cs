@@ -4,10 +4,11 @@ using System.Globalization;
 using Sample.Services;
 
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Sample.Converters
 {
-    public class ExceptionToErrorMessageConverter : IValueConverter
+    public class ExceptionToErrorMessageConverter : IValueConverter, IMarkupExtension
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -25,6 +26,11 @@ namespace Sample.Converters
         {
             // One-Way converter only
             throw new NotImplementedException();
+        }
+
+        public object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
         }
     }
 }

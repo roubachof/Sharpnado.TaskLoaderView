@@ -10,26 +10,12 @@
              xmlns:viewModels="clr-namespace:Sample.ViewModels;assembly=Sample"
              xmlns:views="clr-namespace:Sample.Views;assembly=Sample"
              xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.TaskLoaderView"
+             xmlns:converters="clr-namespace:Sample.Converters;assembly=Sample"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource TopElementBackground}"
              x:DataType="viewModels:CommandsPageViewModel"
              NavigationPage.HasNavigationBar="false">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style x:Key="TaskLoaderStyle" TargetType="tlv:TaskLoaderView">
-                <Setter Property="AccentColor" Value="{StaticResource AccentColor}" />
-                <Setter Property="FontFamily" Value="{StaticResource FontAtariSt}" />
-                <Setter Property="EmptyStateMessage" Value="{loc:Translate Empty_Screen}" />
-                <Setter Property="EmptyStateImageSource" Value="{inf:ImageResource Sample.Images.dougal.png}" />
-                <Setter Property="TextColor" Value="{StaticResource OnDarkColor}" />
-                <Setter Property="ErrorImageConverter" Value="{StaticResource ExceptionToImageSourceConverter}" />
-                <Setter Property="ErrorMessageConverter" Value="{StaticResource ExceptionToErrorMessageConverter}" />
-                <Setter Property="NotificationBackgroundColor" Value="{StaticResource TosWindows}" />
-                <Setter Property="NotificationTextColor" Value="{StaticResource TextPrimaryColor}" />
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <ContentPage.Content>
         <Grid>
@@ -43,10 +29,16 @@
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />
 
-            <tlv:TaskLoaderView Grid.Row="1"
-                                        Style="{StaticResource TaskLoaderStyle}"
-                                        TaskLoaderNotifier="{Binding Loader}">
-                <Grid RowDefinitions="300,*">
+            <RefreshView Grid.Row="1" IsRefreshing="{Binding Loader.ShowRefresher}"
+                         RefreshColor="{StaticResource AccentColor}"
+                         Command="{Binding Loader.RefreshCommand}">
+                <ScrollView>
+                <tlv:TemplatedTaskLoader TaskLoaderNotifier="{Binding Loader}">
+                <tlv:TemplatedTaskLoader.ResultControlTemplate>
+                    <ControlTemplate>
+                        <Grid RowDefinitions="300,*"
+                              x:DataType="viewModels:CommandsPageViewModel"
+                              BindingContext="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CommandsPageViewModel}}}">
                     <Image Grid.Row="0"
                            skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
                            skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
@@ -120,10 +112,65 @@
                            Margin="15,45,15,0"
                            Text="{Binding Loader.Result.Summary}"
                            TextColor="White" />
+                        </Grid>
+                    </ControlTemplate>
+                </tlv:TemplatedTaskLoader.ResultControlTemplate>
+                <tlv:TemplatedTaskLoader.LoadingControlTemplate>
+                    <ControlTemplate>
+                        <ActivityIndicator Color="{StaticResource AccentColor}"
+                                           IsRunning="True"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"/>
+                    </ControlTemplate>
+                </tlv:TemplatedTaskLoader.LoadingControlTemplate>
+                <tlv:TemplatedTaskLoader.ErrorControlTemplate>
+                    <ControlTemplate x:DataType="{x:Null}">
+                        <StackLayout HorizontalOptions="Center"
+                                     VerticalOptions="Center"
+                                     BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TemplatedTaskLoader}},
+                                          Path=TaskLoaderNotifier}"
+                                     Orientation="Vertical"
+                                     Spacing="10">
+                            <Frame CornerRadius="50"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   BackgroundColor="Transparent"
+                                   HasShadow="False"
+                                   IsClippedToBounds="True"
+                                   WidthRequest="100"
+                                   Padding="0"
+                                   HeightRequest="100"
+                                   Margin="0,0,0,10">
+                                <Image HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       WidthRequest="100"
+                                       HeightRequest="100"
+                                       Source="{Binding Error,
+                                    Converter={converters:ExceptionToImageSourceConverter}}" />
+                            </Frame>
+                            <Label Style="{StaticResource TextBodySecondary}"
+                                   WidthRequest="300"
+                                   Margin="0,0,0,20"
+                                   HorizontalTextAlignment="Center"
+                                   LineBreakMode="WordWrap"
+                                   MaxLines="2"
+                                   Text="{Binding Error,
+                              Converter={converters:ExceptionToErrorMessageConverter}}" />
 
-
-                </Grid>
-            </tlv:TaskLoaderView>
+                                <Button BackgroundColor="{StaticResource AccentColor}"
+                                        CornerRadius="10"
+                                        Padding="10,0"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="End"
+                                        Command="{Binding ReloadCommand}"
+                                        TextColor="Black"
+                                        Text="{x:Static loc:SampleResources.ErrorButton_Retry}" />
+                        </StackLayout>
+                    </ControlTemplate>
+                </tlv:TemplatedTaskLoader.ErrorControlTemplate>
+            </tlv:TemplatedTaskLoader>
+                </ScrollView>
+            </RefreshView>
 
             <AbsoluteLayout Grid.Row="1"
                             BackgroundColor="#77002200"
@@ -156,7 +203,7 @@
                             VerticalOptions="End"
                             BackgroundColor="White"
                             FontFamily="{StaticResource FontAtariSt}"
-                            IsVisible="{Binding CompositeNotifier.ShowError, Mode=TwoWay}"
+                            IsVisible="{Binding CompositeNotifier.ShowAnyError, Mode=TwoWay}"
                             Text="{Binding CompositeNotifier.LastError, Converter={StaticResource ExceptionToErrorMessageConverter}}"
                             TextColor="{StaticResource TextPrimaryColor}"
                             TextHorizontalOptions="Start" />
