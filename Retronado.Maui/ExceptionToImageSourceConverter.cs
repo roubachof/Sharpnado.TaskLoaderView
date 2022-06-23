@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace Sample.Converters
 {
-    public class ExceptionToImageSourceConverter : IValueConverter
+    public class ExceptionToImageSourceConverter : IValueConverter, IMarkupExtension
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -32,7 +32,6 @@ namespace Sample.Converters
                     break;
             }
 
-       
             return ImageSource.FromFile(imageName);
         }
 
@@ -40,6 +39,11 @@ namespace Sample.Converters
         {
             // One-Way converter only
             throw new NotImplementedException();
+        }
+
+        public object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
         }
     }
 }

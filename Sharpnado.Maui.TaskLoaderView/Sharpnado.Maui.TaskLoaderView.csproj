@@ -8,11 +8,11 @@
     <AssemblyName>Sharpnado.Maui.TaskLoaderView</AssemblyName>
     <CodeAnalysisRuleSet>StyleCopRules.ruleset</CodeAnalysisRuleSet>
     <RootNamespace>Sharpnado.TaskLoaderView</RootNamespace>
-    
+
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>2.5.0.0</AssemblyVersion>
-    <AssemblyFileVersion>2.5.0.0</AssemblyFileVersion>
-    <Version>2.5.0.0</Version>
+    <AssemblyVersion>2.5.1.0</AssemblyVersion>
+    <AssemblyFileVersion>2.5.1.0</AssemblyFileVersion>
+    <Version>2.5.1.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
@@ -22,12 +22,12 @@
     <RepositoryUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</RepositoryUrl>
     <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/maui_logo.png</PackageIconUrl>
     <PackageTags>maui, netmaui, xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
-    <PackageReleaseNotes>First .Net MAUI (.net 6) release \o/
-      </PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed timed visibility duration, introduced ForCommands building pattern for composite task notifier.</PackageReleaseNotes>
     <Title>Maui TaskLoaderView: free yourself from IsBusy=true!</Title>
     <Summary>Free yourself from IsBusy=true! The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.</Summary>
     <Description>Free yourself from IsBusy=true!
-        The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
+        The `TaskLoaderView` and the `TemplatedTaskLoader` are UI components that handle all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
+       
         Featuring:
 
         * Default views for all loading states (Loading, Error, Success, Notification, Refresh)
@@ -57,12 +57,14 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType />
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="..\Sharpnado.TaskLoaderView\ColorHelper.cs">
       <Link>ColorHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\Sharpnado.TaskLoaderView\CompositeTaskLoaderNotifier.Builder.cs">
+      <Link>CompositeTaskLoaderNotifier.Builder.cs</Link>
     </Compile>
     <Compile Include="..\Sharpnado.TaskLoaderView\CompositeTaskLoaderNotifier.cs">
       <Link>CompositeTaskLoaderNotifier.cs</Link>

@@ -7,9 +7,9 @@
     <RootNamespace>Sharpnado.TaskLoaderView</RootNamespace>
 
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>2.4.0.0</AssemblyVersion>
-    <AssemblyFileVersion>2.4.0.0</AssemblyFileVersion>
-    <Version>2.4.0.0</Version>
+    <AssemblyVersion>2.5.1.0</AssemblyVersion>
+    <AssemblyFileVersion>2.5.1.0</AssemblyFileVersion>
+    <Version>2.5.1.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
 
@@ -22,57 +22,14 @@
     <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/tlv_icon_tos.png</PackageIconUrl>
     <PackageTags>xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
 
-    <PackageReleaseNotes>
-      Fix Snackbar BackgroundColor and CompositeLoader behavior.
-BREAKING CHANGE: the task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}.
-You can simply change your calls from Loader.Load(() =&gt; InitializeAsync()); to Loader.Load(_ =&gt; InitializeAsync());
-The booleand that is passed now to your task source is a boolean indicating if the notifier is refreshing.
-You can use it for invalidating your cache for example.
-
-Loader.Load(LoadItems);
-
-public Task LoadItems(bool isRefreshing)
-{
-    if (isRefreshing || !_cache.ContainsItems())
-    {
-         _cache.InvalidateItems();
-         var items = _httpService.GetItems()
-         _cache.PutItems(items);
-         return items;
-    }
-
-    return _cache.GetItems();
-}
-
-When the Refresh command will be called, it will pass automatically the isRefreshing boolean set to true to your task source.
-    </PackageReleaseNotes>
+      <PackageReleaseNotes>Fixed timed visibility duration, introduced ForCommands building pattern for composite task notifier.</PackageReleaseNotes>
 
     <Title>TaskLoaderView: free yourself from IsBusy=true!</Title>
     <Summary>Free yourself from IsBusy=true! The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.</Summary>
     <Description>Free yourself from IsBusy=true!
-The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
+The `TaskLoaderView` and the `TemplatedTaskLoader` are UI components that handle all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
-BREAKING CHANGE Version 2.4.0:
-The task source given to to TaskLoaderNotifier is now a Func{bool, Task} (or a Func{bool, Task{T}}) instead of a Func{Task}.
-You can simply change your calls from Loader.Load(() =&gt; InitializeAsync()) to Loader.Load(_ =&gt; InitializeAsync()) to ignore it if you like.
-
-The boolean that is passed now to your task source is a boolean indicating if the notifier is refreshing.
-You can use it for invalidating your cache, for example:
-
-public Task LoadItems(bool isRefreshing)
-{
-    if (isRefreshing || !_cache.ContainsItems())
-    {
-        _cache.InvalidateItems();
-        var items = _httpService.GetItems()
-        _cache.PutItems(items);
-        return items;
-    }
-
-    return _cache.GetItems();
-}
-
-Featuring:
+    Featuring:
 
 * Default views for all loading states (Loading, Error, Success, Notification, Refresh)
 * Snackbar component
@@ -104,11 +61,9 @@ Featuring:
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType></DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-*" PrivateAssets="All" />
     <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>
