@@ -11,6 +11,8 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 
 <img src="https://img.shields.io/nuget/v/Sharpnado.TaskLoaderView.svg"/>
 
+<img src="https://img.shields.io/nuget/v/Sharpnado.Maui.TaskLoaderView.svg"/>
+
 **Featuring:**
 
 * Default layout for all loading states (`Loading`, `Error`, `Success`, `Notification`, `Refresh`)
@@ -109,7 +111,229 @@ New `TemplatedTaskLoader`: it does the same job as the `TaskLoaderView` but usin
         </sho:Shadows>
     </StackLayout>
 </ControlTemplate>
-</ControlTemplate>
+```
+
+**For all new developments, I recommend now to use the TemplatedTaskLoader, and use it with a Snackbar to handle the error notifications**.
+
+There is an detailed example on how to use it here:
+
+https://github.com/roubachof/Sharpnado.TaskLoaderView/blob/master/Retronado/Sample/Views/CommandsPage.xaml
+
+and here:
+
+https://github.com/roubachof/Sharpnado.TaskLoaderView/blob/master/Retronado/Sample/ViewModels/CommandsPageViewModel.cs
+
+### New CompositeTaskLoaderNotifier builder and simplified wiring
+
+You can use the new builder for the CompositeTaskLoader that will wire for you the `ShowErrorNotification` of your loaders, and the errors from your `TaskLoaderCommand`:
+
+```csharp
+CompositeNotifier = CompositeTaskLoaderNotifier.ForCommands()
+    .WithLoaders(Loader)
+    .WithCommands(BuyGameCommand, PlayTheGameCommand)
+    .Build();
+```
+
+And bind the `ShowLastError` and `LastError` property to your `Snackbar`:
+
+```xml
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <views:NavigationToolBar Title="{loc:Translate Commands_Title}"
+                                     Grid.Row="0"
+                                     BackgroundColor="{StaticResource TopElementBackground}"
+                                     Theme="Standard" />
+
+            <RefreshView Grid.Row="1"
+                         IsRefreshing="{Binding Loader.ShowRefresher}"
+                         RefreshColor="{StaticResource AccentColor}"
+                         Command="{Binding Loader.RefreshCommand}">
+                <ScrollView>
+                    <tlv:TemplatedTaskLoader TaskLoaderNotifier="{Binding Loader}">
+                        <tlv:TemplatedTaskLoader.ResultControlTemplate>
+                            <ControlTemplate>
+                                <Grid RowDefinitions="300,*"
+                                      x:DataType="viewModels:CommandsPageViewModel"
+                                      BindingContext="{Binding Source={RelativeSource
+                                            AncestorType={x:Type viewModels:CommandsPageViewModel}}}">
+                                    <Image Grid.Row="0"
+                                           skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                           skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                           Aspect="Fill"
+                                           Source="{Binding Loader.Result.ScreenshotUrl}" />
+
+                                    <sho:MaterialFrame Grid.Row="0"
+                                                       Padding="15,5,15,30"
+                                                       VerticalOptions="End"
+                                                       CornerRadius="0"
+                                                       MaterialBlurStyle="Dark"
+                                                       MaterialTheme="AcrylicBlur">
+                                        <Grid Padding="0"
+                                              ColumnDefinitions="*,60"
+                                              RowDefinitions="40,20,20"
+                                              RowSpacing="0">
+                                            <Label Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   Style="{StaticResource GameName}"
+                                                   Margin="0,0,10,0"
+                                                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                                   skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                                   Text="{Binding Loader.Result.Name}" />
+
+                                            <Label Grid.Row="1"
+                                                   Style="{StaticResource GameCompany}"
+                                                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                                   skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                                   Text="{Binding Loader.Result.MajorCompany}" />
+
+                                            <Label Grid.Row="2"
+                                                   Style="{StaticResource GameGenre}"
+                                                   Text="{Binding Loader.Result.MajorGenre}" />
+
+                                            <Image Grid.Row="0"
+                                                   Grid.RowSpan="3"
+                                                   Grid.Column="1"
+                                                   Margin="0,10,0,0"
+                                                   Source="{Binding Loader.Result.CoverUrl}" />
+
+                                        </Grid>
+                                    </sho:MaterialFrame>
+
+                                    <Button Grid.Row="1"
+                                            HeightRequest="40"
+                                            Margin="0,-20,100,0"
+                                            Padding="10"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Start"
+                                            BackgroundColor="{StaticResource AccentColor}"
+                                            Command="{Binding BuyGameCommand}"
+                                            FontFamily="{StaticResource FontAtariSt}"
+                                            Text="BUY IT"
+                                            TextColor="{StaticResource TopElementBackground}" />
+
+                                    <Button Grid.Row="1"
+                                            HeightRequest="40"
+                                            Margin="100,-20,0,0"
+                                            Padding="10"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Start"
+                                            BackgroundColor="{StaticResource AccentColor}"
+                                            Command="{Binding PlayTheGameCommand}"
+                                            FontFamily="{StaticResource FontAtariSt}"
+                                            Text="PLAY IT"
+                                            TextColor="{StaticResource TopElementBackground}" />
+
+
+                                    <Label Grid.Row="1"
+                                           Style="{StaticResource GameGenre}"
+                                           Margin="15,45,15,0"
+                                           Text="{Binding Loader.Result.Summary}"
+                                           TextColor="White" />
+                                </Grid>
+                            </ControlTemplate>
+                        </tlv:TemplatedTaskLoader.ResultControlTemplate>
+
+                        <tlv:TemplatedTaskLoader.LoadingControlTemplate>
+                            <ControlTemplate>
+                                <ActivityIndicator Color="{StaticResource AccentColor}"
+                                                   IsRunning="True"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center" />
+                            </ControlTemplate>
+                        </tlv:TemplatedTaskLoader.LoadingControlTemplate>
+
+                        <tlv:TemplatedTaskLoader.ErrorControlTemplate>
+                            <ControlTemplate x:DataType="{x:Null}">
+                                <StackLayout HorizontalOptions="Center"
+                                             VerticalOptions="Center"
+                                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TemplatedTaskLoader}},
+                                          Path=TaskLoaderNotifier}"
+                                             Orientation="Vertical"
+                                             Spacing="10">
+                                    <Frame CornerRadius="50"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           BackgroundColor="Transparent"
+                                           HasShadow="False"
+                                           IsClippedToBounds="True"
+                                           WidthRequest="100"
+                                           Padding="0"
+                                           HeightRequest="100"
+                                           Margin="0,0,0,10">
+                                        <Image HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               WidthRequest="100"
+                                               HeightRequest="100"
+                                               Source="{Binding Error,
+                                    Converter={converters:ExceptionToImageSourceConverter}}" />
+                                    </Frame>
+                                    <Label Style="{StaticResource TextBodySecondary}"
+                                           WidthRequest="300"
+                                           Margin="0,0,0,20"
+                                           HorizontalTextAlignment="Center"
+                                           LineBreakMode="WordWrap"
+                                           MaxLines="2"
+                                           Text="{Binding Error,
+                              Converter={converters:ExceptionToErrorMessageConverter}}" />
+
+                                    <Button BackgroundColor="{StaticResource AccentColor}"
+                                            CornerRadius="10"
+                                            Padding="10,0"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="End"
+                                            Command="{Binding ReloadCommand}"
+                                            TextColor="Black"
+                                            Text="{x:Static loc:SampleResources.ErrorButton_Retry}" />
+                                </StackLayout>
+                            </ControlTemplate>
+                        </tlv:TemplatedTaskLoader.ErrorControlTemplate>
+
+                    </tlv:TemplatedTaskLoader>
+                </ScrollView>
+            </RefreshView>
+
+            <AbsoluteLayout Grid.Row="1"
+                            BackgroundColor="#77002200"
+                            IsVisible="{Binding CompositeNotifier.ShowLoader}">
+                <Grid x:Name="ErrorNotificationView"
+                      AbsoluteLayout.LayoutFlags="PositionProportional"
+                      AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+                      RowDefinitions="*,*">
+                    <Grid.Behaviors>
+                        <tlv:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
+                    </Grid.Behaviors>
+                    <Image Grid.RowSpan="2"
+                           Aspect="Fill"
+                           Source="{inf:ImageResource Sample.Images.window_border.png}" />
+                    <Image x:Name="BusyImage"
+                           Margin="15,30,15,0"
+                           Aspect="AspectFit"
+                           Source="{inf:ImageResource Sample.Images.busy_bee_white_bg.png}" />
+                    <Label Grid.Row="1"
+                           Style="{StaticResource TextBody}"
+                           Margin="{StaticResource ThicknessLarge}"
+                           VerticalOptions="Center"
+                           HorizontalTextAlignment="Center"
+                           Text="{Binding LoadingText}" />
+                </Grid>
+            </AbsoluteLayout>
+
+            <tlv:Snackbar Grid.Row="1"
+                          Margin="15"
+                          VerticalOptions="End"
+                          BackgroundColor="White"
+                          FontFamily="{StaticResource FontAtariSt}"
+                          IsVisible="{Binding CompositeNotifier.ShowLastError, Mode=TwoWay}"
+                          Text="{Binding CompositeNotifier.LastError, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                          TextColor="{StaticResource TextPrimaryColor}"
+                          TextHorizontalOptions="Start" />
+        </Grid>
+    </ContentPage.Content>
 ```
 
 ## 2.4.0 BREAKING CHANGES
