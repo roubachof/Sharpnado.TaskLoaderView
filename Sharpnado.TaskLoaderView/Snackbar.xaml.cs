@@ -4,7 +4,7 @@ using Xamarin.Forms.Xaml;
 namespace Sharpnado.TaskLoaderView
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class Snackbar : Frame
+    public partial class Snackbar : Frame, ITimeVisibilityText
     {
         public static readonly BindableProperty TextProperty = BindableProperty.Create(
             nameof(Text),
