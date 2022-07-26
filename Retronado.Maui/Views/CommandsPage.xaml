@@ -30,8 +30,8 @@
                          IsRefreshing="{Binding Loader.ShowRefresher}"
                          RefreshColor="{StaticResource AccentColor}"
                          Command="{Binding Loader.RefreshCommand}">
-                <ScrollView>
-                    <tlv:TemplatedTaskLoader TaskLoaderNotifier="{Binding Loader}">
+                <ScrollView Grid.Row="1" >
+                    <tlv:TemplatedTaskLoader  TaskLoaderNotifier="{Binding Loader}">
                         <tlv:TemplatedTaskLoader.ResultControlTemplate>
                             <ControlTemplate>
                                 <Grid RowDefinitions="300,*"
@@ -161,7 +161,7 @@
 
                                     <Button BackgroundColor="{StaticResource AccentColor}"
                                             CornerRadius="10"
-                                            Padding="10,0"
+                                            Padding="10"
                                             HorizontalOptions="Center"
                                             VerticalOptions="End"
                                             Command="{Binding ReloadCommand}"

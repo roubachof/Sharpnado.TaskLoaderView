@@ -12,6 +12,7 @@ public static class MauiProgram
                 fonts.AddFont("Font-Awesome-5-Free-Solid-900.otf", "FontAwesome");
                 fonts.AddFont("ka1.ttf", "FontKarmatic");
                 fonts.AddFont("atarist.ttf", "FontAtariSt");
+                fonts.AddFont("ac.ttf", "FontArcadeClassic");
             });
 
         builder.Services.AddLocalization();
