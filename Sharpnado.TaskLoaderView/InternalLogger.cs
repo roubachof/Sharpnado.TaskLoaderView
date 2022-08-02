@@ -1,6 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Text;
 
 namespace Sharpnado.TaskLoaderView
 {
@@ -11,7 +9,7 @@ namespace Sharpnado.TaskLoaderView
         public const string WarningLevel = "WARN";
         public const string ErrorLevel = "ERRO";
 
-        public static Initializer.LoggerDelegate LoggerDelegate { get; set; }
+        public static Initializer.LoggerDelegate? LoggerDelegate { get; set; }
 
         public static bool EnableLogging { get; set; } = false;
 
