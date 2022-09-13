@@ -41,14 +41,15 @@
                                     <Image Grid.Row="0"
                                            skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
                                            skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
-                                           Aspect="Fill"
+                                           Aspect="AspectFill"
                                            Source="{Binding Loader.Result.ScreenshotUrl}" />
 
                                     <Frame Grid.Row="0"
                                            Padding="15,5,15,30"
-                                                       VerticalOptions="End"
-                                                       CornerRadius="0"
-                                                       BackgroundColor="{StaticResource DarkOverlay}">
+                                           ZIndex="1"
+                                           VerticalOptions="End"
+                                           CornerRadius="0"
+                                           BackgroundColor="{StaticResource DarkOverlay}">
 
                                         <Grid Padding="0"
                                               ColumnDefinitions="*,60"
@@ -81,37 +82,38 @@
                                         </Grid>
                                     </Frame>
 
+                                    <Label Grid.Row="1"
+                                           Style="{StaticResource GameGenre}"
+                                           Margin="15,45,15,0"
+                                           Text="{Binding Loader.Result.Summary}"
+                                           TextColor="White" />
+
                                     <Button Grid.Row="1"
                                             HeightRequest="40"
                                             Margin="0,-20,100,0"
-                                            Padding="10"
+                                            Padding="15,10"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Start"
                                             BackgroundColor="{StaticResource AccentColor}"
                                             Command="{Binding BuyGameCommand}"
                                             FontFamily="FontAtariSt"
-
+                                            ZIndex="10"
                                             Text="BUY IT"
                                             TextColor="{StaticResource TopElementBackground}" />
 
                                     <Button Grid.Row="1"
                                             HeightRequest="40"
                                             Margin="100,-20,0,0"
-                                            Padding="10"
+                                            Padding="15,10"
                                             HorizontalOptions="Center"
                                             VerticalOptions="Start"
                                             BackgroundColor="{StaticResource AccentColor}"
                                             Command="{Binding PlayTheGameCommand}"
                                             FontFamily="FontAtariSt"
+                                            ZIndex="10"
                                             Text="PLAY IT"
                                             TextColor="{StaticResource TopElementBackground}" />
 
-
-                                    <Label Grid.Row="1"
-                                           Style="{StaticResource GameGenre}"
-                                           Margin="15,45,15,0"
-                                           Text="{Binding Loader.Result.Summary}"
-                                           TextColor="White" />
                                 </Grid>
                             </ControlTemplate>
                         </tlv:TemplatedTaskLoader.ResultControlTemplate>
