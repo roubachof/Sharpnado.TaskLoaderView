@@ -29,6 +29,56 @@ It has been tested on **Android**, **iOS** and **UWP** platforms through the `Re
 
 It uses the Sharpnado's [TaskMonitor](https://github.com/roubachof/Sharpnado.TaskMonitor).
 
+## Installation
+
+### MAUI
+
+Add the [Sharpnado.Maui.TaskLoaderView](https://www.nuget.org/packages/Sharpnado.Maui.TaskLoaderView) nuget package.
+
+And call the initializer in your `MauiProgram.cs` file:
+
+```csharp
+public static class MauiProgram
+{
+	public static MauiApp CreateMauiApp()
+	{
+		var builder = MauiApp.CreateBuilder();
+		builder
+			.UseMauiApp<App>()
+			.ConfigureFonts(fonts =>
+			{
+				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+			});
+
+		Initializer.Initialize(true); // logger enabled
+
+		return builder.Build();
+	}
+}
+```
+
+### Xamarin.Forms
+
+Add the [Sharpnado.TaskLoaderView](https://www.nuget.org/packages/Sharpnado.Maui.TaskLoaderView) nuget package.
+
+And call the initializer in your `MauiProgram.cs` file:
+
+```csharp
+public partial class App : Application
+{
+	public App()
+	{
+	    InitializeComponent();
+
+	    // TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
+
+	    Initializer.Initialize(true); // logger enabled
+	    MainPage = new NavigationPage(new MainPage());
+	}
+}
+```
+
 ## 2.5.0 MAUI support \o/ and TemplatedTaskLoader
 
 Version 2.5.0 now supports .Net MAUI.
