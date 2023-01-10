@@ -1,17 +1,16 @@
 # TaskLoaderView 2.0: Let's burn IsBusy=true!
 
-
-<img src="Docs/maui_logo.png" height="200" />
-
-<img src="Docs/tlv_icon_tos.png" height="200" />
-
-
-
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
-<img src="https://img.shields.io/nuget/v/Sharpnado.TaskLoaderView.svg"/>
+| MAUI Supported platforms   | XF Supported platforms     |
+|----------------------------|----------------------------|
+| <img src="Docs/maui_logo.png" height="100" /> | <img src="Docs/tlv_icon_tos.png" height="100" />|
+| [![Nuget](https://img.shields.io/nuget/v/Sharpnado.Maui.TaskLoaderView.svg)](https://www.nuget.org/packages/Sharpnado.CollectionView)                            | [![Nuget](https://img.shields.io/nuget/v/Sharpnado.TaskLoaderView.svg)](https://www.nuget.org/packages/Sharpnado.CollectionView) |
+| :heavy_check_mark: Android | :heavy_check_mark: Android |
+| :heavy_check_mark: iOS     | :heavy_check_mark: iOS     |
+| :heavy_check_mark: Windows | :heavy_check_mark: Windows |
+| :heavy_check_mark: macOS   | :heavy_check_mark: macOS   |
 
-<img src="https://img.shields.io/nuget/v/Sharpnado.Maui.TaskLoaderView.svg"/>
 
 **Featuring:**
 
@@ -24,6 +23,7 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 * Support loading task on demand with the `NotStarted` state
 * `TaskLoaderNotifier` for the `ViewModel` side taking care of all the error handling and the `IsBusy` nonsense
 
+![banner](https://user-images.githubusercontent.com/596903/211530187-d01267fe-f1f1-434e-999b-a3fe35b85988.png)
 
 It has been tested on **Android**, **iOS** and **UWP** platforms through the `Retronado` sample app.
 
