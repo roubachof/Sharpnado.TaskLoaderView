@@ -56,7 +56,6 @@ namespace Sharpnado.TaskLoaderView
                 {
                     InternalLogger.Warn("A loading task is currently running: discarding previous call");
                     OnTaskOverloaded();
-                    return;
                 }
 
                 _loadingTaskSource = loadingTaskSource;
