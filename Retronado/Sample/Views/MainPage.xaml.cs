@@ -41,9 +41,9 @@ namespace Sample.Views
         {
             base.OnAppearing();
 
-            var safeInsets = On<iOS>().SafeAreaInsets();
-            safeInsets.Bottom = 0;
-            Padding = safeInsets;
+            // var safeInsets = On<iOS>().SafeAreaInsets();
+            // safeInsets.Bottom = 0;
+            // Padding = safeInsets;
 
             ResourcesHelper.SetSublimeGameMode();
         }

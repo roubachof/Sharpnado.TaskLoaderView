@@ -15,12 +15,15 @@ namespace Sample.ViewModels
 
         private GamePlatform _platform;
 
-        public RetroGamesViewModel(INavigationService navigationService, IRetroGamingService retroGamingService, ErrorEmulator errorEmulator)
+        public RetroGamesViewModel(
+            INavigationService navigationService,
+            IRetroGamingService retroGamingService,
+            ErrorEmulator errorEmulator)
             : base(navigationService)
         {
             _retroGamingService = retroGamingService;
 
-            ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator, () => Loader.Load(_ => InitializeAsync()));
+            ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator, () => Loader.Load(_ => GetGamesAsync()));
 
             // TaskStartMode = Auto
             // Loader = new TaskLoaderNotifier<List<Game>>(InitializeAsync);
@@ -38,7 +41,7 @@ namespace Sample.ViewModels
             _platform = (GamePlatform)parameter;
 
             // TaskStartMode = Manual (Default mode)
-            Loader.Load(_ => InitializeAsync());
+            Loader.Load(_ => GetGamesAsync());
         }
 
         private async Task ChainTasks()
@@ -49,7 +52,7 @@ namespace Sample.ViewModels
             await Task.Delay(1000);
         }
 
-        private async Task<List<Game>> InitializeAsync()
+        private async Task<List<Game>> GetGamesAsync()
         {
             var result = _platform == GamePlatform.Computer
                 ? await _retroGamingService.GetAtariAndAmigaGames()

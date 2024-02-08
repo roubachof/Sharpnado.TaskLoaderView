@@ -19,14 +19,5 @@ namespace Sample.Views
 
             ResourcesHelper.SetSublimeGameMode();
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            var safeInsets = On<iOS>().SafeAreaInsets();
-            safeInsets.Bottom = 0;
-            Padding = safeInsets;
-        }
     }
 }

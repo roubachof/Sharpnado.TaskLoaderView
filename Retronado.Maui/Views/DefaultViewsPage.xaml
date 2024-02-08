@@ -3,14 +3,14 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:inf="clr-namespace:Sample.Infrastructure"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
-             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
-             ios:Page.UseSafeArea="true"
-             BackgroundColor="{StaticResource LightGreyBackground}"
+             ios:Page.UseSafeArea="false"
              x:DataType="viewModels:RetroGamesViewModel"
+             BackgroundColor="{StaticResource LightGreyBackground}"
              NavigationPage.HasNavigationBar="false">
 
     <ContentPage.Resources>
@@ -31,19 +31,22 @@
     </ContentPage.Resources>
 
     <ContentPage.Content>
-        <Grid>
+        <Grid IgnoreSafeArea="True">
             <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
                 <RowDefinition Height="80" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
+            <BoxView Color="{StaticResource TopElementBackground}" />
+
             <views:NavigationToolBar Title="{x:Static loc:SampleResources.DefaultLayout_Title}"
-                                     Grid.Row="0"
+                                     Grid.Row="1"
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />
 
-            <Frame Grid.Row="1"
+            <Frame Grid.Row="2"
                    Margin="15,15,15,8"
                    Padding="0"
                    BackgroundColor="{StaticResource TopElementBackground}"
@@ -56,9 +59,9 @@
                                          ValueFontFamily="FontAtariSt" />
             </Frame>
 
-            <taskLoaderView:TaskLoaderView Grid.Row="2"
-                                        Style="{StaticResource TaskLoaderStyle}"
-                                        TaskLoaderNotifier="{Binding Loader}">
+            <taskLoaderView:TaskLoaderView Grid.Row="3"
+                                           Style="{StaticResource TaskLoaderStyle}"
+                                           TaskLoaderNotifier="{Binding Loader}">
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
                              RefreshColor="{StaticResource AccentColor}">

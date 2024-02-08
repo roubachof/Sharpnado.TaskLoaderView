@@ -3,12 +3,12 @@
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
-             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              ios:Page.UseSafeArea="true"
-             BackgroundColor="{StaticResource LightGreyBackground}"
              x:DataType="viewModels:RetroGamesIsBusyViewModel"
+             BackgroundColor="{StaticResource LightGreyBackground}"
              NavigationPage.HasNavigationBar="false">
 
     <ContentPage.Resources>
@@ -49,16 +49,19 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />
+                <RowDefinition Height="60" />
                 <RowDefinition Height="80" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
+            <BoxView Color="{StaticResource TopElementBackground}" />
+
             <views:NavigationToolBar Title="IsBusy Views"
-                                     Grid.Row="0"
+                                     Grid.Row="1"
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />
 
-            <Frame Grid.Row="1"
+            <Frame Grid.Row="2"
                    Margin="15,15,15,8"
                    Padding="0"
                    BackgroundColor="{StaticResource TopElementBackground}"
@@ -71,7 +74,7 @@
                                          ValueFontFamily="FontAtariSt" />
             </Frame>
 
-            <AbsoluteLayout Grid.Row="2">
+            <AbsoluteLayout Grid.Row="3">
 
                 <RefreshView x:Name="ResultView"
                              AbsoluteLayout.LayoutFlags="All"

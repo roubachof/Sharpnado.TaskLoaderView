@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 using Sample.Domain;
 using Sample.Infrastructure;
 using Sample.Localization;
 using Sample.Navigation;
 using Sample.Services;
-
-using Xamarin.Forms;
 
 namespace Sample.ViewModels
 {
@@ -35,6 +29,7 @@ namespace Sample.ViewModels
             : base(navigationService)
         {
             _retroGamingService = retroGamingService;
+            _games = new List<Game>();
 
             ErrorEmulatorViewModel = new ErrorEmulatorViewModel(errorEmulator, () => Load());
 
@@ -104,16 +99,10 @@ namespace Sample.ViewModels
             HasError = false;
             HasRefreshError = false;
             ErrorMessage = string.Empty;
-            List<Game> items = new List<Game>();
-
-            if (!isRefreshing)
-            {
-                Games = new List<Game>();
-            }
 
             try
             {
-                items = await InitializeAsync();
+                Games = await GetGamesAsync();
             }
             catch (NetworkException)
             {
@@ -137,14 +126,9 @@ namespace Sample.ViewModels
                 HasError = !isRefreshing && ErrorMessage != string.Empty;
                 HasRefreshError = isRefreshing && ErrorMessage != string.Empty;
             }
-
-            if (!HasRefreshError)
-            {
-                Games = items;
-            }
         }
 
-        private async Task<List<Game>> InitializeAsync()
+        private async Task<List<Game>> GetGamesAsync()
         {
             var result = _platform == GamePlatform.Computer
                 ? await _retroGamingService.GetAtariAndAmigaGames()

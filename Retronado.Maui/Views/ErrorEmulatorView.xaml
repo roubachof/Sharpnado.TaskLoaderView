@@ -18,13 +18,15 @@
                     </OnPlatform>
                 </Setter>
                 <Setter Property="FontSize" Value="Small" />
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="HorizontalOptions" Value="Fill" />
             </Style>
         </ResourceDictionary>
     </ContentView.Resources>
 
     <ContentView.Content>
-        <HorizontalStackLayout Padding="15,0" Spacing="10">
+        <Grid Padding="15,0"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="10">
 
             <Label x:Name="Label"
                    Style="{StaticResource TextTitle}"
@@ -34,11 +36,12 @@
                    Text="{x:Static loc:SampleResources.ErrorEmulator_Title}" />
 
             <Picker x:Name="Picker"
+                    Grid.Column="1"
                     Style="{StaticResource ErrorPickerStyle}"
                     BackgroundColor="Transparent"
                     ItemsSource="{Binding ErrorTypes}"
                     SelectedIndex="{Binding SelectedIndex}"
                     TextColor="{StaticResource TosBackground}" />
-        </HorizontalStackLayout>
+        </Grid>
     </ContentView.Content>
 </ContentView>
