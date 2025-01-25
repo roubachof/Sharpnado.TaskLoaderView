@@ -1,3 +1,4 @@
 [submodule "Maui.Skeleton"]
 	path = Maui.Skeleton
 	url = https://github.com/Jon2G/Xamarin.Forms.Skeleton
+	branch = master
