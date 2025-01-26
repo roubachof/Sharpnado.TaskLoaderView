@@ -16,7 +16,7 @@ using Sample.Domain;
 using Sample.Infrastructure;
 using Sample.Navigation;
 using Sample.Navigation.Impl;
-
+using Sample.ViewModels;
 using Xamarin.Forms;
 
 namespace Sample
@@ -44,6 +44,10 @@ namespace Sample
             container.RegisterSingleton<IRetroGamingService, RetroGamingService>();
             container.RegisterSingleton<INavigationService, FormsNavigationService>();
             container.RegisterSingleton<ErrorEmulator>();
+            container.Register<RetroGamesViewModel>();
+            container.Register<CommandsPageViewModel>();
+
+            
 
             // Register all views by convention
             foreach (var pageType in
