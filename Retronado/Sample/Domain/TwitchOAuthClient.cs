@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 
 using IGDB;
-
+using IGDB.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -52,7 +52,7 @@ namespace Sample.Domain
                 httpClient,
                 new RefitSettings
                 {
-                    ContentSerializer = new JsonContentSerializer(JsonSerializationConfig),
+                    ContentSerializer = new NewtonsoftJsonContentSerializer(JsonSerializationConfig),
                 });
         }
 

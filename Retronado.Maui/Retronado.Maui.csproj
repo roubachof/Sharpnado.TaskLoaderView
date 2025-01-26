@@ -3,6 +3,8 @@
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks>-->
 		<OutputType>Exe</OutputType>
@@ -46,12 +48,6 @@
 		<MauiFont Include="Resources\Fonts\*" />
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="Properties\launchSettings.json">
-			<Generator>MSBuild:UpdateGeneratedFiles</Generator>
-		</EmbeddedResource>
 	</ItemGroup>
 	
 	<ItemGroup>
@@ -227,16 +223,17 @@
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.3" />
-		<PackageReference Include="IGDB" Version="2.0.1" />
-		<PackageReference Include="Refit" Version="5.2.1" />
+		<PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.1" />
+		<PackageReference Include="IGDB" Version="5.1.0" />
+		<PackageReference Include="Refit" Version="8.0.0" />
+		<PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
 		<PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.2" />
-		<PackageReference Include="SimpleInjector" Version="4.8.1" />
+		<PackageReference Include="SimpleInjector" Version="5.5.0" />
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="VocaDb.ResXFileCodeGenerator" Version="3.1.1">
+		<PackageReference Include="VocaDb.ResXFileCodeGenerator" Version="3.2.1">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -251,5 +248,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Resources\Localization" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls" Version="9.0.30" />
 	</ItemGroup>
 </Project>
