@@ -219,7 +219,7 @@ namespace Sample.Domain
                     httpClient,
                     new RefitSettings
                     {
-                        ContentSerializer = new JsonContentSerializer(JsonSerializationConfig),
+                        ContentSerializer = new NewtonsoftJsonContentSerializer(JsonSerializationConfig),
                     }));
         }
     }

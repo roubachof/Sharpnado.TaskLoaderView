@@ -37,6 +37,7 @@ namespace Sample
         {
             var container = DependencyContainer.Instance;
 
+            container.Options.EnableAutoVerification = false;
             container.RegisterSingleton(
                 () => new Lazy<NavigationPage>(() => (NavigationPage)Application.Current.MainPage));
 
@@ -60,7 +61,7 @@ namespace Sample
                 ProjectAssembly.ExportedTypes.Where(
                     type =>
                     type.Namespace.StartsWith("Sample.ViewModels")
-                    && !type.GetTypeInfo().IsAbstract && type.Name.EndsWith("Vm")))
+                    && !type.GetTypeInfo().IsAbstract && type.Name.EndsWith("ViewModel")))
             {
                 container.Register(viewModelType);
             }

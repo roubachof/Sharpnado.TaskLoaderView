@@ -10,13 +10,10 @@ public partial class App : Application
     public App()
     {
         InitializeComponent();
+    }
 
-        var entryPoint = new CoreEntryPoint();
-        entryPoint.RegisterDependencies();
-
-        TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
-
-        Initializer.Initialize(true, true);
-        MainPage = new NavigationPage(new MainPage());
+    protected override Window CreateWindow(IActivationState activationState)
+    {
+        return new Window(new NavigationPage(new MainPage()));
     }
 }

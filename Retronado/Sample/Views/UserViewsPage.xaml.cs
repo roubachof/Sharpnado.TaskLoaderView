@@ -15,7 +15,6 @@ using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 
 namespace Sample.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserViewsPage : ContentPage, IBindablePage
     {
         private CancellationTokenSource _animationTokenSource;

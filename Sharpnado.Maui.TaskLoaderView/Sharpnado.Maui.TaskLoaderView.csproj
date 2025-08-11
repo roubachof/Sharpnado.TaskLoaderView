@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseMaui>true</UseMaui>
@@ -10,9 +10,9 @@
     <RootNamespace>Sharpnado.TaskLoaderView</RootNamespace>
 
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <AssemblyVersion>2.5.1.0</AssemblyVersion>
-    <AssemblyFileVersion>2.5.1.0</AssemblyFileVersion>
-    <Version>2.5.1.0</Version>
+    <AssemblyVersion>2.6.0.0</AssemblyVersion>
+    <AssemblyFileVersion>2.6.0.0</AssemblyFileVersion>
+    <Version>2.6.0.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <UseFullSemVerForNuGet>false</UseFullSemVerForNuGet>
@@ -20,9 +20,9 @@
 
     <PackageProjectUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</PackageProjectUrl>
     <RepositoryUrl>https://github.com/roubachof/Sharpnado.TaskLoaderView</RepositoryUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/roubachof/Sharpnado.TaskLoaderView/master/Docs/maui_logo.png</PackageIconUrl>
+    <PackageIcon>maui_logo.png</PackageIcon>
     <PackageTags>maui, netmaui, xamarin, xamarin.forms, skeleton, loading, states, async, task, loader, isbusy, control, taskloader, taskloadernotifier</PackageTags>
-    <PackageReleaseNotes>Fixed timed visibility duration, introduced ForCommands building pattern for composite task notifier.</PackageReleaseNotes>
+    <PackageReleaseNotes>Upgrade to .Net 9</PackageReleaseNotes>
     <Title>Maui TaskLoaderView: free yourself from IsBusy=true!</Title>
     <Summary>Free yourself from IsBusy=true! The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.</Summary>
     <Description>Free yourself from IsBusy=true!
@@ -42,13 +42,14 @@
         * TaskLoaderNotifier for the ViewModel side taking care of all the error handling and the IsBusy nonsense</Description>
     <Owners>Jean-Marie Alfonsi</Owners>
     <Authors>Jean-Marie Alfonsi</Authors>
-    <Copyright>Copyright 2022 Sharpnado</Copyright>
+    <Copyright>Copyright 2025 Sharpnado</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -64,66 +65,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\Sharpnado.TaskLoaderView\AssemblyConfiguration.cs" Link="AssemblyConfiguration.cs" />
-    <Compile Include="..\Sharpnado.TaskLoaderView\ColorHelper.cs">
-      <Link>ColorHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\CompositeTaskLoaderNotifier.Builder.cs">
-      <Link>CompositeTaskLoaderNotifier.Builder.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\CompositeTaskLoaderNotifier.cs">
-      <Link>CompositeTaskLoaderNotifier.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\DefaultErrorMessageConverter.cs">
-      <Link>DefaultErrorMessageConverter.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\Initializer.cs">
-      <Link>Initializer.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\InternalLogger.cs">
-      <Link>InternalLogger.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\ITaskLoaderNotifier.cs">
-      <Link>ITaskLoaderNotifier.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\NotStartedTaskLoaderNotifier.cs">
-      <Link>NotStartedTaskLoaderNotifier.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\Snackbar.xaml.cs">
-      <Link>Snackbar.xaml.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderCommand.cs">
-      <Link>TaskLoaderCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderNotifier.cs">
-      <Link>TaskLoaderNotifier.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderNotifierBase.cs">
-      <Link>TaskLoaderNotifierBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderNotifier{T}.cs">
-      <Link>TaskLoaderNotifier{T}.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderView.Updates.cs">
-      <Link>TaskLoaderView.Updates.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TaskLoaderView.xaml.cs">
-      <Link>TaskLoaderView.xaml.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TemplatedTaskLoader.cs">
-      <Link>TemplatedTaskLoader.cs</Link>
-    </Compile>
-    <Compile Include="..\Sharpnado.TaskLoaderView\TimedVisibilityBehavior.cs">
-      <Link>TimedVisibilityBehavior.cs</Link>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.90" />
+    <PackageReference Include="Sharpnado.TaskMonitor" Version="1.1.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\Docs\maui_logo.png" Pack="true" PackagePath="\"/>
+    <None Include="..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
 </Project>

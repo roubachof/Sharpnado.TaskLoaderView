@@ -2,13 +2,13 @@
 <ContentPage x:Class="Sample.Views.CommandsPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Maui.Skeleton"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              xmlns:loc="clr-namespace:Sample.Localization"
              xmlns:converters="clr-namespace:Sample.Converters"
+             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Sharpnado.HorusSkeleton.Maui"
              ios:Page.UseSafeArea="true"
              BackgroundColor="{StaticResource TopElementBackground}"
              x:DataType="viewModels:CommandsPageViewModel"
@@ -44,11 +44,10 @@
                                            Aspect="AspectFill"
                                            Source="{Binding Loader.Result.ScreenshotUrl}" />
 
-                                    <Frame Grid.Row="0"
+                                    <Border Grid.Row="0"
                                            Padding="15,5,15,30"
                                            ZIndex="1"
                                            VerticalOptions="End"
-                                           CornerRadius="0"
                                            BackgroundColor="{StaticResource DarkOverlay}">
 
                                         <Grid Padding="0"
@@ -80,7 +79,7 @@
                                                    Source="{Binding Loader.Result.CoverUrl}" />
 
                                         </Grid>
-                                    </Frame>
+                                    </Border>
 
                                     <Label Grid.Row="1"
                                            Style="{StaticResource GameGenre}"

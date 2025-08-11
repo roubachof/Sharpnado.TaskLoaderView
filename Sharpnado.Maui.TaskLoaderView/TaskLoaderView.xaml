@@ -81,9 +81,8 @@
                            AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
                            Margin="15"
                            Padding="15"
+                           StrokeShape="RoundRectangle 8"
                            BackgroundColor="{x:Static nado:ColorHelper.MaterialNotificationColor}"
-                           CornerRadius="8"
-                           HasShadow="False"
                            IsVisible="False"
                            Text="Super pipo AHAHAHAHAHAHA" />
         </AbsoluteLayout>
