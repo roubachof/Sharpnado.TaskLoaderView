@@ -1,14 +1,13 @@
-using System;
+
 using System.ComponentModel;
 using System.Windows.Input;
 using Sharpnado.Tasks;
-using Xamarin.Forms;
 
 namespace Sharpnado.TaskLoaderView
 {
     public class NotStartedTaskLoaderNotifier : ITaskLoaderNotifier
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ICommand ResetCommand => DoNothingCommand;
 
@@ -38,7 +37,7 @@ namespace Sharpnado.TaskLoaderView
 
         public bool IsFaulted { get; }
 
-        public Exception Error { get; }
+        public Exception? Error { get; }
 
         public bool ShowLoader { get; }
 

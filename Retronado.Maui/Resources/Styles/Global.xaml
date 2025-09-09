@@ -4,9 +4,9 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:converters="clr-namespace:Sample.Converters"
-                    xmlns:views="clr-namespace:Sample.Views"
+                    xmlns:loc="clr-namespace:Sample.Localization"
                     xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
-                    xmlns:loc="clr-namespace:Sample.Localization">
+                    xmlns:views="clr-namespace:Sample.Views">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Colors.xaml" />
@@ -35,14 +35,13 @@
     </Style>
 
     <DataTemplate x:Key="GameDataTemplate">
-        <views:GameViewCell />
+        <views:GameViewItem />
     </DataTemplate>
 
     <converters:ExceptionToImageSourceConverter x:Key="ExceptionToImageSourceConverter" />
     <converters:ExceptionToErrorMessageConverter x:Key="ExceptionToErrorMessageConverter" />
     <converters:CyclicLoadingLottieConverter x:Key="CyclicLoadingLottieConverter" />
     <converters:ExceptionToLottieConverter x:Key="ExceptionToLottieConverter" />
-    <!-- <converters:StringToImageSourceResourceConverter x:Key="StringToImageSourceResourceConverter" /> -->
     <converters:ListCountToVisibilityConverter x:Key="ListCountToVisibilityConverter" />
 
     <Style TargetType="taskLoaderView:TaskLoaderView">

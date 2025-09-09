@@ -1,137 +1,135 @@
 ﻿using System.ComponentModel;
-using Xamarin.Forms;
 
-namespace Sharpnado.TaskLoaderView
+namespace Sharpnado.TaskLoaderView;
+
+public class TemplatedTaskLoader : ContentView
 {
-    public class TemplatedTaskLoader : ContentView
+    public static readonly BindableProperty TaskLoaderNotifierProperty = BindableProperty.Create(
+        nameof(TaskLoaderNotifier),
+        typeof(ITaskLoaderNotifier),
+        typeof(TaskLoaderView),
+        propertyChanged: TaskLoaderChanged);
+
+    public static readonly BindableProperty ResultControlTemplateProperty = BindableProperty.Create(
+        nameof(ResultControlTemplate),
+        typeof(ControlTemplate),
+        typeof(TemplatedTaskLoader));
+
+    public static readonly BindableProperty LoadingControlTemplateProperty = BindableProperty.Create(
+        nameof(LoadingControlTemplate),
+        typeof(ControlTemplate),
+        typeof(TemplatedTaskLoader));
+
+    public static readonly BindableProperty ErrorControlTemplateProperty = BindableProperty.Create(
+        nameof(ErrorControlTemplate),
+        typeof(ControlTemplate),
+        typeof(TemplatedTaskLoader));
+
+    public static readonly BindableProperty EmptyControlTemplateProperty = BindableProperty.Create(
+        nameof(EmptyControlTemplate),
+        typeof(ControlTemplate),
+        typeof(TemplatedTaskLoader));
+
+    public ITaskLoaderNotifier? TaskLoaderNotifier
     {
-        public static readonly BindableProperty TaskLoaderNotifierProperty = BindableProperty.Create(
-            nameof(TaskLoaderNotifier),
-            typeof(ITaskLoaderNotifier),
-            typeof(TaskLoaderView),
-            propertyChanged: TaskLoaderChanged);
+        get => (ITaskLoaderNotifier?)GetValue(TaskLoaderNotifierProperty);
+        set => SetValue(TaskLoaderNotifierProperty, value);
+    }
 
-        public static readonly BindableProperty ResultControlTemplateProperty = BindableProperty.Create(
-            nameof(ResultControlTemplate),
-            typeof(ControlTemplate),
-            typeof(TemplatedTaskLoader));
+    public ControlTemplate ResultControlTemplate
+    {
+        get => (ControlTemplate)GetValue(ResultControlTemplateProperty);
+        set => SetValue(ResultControlTemplateProperty, value);
+    }
 
-        public static readonly BindableProperty LoadingControlTemplateProperty = BindableProperty.Create(
-            nameof(LoadingControlTemplate),
-            typeof(ControlTemplate),
-            typeof(TemplatedTaskLoader));
+    public ControlTemplate? LoadingControlTemplate
+    {
+        get => (ControlTemplate?)GetValue(LoadingControlTemplateProperty);
+        set => SetValue(LoadingControlTemplateProperty, value);
+    }
 
-        public static readonly BindableProperty ErrorControlTemplateProperty = BindableProperty.Create(
-            nameof(ErrorControlTemplate),
-            typeof(ControlTemplate),
-            typeof(TemplatedTaskLoader));
+    public ControlTemplate? ErrorControlTemplate
+    {
+        get => (ControlTemplate?)GetValue(ErrorControlTemplateProperty);
+        set => SetValue(ErrorControlTemplateProperty, value);
+    }
 
-        public static readonly BindableProperty EmptyControlTemplateProperty = BindableProperty.Create(
-            nameof(EmptyControlTemplate),
-            typeof(ControlTemplate),
-            typeof(TemplatedTaskLoader));
+    public ControlTemplate? EmptyControlTemplate
+    {
+        get => (ControlTemplate?)GetValue(EmptyControlTemplateProperty);
+        set => SetValue(EmptyControlTemplateProperty, value);
+    }
 
-        public ITaskLoaderNotifier? TaskLoaderNotifier
+    private static void TaskLoaderChanged(BindableObject bindable, object oldValue, object newValue)
+    {
+        var taskLoader = (TemplatedTaskLoader)bindable;
+        taskLoader.SubscribeToNotifier(oldValue, newValue);
+        taskLoader.Initialize();
+    }
+
+    private void SubscribeToNotifier(object oldValue, object newValue)
+    {
+        if (oldValue is ITaskLoaderNotifier oldNotifier)
         {
-            get => (ITaskLoaderNotifier?)GetValue(TaskLoaderNotifierProperty);
-            set => SetValue(TaskLoaderNotifierProperty, value);
+            oldNotifier.PropertyChanged -= NotifierPropertyChanged;
         }
 
-        public ControlTemplate ResultControlTemplate
+        if (newValue is ITaskLoaderNotifier notifier)
         {
-            get => (ControlTemplate)GetValue(ResultControlTemplateProperty);
-            set => SetValue(ResultControlTemplateProperty, value);
+            notifier.PropertyChanged += NotifierPropertyChanged;
+        }
+    }
+
+    private void Initialize()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
         }
 
-        public ControlTemplate? LoadingControlTemplate
+        if (TaskLoaderNotifier.ShowResult)
         {
-            get => (ControlTemplate?)GetValue(LoadingControlTemplateProperty);
-            set => SetValue(LoadingControlTemplateProperty, value);
+            ControlTemplate = ResultControlTemplate;
+            return;
         }
 
-        public ControlTemplate? ErrorControlTemplate
+        if (TaskLoaderNotifier.ShowError)
         {
-            get => (ControlTemplate?)GetValue(ErrorControlTemplateProperty);
-            set => SetValue(ErrorControlTemplateProperty, value);
+            ControlTemplate = ErrorControlTemplate ?? ResultControlTemplate;
+            return;
         }
 
-        public ControlTemplate? EmptyControlTemplate
+        if (TaskLoaderNotifier.ShowEmptyState)
         {
-            get => (ControlTemplate?)GetValue(EmptyControlTemplateProperty);
-            set => SetValue(EmptyControlTemplateProperty, value);
+            ControlTemplate = EmptyControlTemplate ?? ResultControlTemplate;
+            return;
         }
 
-        private static void TaskLoaderChanged(BindableObject bindable, object oldValue, object newValue)
+        if (TaskLoaderNotifier.ShowLoader)
         {
-            var taskLoader = (TemplatedTaskLoader)bindable;
-            taskLoader.SubscribeToNotifier(oldValue, newValue);
-            taskLoader.Initialize();
+            ControlTemplate = LoadingControlTemplate ?? ResultControlTemplate;
         }
+    }
 
-        private void SubscribeToNotifier(object oldValue, object newValue)
+    private void NotifierPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
         {
-            if (oldValue is ITaskLoaderNotifier oldNotifier)
-            {
-                oldNotifier.PropertyChanged -= NotifierPropertyChanged;
-            }
-
-            if (newValue is ITaskLoaderNotifier notifier)
-            {
-                notifier.PropertyChanged += NotifierPropertyChanged;
-            }
-        }
-
-        private void Initialize()
-        {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
-
-            if (TaskLoaderNotifier.ShowResult)
-            {
+            case nameof(ITaskLoaderNotifier.ShowResult) when TaskLoaderNotifier!.ShowResult:
                 ControlTemplate = ResultControlTemplate;
-                return;
-            }
+                break;
 
-            if (TaskLoaderNotifier.ShowError)
-            {
-                ControlTemplate = ErrorControlTemplate ?? ResultControlTemplate;
-                return;
-            }
+            case nameof(ITaskLoaderNotifier.ShowError) when TaskLoaderNotifier!.ShowError:
+                ControlTemplate = ErrorControlTemplate;
+                break;
 
-            if (TaskLoaderNotifier.ShowEmptyState)
-            {
-                ControlTemplate = EmptyControlTemplate ?? ResultControlTemplate;
-                return;
-            }
+            case nameof(ITaskLoaderNotifier.ShowLoader) when TaskLoaderNotifier!.ShowLoader:
+                ControlTemplate = LoadingControlTemplate;
+                break;
 
-            if (TaskLoaderNotifier.ShowLoader)
-            {
-                ControlTemplate = LoadingControlTemplate ?? ResultControlTemplate;
-            }
-        }
-
-        private void NotifierPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case nameof(ITaskLoaderNotifier.ShowResult) when TaskLoaderNotifier!.ShowResult:
-                    ControlTemplate = ResultControlTemplate;
-                    break;
-
-                case nameof(ITaskLoaderNotifier.ShowError) when TaskLoaderNotifier!.ShowError:
-                    ControlTemplate = ErrorControlTemplate;
-                    break;
-
-                case nameof(ITaskLoaderNotifier.ShowLoader) when TaskLoaderNotifier!.ShowLoader:
-                    ControlTemplate = LoadingControlTemplate;
-                    break;
-
-                case nameof(ITaskLoaderNotifier.ShowEmptyState) when TaskLoaderNotifier!.ShowEmptyState:
-                    ControlTemplate = EmptyControlTemplate;
-                    break;
-            }
+            case nameof(ITaskLoaderNotifier.ShowEmptyState) when TaskLoaderNotifier!.ShowEmptyState:
+                ControlTemplate = EmptyControlTemplate;
+                break;
         }
     }
 }

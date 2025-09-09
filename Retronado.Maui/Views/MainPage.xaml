@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:lottie="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
              xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Sharpnado.HorusSkeleton.Maui"
              xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
@@ -13,17 +14,14 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style x:Key="ToolBarStyle" TargetType="Frame">
+            <Style x:Key="ToolBarStyle" TargetType="Border">
                 <Setter Property="Padding" Value="{StaticResource ThicknessLarge}" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TosWindows}" />
-                <Setter Property="HasShadow" Value="False" />
             </Style>
-            <Style x:Key="CardStyle" TargetType="Frame">
+            <Style x:Key="CardStyle" TargetType="Border">
                 <Setter Property="Margin" Value="15, 8, 15, 8" />
                 <Setter Property="Padding" Value="{StaticResource ThicknessLarge}" />
-                <Setter Property="CornerRadius" Value="10" />
-                <Setter Property="HasShadow" Value="False" />
-                <Setter Property="IsClippedToBounds" Value="True" />
+                <Setter Property="StrokeShape" Value="RoundRectangle 10" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TosWindows}" />
             </Style>
             <Style x:Key="CardTitle"
@@ -50,10 +48,9 @@
             <RowDefinition Height="215" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Frame x:Name="ToolBar"
-               Grid.Row="0"
-               Style="{StaticResource ToolBarStyle}"
-               CornerRadius="0">
+        <Border x:Name="ToolBar"
+                Grid.Row="0"
+                Style="{StaticResource ToolBarStyle}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="80" />
@@ -101,15 +98,15 @@
                          Margin="-15,13,-15,-15"
                          Color="Black" />
             </Grid>
-        </Frame>
+        </Border>
         <ScrollView x:Name="ScrollView" Grid.Row="1">
             <StackLayout Orientation="Vertical">
                 <Grid>
-                    <Frame Style="{StaticResource CardStyle}"
-                           Margin="15,15,15,8"
-                           BackgroundColor="Black"
-                           TranslationY="2" />
-                    <Frame Style="{StaticResource CardStyle}" Margin="15,15,15,8">
+                    <Border Style="{StaticResource CardStyle}"
+                            Margin="15,15,15,8"
+                            BackgroundColor="Black"
+                            TranslationY="2" />
+                    <Border Style="{StaticResource CardStyle}" Margin="15,15,15,8">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -157,13 +154,13 @@
                                     Style="{StaticResource ButtonTextIt}"
                                     Clicked="ButtonDefaultLayoutOnClicked" />
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
                 <Grid>
-                    <Frame Style="{StaticResource CardStyle}"
-                           BackgroundColor="Black"
-                           TranslationY="2" />
-                    <Frame Style="{StaticResource CardStyle}">
+                    <Border Style="{StaticResource CardStyle}"
+                            BackgroundColor="Black"
+                            TranslationY="2" />
+                    <Border Style="{StaticResource CardStyle}">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -211,13 +208,13 @@
                                     Style="{StaticResource ButtonTextIt}"
                                     Clicked="ButtonCustomLayoutOnClicked" />
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
                 <Grid>
-                    <Frame Style="{StaticResource CardStyle}"
-                           BackgroundColor="Black"
-                           TranslationY="2" />
-                    <Frame Style="{StaticResource CardStyle}">
+                    <Border Style="{StaticResource CardStyle}"
+                            BackgroundColor="Black"
+                            TranslationY="2" />
+                    <Border Style="{StaticResource CardStyle}">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -265,14 +262,14 @@
                                     Style="{StaticResource ButtonTextIt}"
                                     Clicked="SkeletonLoadingOnClicked" />
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
                 <Grid>
-                    <Frame Style="{StaticResource CardStyle}"
-                           Margin="15,15,15,8"
-                           BackgroundColor="Black"
-                           TranslationY="2" />
-                    <Frame Style="{StaticResource CardStyle}" Margin="15,15,15,8">
+                    <Border Style="{StaticResource CardStyle}"
+                            Margin="15,15,15,8"
+                            BackgroundColor="Black"
+                            TranslationY="2" />
+                    <Border Style="{StaticResource CardStyle}" Margin="15,15,15,8">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -306,52 +303,28 @@
                                      Margin="-15,-10,-15,10"
                                      Color="{StaticResource LightGreyBackground}" />
 
-                            <Frame x:Name="animationView"
-                                   Grid.Row="2"
-                                   Grid.Column="0"
-                                   Grid.ColumnSpan="2"
-                                   Margin="-15,-10,-15,10"
-                                   HorizontalOptions="FillAndExpand"
-                                   VerticalOptions="FillAndExpand">
-                                <Image WidthRequest="60"
-                                       HeightRequest="60"
-                                       HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       Source="richmond.png" />
-                            </Frame>
+                            <lottie:SKLottieView Grid.Row="2"
+                                                 Grid.Column="0"
+                                                 Grid.ColumnSpan="2"
+                                                 Margin="-15,-10,-15,10"
+                                                 HorizontalOptions="FillAndExpand"
+                                                 VerticalOptions="FillAndExpand"
+                                                 RepeatCount="-1"
+                                                 RepeatMode="Reverse"
+                                                 Source="lottie_grey.json" />
 
-
-                            <!--  <lottie:AnimationView x:Name="animationView"  -->
-                            <!--  Grid.Row="2"  -->
-                            <!--  Grid.Column="0"  -->
-                            <!--  Grid.ColumnSpan="2"  -->
-                            <!--  Margin="-15,-10,-15,10"  -->
-                            <!--  HorizontalOptions="FillAndExpand"  -->
-                            <!--  VerticalOptions="FillAndExpand"  -->
-                            <!--  Animation="lottie_grey.json"  -->
-                            <!--  AutoPlay="True"  -->
-                            <!--  IsAnimating="True"  -->
-                            <!--  RepeatMode="Infinite" />  -->
-
-                            <Label Grid.Row="3"
-                                   Grid.Column="0"
-                                   Grid.ColumnSpan="2"
-                                   Style="{StaticResource TextBody}"
-                                   FontFamily="FontAtariSt"
-                                   Text="Unfortunately, Lottie has not been ported to MAUI yet..." />
-
-                            <!--  <Button Grid.Row="3"  -->
-                            <!--  Grid.Column="1"  -->
-                            <!--  Style="{StaticResource ButtonTextIt}"  -->
-                            <!--  Clicked="ButtonLottieLayoutOnClicked" />  -->
+                            <Button Grid.Row="3"
+                                    Grid.Column="1"
+                                    Style="{StaticResource ButtonTextIt}"
+                                    Clicked="ButtonLottieLayoutOnClicked" />
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
                 <Grid>
-                    <Frame Style="{StaticResource CardStyle}"
-                           BackgroundColor="Black"
-                           TranslationY="2" />
-                    <Frame Style="{StaticResource CardStyle}">
+                    <Border Style="{StaticResource CardStyle}"
+                            BackgroundColor="Black"
+                            TranslationY="2" />
+                    <Border Style="{StaticResource CardStyle}">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -399,15 +372,15 @@
                                     Style="{StaticResource ButtonTextIt}"
                                     Clicked="CommandsOnClicked" />
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
                 <Grid>
-                    <Frame Style="{StaticResource CardStyle}"
-                           BackgroundColor="Black"
-                           TranslationY="2" />
-                    <Frame x:Name="LoadOnDemandCard"
-                           Style="{StaticResource CardStyle}"
-                           x:DataType="viewModels:LoadOnDemandViewModel">
+                    <Border Style="{StaticResource CardStyle}"
+                            BackgroundColor="Black"
+                            TranslationY="2" />
+                    <Border x:Name="LoadOnDemandCard"
+                            Style="{StaticResource CardStyle}"
+                            x:DataType="viewModels:LoadOnDemandViewModel">
                         <Grid RowSpacing="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
@@ -457,16 +430,14 @@
                                 </taskLoaderView:TaskLoaderView.NotStartedView>
 
                                 <ContentView BindingContext="{Binding RandomGameLoaderCommand.Notifier}" CompressedLayout.IsHeadless="True">
-                                    <Frame Style="{StaticResource CardStyle}"
-                                           Margin="-15,0,-15,-15"
-                                           Padding="0"
-                                           skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
-                                           skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
-                                           skeleton:Skeleton.IsParent="True"
-                                           x:DataType="{x:Null}"
-                                           BackgroundColor="{DynamicResource CellBackgroundColor}"
-                                           CornerRadius="10"
-                                           IsClippedToBounds="True">
+                                    <Border Style="{StaticResource CardStyle}"
+                                            Margin="-15,0,-15,-15"
+                                            Padding="0"
+                                            skeleton:Skeleton.Animation="{skeleton:DefaultAnimation Fade}"
+                                            skeleton:Skeleton.IsBusy="{Binding ShowLoader}"
+                                            skeleton:Skeleton.IsParent="True"
+                                            x:DataType="{x:Null}"
+                                            BackgroundColor="{DynamicResource CellBackgroundColor}">
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="180" />
@@ -499,12 +470,12 @@
                                                    Margin="15,0"
                                                    Text="{Binding Result.MajorGenre}" />
                                         </Grid>
-                                    </Frame>
+                                    </Border>
                                 </ContentView>
                             </taskLoaderView:TaskLoaderView>
 
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
             </StackLayout>
         </ScrollView>

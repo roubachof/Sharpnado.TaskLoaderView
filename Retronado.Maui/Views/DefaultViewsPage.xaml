@@ -46,18 +46,17 @@
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />
 
-            <Frame Grid.Row="2"
-                   Margin="15,15,15,8"
-                   Padding="0"
-                   BackgroundColor="{StaticResource TopElementBackground}"
-                   CornerRadius="5"
-                   IsClippedToBounds="True">
+            <Border Grid.Row="2"
+                    Margin="15,15,15,8"
+                    Padding="0"
+                    BackgroundColor="{StaticResource TopElementBackground}"
+                    StrokeShape="RoundRectangle 5">
                 <views:ErrorEmulatorView AccentColor="{StaticResource TextWhitePrimaryColor}"
                                          BindingContext="{Binding ErrorEmulatorViewModel}"
                                          LabelColor="{StaticResource TextWhitePrimaryColor}"
                                          LabelFontFamily="FontArcadeClassic"
                                          ValueFontFamily="FontAtariSt" />
-            </Frame>
+            </Border>
 
             <taskLoaderView:TaskLoaderView Grid.Row="3"
                                            Style="{StaticResource TaskLoaderStyle}"
@@ -65,14 +64,12 @@
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
                              RefreshColor="{StaticResource AccentColor}">
-                    <ListView BackgroundColor="Transparent"
-                              CachingStrategy="RecycleElementAndDataTemplate"
-                              Header=""
-                              ItemTemplate="{StaticResource GameDataTemplate}"
-                              ItemsSource="{Binding Loader.Result}"
-                              RowHeight="140"
-                              SelectionMode="None"
-                              SeparatorVisibility="None" />
+                    <CollectionView BackgroundColor="Transparent"
+                                    Header=""
+                                    ItemSizingStrategy="MeasureFirstItem"
+                                    ItemTemplate="{StaticResource GameDataTemplate}"
+                                    ItemsSource="{Binding Loader.Result}"
+                                    SelectionMode="None" />
                 </RefreshView>
             </taskLoaderView:TaskLoaderView>
         </Grid>

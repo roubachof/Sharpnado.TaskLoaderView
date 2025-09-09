@@ -4,12 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
-             xmlns:taskLoaderView="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              ios:Page.UseSafeArea="true"
-             BackgroundColor="{StaticResource TosBackground}"
              x:DataType="viewModels:RetroGamesViewModel"
+             BackgroundColor="{StaticResource TosBackground}"
              NavigationPage.HasNavigationBar="false">
 
     <ContentPage.Resources>
@@ -59,9 +59,9 @@
             <BoxView Grid.Row="2" BackgroundColor="Black" />
 
             <taskLoaderView:TaskLoaderView x:Name="TaskLoaderView"
-                                      Grid.Row="3"
-                                      Style="{StaticResource TaskLoaderStyle}"
-                                      TaskLoaderNotifier="{Binding Loader}">
+                                           Grid.Row="3"
+                                           Style="{StaticResource TaskLoaderStyle}"
+                                           TaskLoaderNotifier="{Binding Loader}">
 
                 <taskLoaderView:TaskLoaderView.LoadingView>
                     <Image x:Name="BusyImage"
@@ -72,36 +72,34 @@
                 </taskLoaderView:TaskLoaderView.LoadingView>
 
                 <taskLoaderView:TaskLoaderView.ErrorView>
-                    <DataTemplate>
-                        <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
-                              AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
-                              Padding="15,0,0,0"
-                              BackgroundColor="White">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="60" />
-                                <RowDefinition Height="30" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Image Grid.Row="0"
-                                   Grid.Column="0"
-                                   Style="{StaticResource ErrorBombStyle}" />
-                            <Image Grid.Row="0"
-                                   Grid.Column="1"
-                                   Style="{StaticResource ErrorBombStyle}" />
-                            <Image Grid.Row="0"
-                                   Grid.Column="2"
-                                   Style="{StaticResource ErrorBombStyle}" />
-                            <Label Grid.Row="1"
-                                   Grid.Column="0"
-                                   Grid.ColumnSpan="3"
-                                   Style="{StaticResource TextBody}"
-                                   Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
-                        </Grid>
-                    </DataTemplate>
+                    <Grid AbsoluteLayout.LayoutFlags="PositionProportional"
+                          AbsoluteLayout.LayoutBounds="0, 0.5, 150, 90"
+                          Padding="15,0,0,0"
+                          BackgroundColor="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60" />
+                            <RowDefinition Height="30" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Row="0"
+                               Grid.Column="0"
+                               Style="{StaticResource ErrorBombStyle}" />
+                        <Image Grid.Row="0"
+                               Grid.Column="1"
+                               Style="{StaticResource ErrorBombStyle}" />
+                        <Image Grid.Row="0"
+                               Grid.Column="2"
+                               Style="{StaticResource ErrorBombStyle}" />
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"
+                               Style="{StaticResource TextBody}"
+                               Text="{Binding Loader.Error, Converter={StaticResource ExceptionToErrorMessageConverter}}" />
+                    </Grid>
                 </taskLoaderView:TaskLoaderView.ErrorView>
 
                 <taskLoaderView:TaskLoaderView.ErrorNotificationView>
@@ -124,14 +122,12 @@
                 <RefreshView Command="{Binding Loader.RefreshCommand}"
                              IsRefreshing="{Binding Loader.ShowRefresher}"
                              RefreshColor="{StaticResource AccentColor}">
-                    <ListView BackgroundColor="Transparent"
-                              CachingStrategy="RecycleElementAndDataTemplate"
-                              Header=""
-                              ItemTemplate="{StaticResource GameDataTemplate}"
-                              ItemsSource="{Binding Loader.Result}"
-                              RowHeight="140"
-                              SelectionMode="None"
-                              SeparatorVisibility="None" />
+                    <CollectionView BackgroundColor="Transparent"
+                                    Header=""
+                                    ItemSizingStrategy="MeasureFirstItem"
+                                    ItemTemplate="{StaticResource GameDataTemplate}"
+                                    ItemsSource="{Binding Loader.Result}"
+                                    SelectionMode="None" />
                 </RefreshView>
             </taskLoaderView:TaskLoaderView>
 

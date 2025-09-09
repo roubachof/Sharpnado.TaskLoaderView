@@ -1,6 +1,7 @@
 ﻿using Sample;
 using Sharpnado.TaskLoaderView;
 using Sharpnado.Tasks;
+﻿using SkiaSharp.Views.Maui.Controls.Hosting;
 
 namespace Retronado.Maui;
 
@@ -12,6 +13,7 @@ public static class MauiProgram
         builder
             .UseMauiApp<App>()
             .ConfigureTaskLoader(true)
+            .UseSkiaSharp()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("Font-Awesome-5-Free-Solid-900.otf", "FontAwesome");

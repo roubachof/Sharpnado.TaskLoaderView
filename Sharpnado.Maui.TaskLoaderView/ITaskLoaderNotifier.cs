@@ -27,7 +27,7 @@ namespace Sharpnado.TaskLoaderView
 
         bool IsFaulted { get; }
 
-        Exception Error { get; }
+        Exception? Error { get; }
 
         bool ShowLoader { get; }
 
@@ -41,7 +41,7 @@ namespace Sharpnado.TaskLoaderView
 
         bool ShowErrorNotification { get; }
 
-        ITaskMonitor CurrentLoadingTask { get; }
+        ITaskMonitor? CurrentLoadingTask { get; }
 
         bool DisableEmptyState { get; }
 

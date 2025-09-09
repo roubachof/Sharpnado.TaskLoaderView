@@ -61,18 +61,17 @@
                                      BackgroundColor="{StaticResource TopElementBackground}"
                                      Theme="Standard" />
 
-            <Frame Grid.Row="2"
-                   Margin="15,15,15,8"
-                   Padding="0"
-                   BackgroundColor="{StaticResource TopElementBackground}"
-                   CornerRadius="5"
-                   IsClippedToBounds="True">
+            <Border Grid.Row="2"
+                    Margin="15,15,15,8"
+                    Padding="0"
+                    BackgroundColor="{StaticResource TopElementBackground}"
+                    StrokeShape="RoundRectangle 5">
                 <views:ErrorEmulatorView AccentColor="{StaticResource TextWhitePrimaryColor}"
                                          BindingContext="{Binding ErrorEmulatorViewModel}"
                                          LabelColor="{StaticResource TextWhitePrimaryColor}"
                                          LabelFontFamily="FontArcadeClassic"
                                          ValueFontFamily="FontAtariSt" />
-            </Frame>
+            </Border>
 
             <AbsoluteLayout Grid.Row="3">
 
@@ -83,14 +82,12 @@
                              IsRefreshing="{Binding IsRefreshing}"
                              IsVisible="{Binding Games, Converter={StaticResource ListCountToVisibilityConverter}}"
                              RefreshColor="{StaticResource AccentColor}">
-                    <ListView BackgroundColor="Transparent"
-                              CachingStrategy="RecycleElementAndDataTemplate"
-                              Header=""
-                              ItemTemplate="{StaticResource GameDataTemplate}"
-                              ItemsSource="{Binding Games}"
-                              RowHeight="140"
-                              SelectionMode="None"
-                              SeparatorVisibility="None" />
+                    <CollectionView BackgroundColor="Transparent"
+                                    Header=""
+                                    ItemSizingStrategy="MeasureFirstItem"
+                                    ItemTemplate="{StaticResource GameDataTemplate}"
+                                    ItemsSource="{Binding Games}"
+                                    SelectionMode="None" />
                 </RefreshView>
 
                 <ActivityIndicator x:Name="LoadingView"
@@ -124,18 +121,18 @@
                             Text="Retry" />
                 </StackLayout>
 
-                <Frame AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
-                       AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
-                       Style="{StaticResource ViewSnackbar}"
-                       Margin="15"
-                       Padding="15"
-                       CornerRadius="5"
-                       IsVisible="{Binding HasRefreshError}">
-                    <Frame.Behaviors>
+                <Border AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"
+                        AbsoluteLayout.LayoutBounds="0, 1, 1, AutoSize"
+                        Style="{StaticResource ViewSnackbar}"
+                        Margin="15"
+                        Padding="15"
+                        IsVisible="{Binding HasRefreshError}"
+                        StrokeShape="RoundRectangle 5">
+                    <Border.Behaviors>
                         <taskLoaderView:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
-                    </Frame.Behaviors>
+                    </Border.Behaviors>
                     <Label Style="{StaticResource TextSnackbar}" Text="{Binding ErrorMessage}" />
-                </Frame>
+                </Border>
 
             </AbsoluteLayout>
         </Grid>

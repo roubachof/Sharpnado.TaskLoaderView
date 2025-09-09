@@ -2,16 +2,16 @@
 <ContentPage x:Class="Sample.Views.CommandsPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Sample.Converters"
+             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+             xmlns:loc="clr-namespace:Sample.Localization"
+             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Sharpnado.HorusSkeleton.Maui"
+             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
              xmlns:viewModels="clr-namespace:Sample.ViewModels"
              xmlns:views="clr-namespace:Sample.Views"
-             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
-             xmlns:loc="clr-namespace:Sample.Localization"
-             xmlns:converters="clr-namespace:Sample.Converters"
-             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Sharpnado.HorusSkeleton.Maui"
              ios:Page.UseSafeArea="true"
-             BackgroundColor="{StaticResource TopElementBackground}"
              x:DataType="viewModels:CommandsPageViewModel"
+             BackgroundColor="{StaticResource TopElementBackground}"
              NavigationPage.HasNavigationBar="false">
 
     <ContentPage.Content>
@@ -27,17 +27,16 @@
                                      Theme="Standard" />
 
             <RefreshView Grid.Row="1"
+                         Command="{Binding Loader.RefreshCommand}"
                          IsRefreshing="{Binding Loader.ShowRefresher}"
-                         RefreshColor="{StaticResource AccentColor}"
-                         Command="{Binding Loader.RefreshCommand}">
-                <ScrollView Grid.Row="1" >
-                    <tlv:TemplatedTaskLoader  TaskLoaderNotifier="{Binding Loader}">
+                         RefreshColor="{StaticResource AccentColor}">
+                <ScrollView Grid.Row="1">
+                    <tlv:TemplatedTaskLoader TaskLoaderNotifier="{Binding Loader}">
                         <tlv:TemplatedTaskLoader.ResultControlTemplate>
                             <ControlTemplate>
-                                <Grid RowDefinitions="300,*"
-                                      x:DataType="viewModels:CommandsPageViewModel"
-                                      BindingContext="{Binding Source={RelativeSource
-                                            AncestorType={x:Type viewModels:CommandsPageViewModel}}}">
+                                <Grid x:DataType="viewModels:CommandsPageViewModel"
+                                      BindingContext="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CommandsPageViewModel}}}"
+                                      RowDefinitions="300,*">
                                     <Image Grid.Row="0"
                                            skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
                                            skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
@@ -45,10 +44,10 @@
                                            Source="{Binding Loader.Result.ScreenshotUrl}" />
 
                                     <Border Grid.Row="0"
-                                           Padding="15,5,15,30"
-                                           ZIndex="1"
-                                           VerticalOptions="End"
-                                           BackgroundColor="{StaticResource DarkOverlay}">
+                                            Padding="15,5,15,30"
+                                            VerticalOptions="End"
+                                            BackgroundColor="{StaticResource DarkOverlay}"
+                                            ZIndex="1">
 
                                         <Grid Padding="0"
                                               ColumnDefinitions="*,60"
@@ -96,9 +95,9 @@
                                             BackgroundColor="{StaticResource AccentColor}"
                                             Command="{Binding BuyGameCommand}"
                                             FontFamily="FontAtariSt"
-                                            ZIndex="10"
                                             Text="BUY IT"
-                                            TextColor="{StaticResource TopElementBackground}" />
+                                            TextColor="{StaticResource TopElementBackground}"
+                                            ZIndex="10" />
 
                                     <Button Grid.Row="1"
                                             HeightRequest="40"
@@ -109,9 +108,9 @@
                                             BackgroundColor="{StaticResource AccentColor}"
                                             Command="{Binding PlayTheGameCommand}"
                                             FontFamily="FontAtariSt"
-                                            ZIndex="10"
                                             Text="PLAY IT"
-                                            TextColor="{StaticResource TopElementBackground}" />
+                                            TextColor="{StaticResource TopElementBackground}"
+                                            ZIndex="10" />
 
                                 </Grid>
                             </ControlTemplate>
@@ -119,10 +118,10 @@
 
                         <tlv:TemplatedTaskLoader.LoadingControlTemplate>
                             <ControlTemplate>
-                                <ActivityIndicator Color="{StaticResource AccentColor}"
+                                <ActivityIndicator HorizontalOptions="Center"
+                                                   VerticalOptions="Center"
                                                    IsRunning="True"
-                                                   HorizontalOptions="Center"
-                                                   VerticalOptions="Center" />
+                                                   Color="{StaticResource AccentColor}" />
                             </ControlTemplate>
                         </tlv:TemplatedTaskLoader.LoadingControlTemplate>
 
@@ -130,44 +129,39 @@
                             <ControlTemplate x:DataType="{x:Null}">
                                 <StackLayout HorizontalOptions="Center"
                                              VerticalOptions="Center"
-                                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TemplatedTaskLoader}},
-                                          Path=TaskLoaderNotifier}"
+                                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TemplatedTaskLoader}}, Path=TaskLoaderNotifier}"
                                              Orientation="Vertical"
                                              Spacing="10">
-                                    <Frame CornerRadius="50"
-                                           HorizontalOptions="Center"
-                                           VerticalOptions="Center"
-                                           BackgroundColor="Transparent"
-                                           HasShadow="False"
-                                           IsClippedToBounds="True"
-                                           WidthRequest="100"
-                                           Padding="0"
-                                           HeightRequest="100"
-                                           Margin="0,0,0,10">
-                                        <Image HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               WidthRequest="100"
+                                    <Border WidthRequest="100"
+                                            HeightRequest="100"
+                                            Margin="0,0,0,10"
+                                            Padding="0"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            BackgroundColor="Transparent"
+                                            StrokeShape="RoundRectangle 50">
+                                        <Image WidthRequest="100"
                                                HeightRequest="100"
-                                               Source="{Binding Error,
-                                    Converter={converters:ExceptionToImageSourceConverter}}" />
-                                    </Frame>
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Source="{Binding Error, Converter={converters:ExceptionToImageSourceConverter}}" />
+                                    </Border>
                                     <Label Style="{StaticResource TextBodySecondary}"
                                            WidthRequest="300"
                                            Margin="0,0,0,20"
                                            HorizontalTextAlignment="Center"
                                            LineBreakMode="WordWrap"
                                            MaxLines="2"
-                                           Text="{Binding Error,
-                              Converter={converters:ExceptionToErrorMessageConverter}}" />
+                                           Text="{Binding Error, Converter={converters:ExceptionToErrorMessageConverter}}" />
 
-                                    <Button BackgroundColor="{StaticResource AccentColor}"
-                                            CornerRadius="10"
-                                            Padding="10"
+                                    <Button Padding="10"
                                             HorizontalOptions="Center"
                                             VerticalOptions="End"
+                                            BackgroundColor="{StaticResource AccentColor}"
                                             Command="{Binding ReloadCommand}"
-                                            TextColor="Black"
-                                            Text="{x:Static loc:SampleResources.ErrorButton_Retry}" />
+                                            CornerRadius="10"
+                                            Text="{x:Static loc:SampleResources.ErrorButton_Retry}"
+                                            TextColor="Black" />
                                 </StackLayout>
                             </ControlTemplate>
                         </tlv:TemplatedTaskLoader.ErrorControlTemplate>
@@ -192,7 +186,7 @@
                     <Image x:Name="BusyImage"
                            Margin="15,30,15,0"
                            Aspect="AspectFit"
-                           Source="busy_bee_white_bg.png"  />
+                           Source="busy_bee_white_bg.png" />
                     <Label Grid.Row="1"
                            Style="{StaticResource TextBody}"
                            Margin="{StaticResource ThicknessLarge}"

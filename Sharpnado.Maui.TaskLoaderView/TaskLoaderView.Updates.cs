@@ -1,583 +1,605 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
-#if NET6_0_OR_GREATER
 using Microsoft.Maui.Layouts;
-#endif
 
-using Sharpnado.TaskLoaderView;
-using Xamarin.Forms;
+namespace Sharpnado.TaskLoaderView;
 
-// XF min version 3.6.0.220655
-namespace Sharpnado.TaskLoaderView
+public partial class TaskLoaderView : ContentView
 {
-    public partial class TaskLoaderView : ContentView
+    private const string Tag = "LoaderView";
+
+    protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
     {
-        private const string Tag = "LoaderView";
+        base.OnPropertyChanged(propertyName);
 
-        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        switch (propertyName)
         {
-            base.OnPropertyChanged(propertyName);
+            case nameof(TaskSource):
+                CreateFromTaskSource();
+                break;
 
-            switch (propertyName)
-            {
-                case nameof(TaskSource):
-                    CreateFromTaskSource();
-                    break;
+            case nameof(TaskLoaderNotifier):
+                SetBindings();
+                break;
 
-                case nameof(TaskLoaderNotifier):
-                    SetBindings();
-                    break;
+            case nameof(TaskStartMode):
+                OnTaskStartModeSet();
+                break;
 
-                case nameof(TaskStartMode):
-                    OnTaskStartModeSet();
-                    break;
+            case nameof(TaskLoaderType):
+                OnTaskLoaderTypeSet();
+                break;
 
-                case nameof(TaskLoaderType):
-                    OnTaskLoaderTypeSet();
-                    break;
+            case nameof(ResultView):
+                UpdateResultView();
+                break;
 
-                case nameof(ResultView):
-                    UpdateResultView();
-                    break;
+            case nameof(LoadingView):
+                UpdateLoadingView();
+                break;
 
-                case nameof(LoadingView):
-                    UpdateLoadingView();
-                    break;
+            case nameof(ErrorView):
+                UpdateErrorView();
+                break;
 
-                case nameof(ErrorView):
-                    UpdateErrorView();
-                    break;
+            case nameof(EmptyView):
+                UpdateEmptyView();
+                break;
 
-                case nameof(EmptyView):
-                    UpdateEmptyView();
-                    break;
+            case nameof(NotStartedView):
+                UpdateNotStartedView();
+                break;
 
-                case nameof(NotStartedView):
-                    UpdateNotStartedView();
-                    break;
+            case nameof(ErrorNotificationView):
+                UpdateErrorNotificationView();
+                break;
 
-                case nameof(ErrorNotificationView):
-                    UpdateErrorNotificationView();
-                    break;
+            case nameof(EmptyStateImageSource):
+                UpdateEmptyStateImageSource();
+                break;
 
-                case nameof(EmptyStateImageSource):
-                    UpdateEmptyStateImageSource();
-                    break;
+            case nameof(EmptyStateMessage):
+                UpdateEmptyStateMessage();
+                break;
 
-                case nameof(EmptyStateMessage):
-                    UpdateEmptyStateMessage();
-                    break;
+            case nameof(AccentColor):
+                UpdateAccentColor();
+                break;
 
-                case nameof(AccentColor):
-                    UpdateAccentColor();
-                    break;
+            case nameof(TextColor):
+                UpdateTextColor();
+                break;
 
-                case nameof(TextColor):
-                    UpdateTextColor();
-                    break;
+            case nameof(FontFamily):
+                UpdateFontFamily();
+                break;
 
-                case nameof(FontFamily):
-                    UpdateFontFamily();
-                    break;
+            case nameof(RetryButtonText):
+                UpdateRetryButtonText();
+                break;
 
-                case nameof(RetryButtonText):
-                    UpdateRetryButtonText();
-                    break;
+            case nameof(NotificationBackgroundColor):
+                UpdateNotificationBackgroundColor();
+                break;
 
-                case nameof(NotificationBackgroundColor):
-                    UpdateNotificationBackgroundColor();
-                    break;
+            case nameof(NotificationTextColor):
+                UpdateNotificationTextColor();
+                break;
+        }
+    }
 
-                case nameof(NotificationTextColor):
-                    UpdateNotificationTextColor();
-                    break;
-            }
+    private void Initialize()
+    {
+        CreateFromTaskSource();
+        SetBindings();
+
+        OnTaskStartModeSet();
+        OnTaskLoaderTypeSet();
+        UpdateResultView();
+        UpdateLoadingView();
+        UpdateErrorView();
+        UpdateEmptyView();
+        UpdateNotStartedView();
+        UpdateErrorNotificationView();
+        UpdateEmptyStateImageSource();
+        UpdateEmptyStateMessage();
+        UpdateAccentColor();
+        UpdateTextColor();
+        UpdateFontFamily();
+        UpdateRetryButtonText();
+        UpdateNotificationBackgroundColor();
+        UpdateNotificationTextColor();
+    }
+
+    private void OnTaskStartModeSet()
+    {
+        if (TaskStartMode == TaskStartMode.Manual)
+        {
+            return;
         }
 
-        private void Initialize()
-        {
-            CreateFromTaskSource();
-            SetBindings();
+        TaskLoaderNotifier?.Load();
+    }
 
-            OnTaskStartModeSet();
-            OnTaskLoaderTypeSet();
-            UpdateResultView();
-            UpdateLoadingView();
-            UpdateErrorView();
-            UpdateEmptyView();
-            UpdateNotStartedView();
-            UpdateErrorNotificationView();
-            UpdateEmptyStateImageSource();
-            UpdateEmptyStateMessage();
-            UpdateAccentColor();
-            UpdateTextColor();
-            UpdateFontFamily();
-            UpdateRetryButtonText();
-            UpdateNotificationBackgroundColor();
-            UpdateNotificationTextColor();
+    private void OnTaskLoaderTypeSet()
+    {
+        if (DefaultLoader == null)
+        {
+            return;
         }
 
-        private void OnTaskStartModeSet()
+        if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
         {
-            if (TaskStartMode == TaskStartMode.Manual)
-            {
-                return;
-            }
+            BindResultView();
+        }
+    }
 
-            TaskLoaderNotifier?.Load();
+    private void UpdateAccentColor()
+    {
+        if (DefaultLoader == null)
+        {
+            return;
         }
 
-        private void OnTaskLoaderTypeSet()
-        {
-            if (DefaultLoader == null)
-            {
-                return;
-            }
+        DefaultLoader.Color = AccentColor;
+        ErrorViewButton.BackgroundColor = AccentColor;
+        ErrorViewButton.TextColor = ColorHelper.GetTextColorFromBackground(AccentColor);
+    }
 
-            if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
-            {
-                BindResultView();
-            }
+    private void UpdateTextColor()
+    {
+        if (ErrorViewLabel == null)
+        {
+            return;
         }
 
-        private void UpdateAccentColor()
-        {
-            if (DefaultLoader == null)
-            {
-                return;
-            }
+        ErrorViewLabel.TextColor = TextColor;
+        EmptyStateLabel.TextColor = TextColor;
+    }
 
-            DefaultLoader.Color = AccentColor;
-            ErrorViewButton.BackgroundColor = AccentColor;
-            ErrorViewButton.TextColor = ColorHelper.GetTextColorFromBackground(AccentColor);
+    private void UpdateFontFamily()
+    {
+        if (ErrorViewLabel == null)
+        {
+            return;
         }
 
-        private void UpdateTextColor()
-        {
-            if (ErrorViewLabel == null)
-            {
-                return;
-            }
+        DefaultErrorNotificationView.FontFamily = FontFamily;
+        ErrorViewLabel.FontFamily = FontFamily;
+        EmptyStateLabel.FontFamily = FontFamily;
+    }
 
-            ErrorViewLabel.TextColor = TextColor;
-            EmptyStateLabel.TextColor = TextColor;
+    private void UpdateRetryButtonText()
+    {
+        if (ErrorViewButton == null)
+        {
+            return;
         }
 
-        private void UpdateFontFamily()
-        {
-            if (ErrorViewLabel == null)
-            {
-                return;
-            }
+        ErrorViewButton.Text = RetryButtonText;
+    }
 
-            DefaultErrorNotificationView.FontFamily = FontFamily;
-            ErrorViewLabel.FontFamily = FontFamily;
-            EmptyStateLabel.FontFamily = FontFamily;
+    private void UpdateEmptyStateImageSource()
+    {
+        if (EmptyStateImage == null)
+        {
+            return;
         }
 
-        private void UpdateRetryButtonText()
-        {
-            if (ErrorViewButton == null)
-            {
-                return;
-            }
+        EmptyStateImage.Source = EmptyStateImageSource;
+    }
 
-            ErrorViewButton.Text = RetryButtonText;
+    private void UpdateEmptyStateMessage()
+    {
+        if (EmptyStateLabel == null)
+        {
+            return;
         }
 
-        private void UpdateEmptyStateImageSource()
+        if (string.IsNullOrWhiteSpace(EmptyStateMessage))
         {
-            if (EmptyStateImage == null)
-            {
-                return;
-            }
-
-            EmptyStateImage.Source = EmptyStateImageSource;
+            return;
         }
 
-        private void UpdateEmptyStateMessage()
+        EmptyStateLabel.Text = EmptyStateMessage;
+    }
+
+    private void UpdateResultView()
+    {
+        if (TryCreateView(ResultView, ViewIndex.Result, ref _resultView))
         {
-            if (EmptyStateLabel == null)
-            {
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(EmptyStateMessage))
-            {
-                return;
-            }
-
-            EmptyStateLabel.Text = EmptyStateMessage;
+            BindResultView();
         }
+    }
 
-        private void UpdateResultView()
+    private void UpdateNotStartedView()
+    {
+        if (TryCreateView(NotStartedView, ViewIndex.NotStarted, ref _notStartedView))
         {
-            if (TryCreateView(ResultView, ViewIndex.Result, ref _resultView))
-            {
-                BindResultView();
-            }
+            BindNotStartedView();
         }
+    }
 
-        private void UpdateNotStartedView()
+    private void UpdateLoadingView()
+    {
+        if (TryCreateView(LoadingView, ViewIndex.Loading, ref _loadingView))
         {
-            if (TryCreateView(NotStartedView, ViewIndex.NotStarted, ref _notStartedView))
-            {
-                BindNotStartedView();
-            }
+            Container.Children.Remove(DefaultLoader);
+            DefaultLoader.BindingContext = null;
+
+            BindLoadingView();
         }
+    }
 
-        private void UpdateLoadingView()
+    private void UpdateEmptyView()
+    {
+        if (TryCreateView(EmptyView, ViewIndex.Empty, ref _emptyView))
         {
-            if (TryCreateView(LoadingView, ViewIndex.Loader, ref _loadingView))
-            {
-                Container.Children.Remove(DefaultLoader);
-                DefaultLoader.BindingContext = null;
+            Container.Children.Remove(DefaultEmptyStateView);
+            DefaultEmptyStateView.BindingContext = null;
 
-                BindLoadingView();
-            }
+            BindEmptyView();
         }
+    }
 
-        private void UpdateEmptyView()
+    private void UpdateErrorView()
+    {
+        if (TryCreateView(ErrorView, ViewIndex.Error, ref _errorView))
         {
-            if (TryCreateView(EmptyView, ViewIndex.Empty, ref _emptyView))
-            {
-                Container.Children.Remove(DefaultEmptyStateView);
-                DefaultEmptyStateView.BindingContext = null;
+            Container.Children.Remove(DefaultErrorView);
+            DefaultErrorView.BindingContext = null;
 
-                BindEmptyView();
-            }
+            BindErrorView();
         }
+    }
 
-        private void UpdateErrorView()
-        {
-            if (TryCreateView(ErrorView, ViewIndex.Error, ref _errorView))
-            {
-                Container.Children.Remove(DefaultErrorView);
-                DefaultErrorView.BindingContext = null;
-
-                BindErrorView();
-            }
-        }
-
-        private void UpdateErrorNotificationView()
-        {
-            if (TryCreateView(
+    private void UpdateErrorNotificationView()
+    {
+        if (TryCreateView(
                 ErrorNotificationView,
-                ViewIndex.Notification,
+                ViewIndex.ErrorNotification,
                 ref _errorNotificationView,
                 AbsoluteLayoutFlags.PositionProportional | AbsoluteLayoutFlags.WidthProportional,
                 50))
-            {
-                Container.Children.Remove(DefaultErrorNotificationView);
-                DefaultErrorNotificationView.BindingContext = null;
-
-                BindErrorNotificationView();
-            }
-        }
-
-        private bool TryCreateView(
-            object source,
-            ViewIndex index,
-            ref View target,
-            AbsoluteLayoutFlags flags = AbsoluteLayoutFlags.All,
-            double height = 1)
         {
-            if (Container?.Children == null || source == null)
-            {
-                return false;
-            }
+            Container.Children.Remove(DefaultErrorNotificationView);
+            DefaultErrorNotificationView.BindingContext = null;
 
-            var loggableTarget = target;
-            InternalLogger.Debug(Tag, () => $"TryCreateView( source: {source}, index: {index}, target: {loggableTarget} )");
-
-            if (target != null)
-            {
-                Container.Children.Remove(target);
-                target.BindingContext = null;
-            }
-
-            target = source is DataTemplate dataTemplate
-                ? (View)dataTemplate.CreateContent()
-                : (View)source;
-            target.IsVisible = false;
-
-            var bounds = AbsoluteLayout.GetLayoutBounds(target);
-            if (bounds.Width < 1 || bounds.Height < 1)
-            {
-                // Apply default bounds
-#if NET6_0_OR_GREATER
-                AbsoluteLayout.SetLayoutBounds(target, new Rect(1, 1, 1, height));
-#else
-                AbsoluteLayout.SetLayoutBounds(target, new Rectangle(1, 1, 1, height));
-#endif
-                AbsoluteLayout.SetLayoutFlags(target, flags);
-            }
-
-            Container.Children.Insert((int)index, target);
-            return true;
-        }
-
-        private void UpdateNotificationBackgroundColor()
-        {
-            if (DefaultErrorNotificationView == null)
-            {
-                return;
-            }
-
-            DefaultErrorNotificationView.BackgroundColor = NotificationBackgroundColor;
-        }
-
-        private void UpdateNotificationTextColor()
-        {
-            if (DefaultErrorNotificationView == null)
-            {
-                return;
-            }
-
-            DefaultErrorNotificationView.TextColor = NotificationTextColor;
-        }
-
-        private void CreateFromTaskSource()
-        {
-            if (TaskSource == null)
-            {
-                return;
-            }
-
-            var taskSourceType = TaskSource.GetType();
-            var taskType = taskSourceType.GenericTypeArguments[0];
-            if (taskType.IsGenericType)
-            {
-                var taskResultType = taskType.GenericTypeArguments[0];
-                var taskLoaderNotifierType = typeof(TaskLoaderNotifier<>).MakeGenericType(taskResultType);
-                TaskLoaderNotifier = (ITaskLoaderNotifier)Activator.CreateInstance(taskLoaderNotifierType, TaskSource);
-                return;
-            }
-
-            TaskLoaderNotifier = new TaskLoaderNotifier(TaskSource);
-        }
-
-        private void SetBindings()
-        {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
-
-            InternalLogger.Debug(Tag, () => $"SetBindings() with TaskLoaderNotifier: {TaskLoaderNotifier}");
-
-            BindResultView();
-            BindNotStartedView();
-            BindLoadingView();
-            BindEmptyView();
-            BindErrorView();
             BindErrorNotificationView();
+        }
+    }
 
-            OnTaskLoaderTypeSet();
-
-            OnTaskStartModeSet();
+    private bool TryCreateView(
+        object source,
+        ViewIndex index,
+        ref View target,
+        AbsoluteLayoutFlags flags = AbsoluteLayoutFlags.All,
+        double height = 1)
+    {
+        if (Container?.Children == null || source == null)
+        {
+            return false;
         }
 
-        private void BindResultView()
-        {
-            if (TaskLoaderNotifier == null || _resultView == null)
-            {
-                return;
-            }
+        var loggableTarget = target;
+        InternalLogger.Debug(Tag, () => $"TryCreateView( source: {source}, index: {index}, target: {loggableTarget} )");
 
-            if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
-            {
-                DefaultLoader.IsVisible = false;
-                _resultView.SetBinding(
-                    ContentView.IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.IsRunningOrSuccessfullyCompleted), source: TaskLoaderNotifier));
-            }
-            else
-            {
-                _resultView.SetBinding(
-                    ContentView.IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.ShowResult), source: TaskLoaderNotifier));
-            }
+        if (target != null)
+        {
+            Container.Children.Remove(target);
+            target.BindingContext = null;
         }
 
-        private void BindNotStartedView()
-        {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
+        target = source is DataTemplate dataTemplate
+            ? (View)dataTemplate.CreateContent()
+            : (View)source;
+        target.IsVisible = false;
 
-            if (_notStartedView != null)
-            {
-                _notStartedView.SetBinding(
-                    IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.IsNotStarted), source: TaskLoaderNotifier));
-            }
+        var bounds = AbsoluteLayout.GetLayoutBounds(target);
+        if (bounds.Width < 1 || bounds.Height < 1)
+        {
+            // Apply default bounds
+            AbsoluteLayout.SetLayoutBounds(target, new Rect(1, 1, 1, height));
+            AbsoluteLayout.SetLayoutFlags(target, flags);
         }
 
-        private void BindLoadingView()
-        {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
+        InsertView(index, target);
+        return true;
+    }
 
-            if (_loadingView != null)
-            {
-                _loadingView.SetBinding(
-                    IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.ShowLoader), source: TaskLoaderNotifier));
-            }
-            else
-            {
-                SetDefaultLoadingViewBindings();
-            }
+    private void InsertView(ViewIndex viewIndex, View view)
+    {
+        if (Container?.Children == null)
+        {
+            return;
         }
 
-        private void BindEmptyView()
+        // Find insertion index based on ordered ViewIndex values
+        int insertIndex = Container.Children.Count;
+        for (int i = 0; i < Container.Children.Count; i++)
         {
-            if (_emptyView != null)
+            var existingIndex = GetViewIndexForChild((View)Container.Children[i]);
+            if ((int)existingIndex > (int)viewIndex)
             {
-                _emptyView.SetBinding(
-                    IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));
-            }
-            else
-            {
-                SetDefaultEmptyStateViewBindings();
+                insertIndex = i;
+                break;
             }
         }
 
-        private void BindErrorView()
-        {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
+        Container.Children.Insert(insertIndex, view);
+    }
 
-            if (_errorView != null)
-            {
-                _errorView.SetBinding(
-                    IsVisibleProperty,
-                    new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
-            }
-            else
-            {
-                SetDefaultErrorViewBindings();
-            }
+    private ViewIndex GetViewIndexForChild(View child)
+    {
+        if (child == _resultView) return ViewIndex.Result;
+        if (child == _loadingView) return ViewIndex.Loading;
+        if (child == _errorView) return ViewIndex.Error;
+        if (child == _emptyView) return ViewIndex.Empty;
+        if (child == _notStartedView) return ViewIndex.NotStarted;
+        if (child == _errorNotificationView) return ViewIndex.ErrorNotification;
+        return (ViewIndex)int.MaxValue;
+    }
+
+
+    private void UpdateNotificationBackgroundColor()
+    {
+        if (DefaultErrorNotificationView == null)
+        {
+            return;
         }
 
-        private void BindErrorNotificationView()
+        DefaultErrorNotificationView.BackgroundColor = NotificationBackgroundColor;
+    }
+
+    private void UpdateNotificationTextColor()
+    {
+        if (DefaultErrorNotificationView == null)
         {
-            if (_errorNotificationView != null)
-            {
-                _errorNotificationView.SetBinding(
-                    IsVisibleProperty,
-                    new Binding(
-                        nameof(TaskLoaderNotifier.ShowErrorNotification),
-                        source: TaskLoaderNotifier,
-                        mode: BindingMode.TwoWay));
-            }
-            else
-            {
-                SetDefaultErrorNotificationViewBindings();
-            }
+            return;
         }
 
-        private void SetDefaultLoadingViewBindings()
-        {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
+        DefaultErrorNotificationView.TextColor = NotificationTextColor;
+    }
 
-            DefaultLoader?.SetBinding(
-                ActivityIndicator.IsRunningProperty,
+    private void CreateFromTaskSource()
+    {
+        if (TaskSource == null)
+        {
+            return;
+        }
+
+        var taskSourceType = TaskSource.GetType();
+        var taskType = taskSourceType.GenericTypeArguments[0];
+        if (taskType.IsGenericType)
+        {
+            var taskResultType = taskType.GenericTypeArguments[0];
+            var taskLoaderNotifierType = typeof(TaskLoaderNotifier<>).MakeGenericType(taskResultType);
+            TaskLoaderNotifier = (ITaskLoaderNotifier)Activator.CreateInstance(taskLoaderNotifierType, TaskSource);
+            return;
+        }
+
+        TaskLoaderNotifier = new TaskLoaderNotifier(TaskSource);
+    }
+
+    private void SetBindings()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
+        }
+
+        InternalLogger.Debug(Tag, () => $"SetBindings() with TaskLoaderNotifier: {TaskLoaderNotifier}");
+
+        BindResultView();
+        BindNotStartedView();
+        BindLoadingView();
+        BindEmptyView();
+        BindErrorView();
+        BindErrorNotificationView();
+
+        OnTaskLoaderTypeSet();
+
+        OnTaskStartModeSet();
+    }
+
+    private void BindResultView()
+    {
+        if (TaskLoaderNotifier == null || _resultView == null)
+        {
+            return;
+        }
+
+        if (TaskLoaderType == TaskLoaderType.ResultAsLoadingView)
+        {
+            DefaultLoader.IsVisible = false;
+            _resultView.SetBinding(
+                ContentView.IsVisibleProperty,
+                new Binding(nameof(TaskLoaderNotifier.IsRunningOrSuccessfullyCompleted), source: TaskLoaderNotifier));
+        }
+        else
+        {
+            _resultView.SetBinding(
+                ContentView.IsVisibleProperty,
+                new Binding(nameof(TaskLoaderNotifier.ShowResult), source: TaskLoaderNotifier));
+        }
+    }
+
+    private void BindNotStartedView()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
+        }
+
+        if (_notStartedView != null)
+        {
+            _notStartedView.SetBinding(
+                IsVisibleProperty,
+                new Binding(nameof(TaskLoaderNotifier.IsNotStarted), source: TaskLoaderNotifier));
+        }
+    }
+
+    private void BindLoadingView()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
+        }
+
+        if (_loadingView != null)
+        {
+            _loadingView.SetBinding(
+                IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowLoader), source: TaskLoaderNotifier));
         }
-
-        private void SetDefaultEmptyStateViewBindings()
+        else
         {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
+            SetDefaultLoadingViewBindings();
+        }
+    }
 
-            if (DefaultEmptyStateView == null)
-            {
-                return;
-            }
-
-            DefaultEmptyStateView.SetBinding(
+    private void BindEmptyView()
+    {
+        if (_emptyView != null)
+        {
+            _emptyView.SetBinding(
                 IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));
+        }
+        else
+        {
+            SetDefaultEmptyStateViewBindings();
+        }
+    }
 
-            EmptyStateImage.IsVisible = EmptyStateImageSource != null;
-            if (EmptyStateImage.IsVisible)
-            {
-                EmptyStateImage.Source = EmptyStateImageSource;
-            }
+    private void BindErrorView()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
         }
 
-        private void SetDefaultErrorViewBindings()
+        if (_errorView != null)
         {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
-
-            if (DefaultErrorView == null)
-            {
-                return;
-            }
-
-            DefaultErrorView.SetBinding(
+            _errorView.SetBinding(
                 IsVisibleProperty,
                 new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
+        }
+        else
+        {
+            SetDefaultErrorViewBindings();
+        }
+    }
 
-            ErrorViewImage.IsVisible = ErrorImageConverter != null;
-            if (ErrorViewImage.IsVisible)
-            {
-                ErrorViewImage.SetBinding(
-                    Image.SourceProperty,
-                    new Binding(
-                        nameof(TaskLoaderNotifier.Error),
-                        source: TaskLoaderNotifier,
-                        converter: ErrorImageConverter));
-            }
+    private void BindErrorNotificationView()
+    {
+        if (_errorNotificationView != null)
+        {
+            _errorNotificationView.SetBinding(
+                IsVisibleProperty,
+                new Binding(
+                    nameof(TaskLoaderNotifier.ShowErrorNotification),
+                    source: TaskLoaderNotifier,
+                    mode: BindingMode.TwoWay));
+        }
+        else
+        {
+            SetDefaultErrorNotificationViewBindings();
+        }
+    }
 
-            ErrorViewLabel.SetBinding(
-                Label.TextProperty,
+    private void SetDefaultLoadingViewBindings()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
+        }
+
+        DefaultLoader?.SetBinding(
+            ActivityIndicator.IsRunningProperty,
+            new Binding(nameof(TaskLoaderNotifier.ShowLoader), source: TaskLoaderNotifier));
+    }
+
+    private void SetDefaultEmptyStateViewBindings()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
+        }
+
+        if (DefaultEmptyStateView == null)
+        {
+            return;
+        }
+
+        DefaultEmptyStateView.SetBinding(
+            IsVisibleProperty,
+            new Binding(nameof(TaskLoaderNotifier.ShowEmptyState), source: TaskLoaderNotifier));
+
+        EmptyStateImage.IsVisible = EmptyStateImageSource != null;
+        if (EmptyStateImage.IsVisible)
+        {
+            EmptyStateImage.Source = EmptyStateImageSource;
+        }
+    }
+
+    private void SetDefaultErrorViewBindings()
+    {
+        if (TaskLoaderNotifier == null)
+        {
+            return;
+        }
+
+        if (DefaultErrorView == null)
+        {
+            return;
+        }
+
+        DefaultErrorView.SetBinding(
+            IsVisibleProperty,
+            new Binding(nameof(TaskLoaderNotifier.ShowError), source: TaskLoaderNotifier));
+
+        ErrorViewImage.IsVisible = ErrorImageConverter != null;
+        if (ErrorViewImage.IsVisible)
+        {
+            ErrorViewImage.SetBinding(
+                Image.SourceProperty,
                 new Binding(
                     nameof(TaskLoaderNotifier.Error),
                     source: TaskLoaderNotifier,
-                    converter: ErrorMessageConverter));
-
-            ErrorViewButton.SetBinding(
-                Button.CommandProperty,
-                new Binding(nameof(TaskLoaderNotifier.ReloadCommand), source: TaskLoaderNotifier));
+                    converter: ErrorImageConverter));
         }
 
-        private void SetDefaultErrorNotificationViewBindings()
+        ErrorViewLabel.SetBinding(
+            Label.TextProperty,
+            new Binding(
+                nameof(TaskLoaderNotifier.Error),
+                source: TaskLoaderNotifier,
+                converter: ErrorMessageConverter));
+
+        ErrorViewButton.SetBinding(
+            Button.CommandProperty,
+            new Binding(nameof(TaskLoaderNotifier.ReloadCommand), source: TaskLoaderNotifier));
+    }
+
+    private void SetDefaultErrorNotificationViewBindings()
+    {
+        if (TaskLoaderNotifier == null)
         {
-            if (TaskLoaderNotifier == null)
-            {
-                return;
-            }
-
-            if (DefaultErrorNotificationView == null)
-            {
-                return;
-            }
-
-            DefaultErrorNotificationView.SetBinding(
-                IsVisibleProperty,
-                new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
-
-            DefaultErrorNotificationView.SetBinding(
-                Snackbar.TextProperty,
-                new Binding(nameof(TaskLoaderNotifier.Error), source: TaskLoaderNotifier, converter: ErrorMessageConverter));
+            return;
         }
+
+        if (DefaultErrorNotificationView == null)
+        {
+            return;
+        }
+
+        DefaultErrorNotificationView.SetBinding(
+            IsVisibleProperty,
+            new Binding(nameof(TaskLoaderNotifier.ShowErrorNotification), source: TaskLoaderNotifier, mode: BindingMode.TwoWay));
+
+        DefaultErrorNotificationView.SetBinding(
+            Snackbar.TextProperty,
+            new Binding(nameof(TaskLoaderNotifier.Error), source: TaskLoaderNotifier, converter: ErrorMessageConverter));
     }
 }

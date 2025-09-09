@@ -4,7 +4,7 @@
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks>-->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks>-->
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Retronado.Maui</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -46,158 +46,15 @@
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
-	
-	<ItemGroup>
-		<MauiXaml Update="Resources\Styles\Colors.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
-		<MauiXaml Update="Resources\Styles\Global.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
-		<MauiXaml Update="Resources\Styles\Icons.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
-		<MauiXaml Update="Resources\Styles\Sizes.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
-		<MauiXaml Update="Resources\Styles\StylesGameView.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
-		<MauiXaml Update="Resources\Styles\Text.xaml">
-			<SubType>Designer</SubType>
-		</MauiXaml>
-	</ItemGroup>
+    
 	<ItemGroup>
 		<None Remove="Resources\Localization\" />
-		<None Remove="Properties\launchSettings.json" />
 		<EmbeddedResource Remove="Localization\SampleResources.resx" />
 		<None Include="Localization\SampleResources.resx">
 		  <UseVocaDbResManager>true</UseVocaDbResManager>
 		  <GenerateResource>false</GenerateResource>
 		  <Generator>ResXFileCodeGenerator</Generator>
 		</None>
-	</ItemGroup>
-	<ItemGroup>
-		<Compile Include="..\Retronado\Sample\Converters\CyclicLoadingLottieConverter.cs">
-			<Link>CyclicLoadingLottieConverter.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Converters\ExceptionToErrorMessageConverter.cs">
-			<Link>Converters\ExceptionToErrorMessageConverter.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Converters\ExceptionToLottieConverter.cs">
-			<Link>Converters\ExceptionToLottieConverter.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Converters\ListCountToVisibilityConverter.cs">
-			<Link>Converters\ListCountToVisibilityConverter.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\CoreEntryPoint.cs">
-			<Link>CoreEntryPoint.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Domain\ApplicationExceptions.cs">
-			<Link>Domain\ApplicationExceptions.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Domain\Game.cs">
-			<Link>Domain\Game.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Domain\IGDBRefitClient.cs">
-			<Link>Domain\IGDBRefitClient.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Domain\IRetroGamingService.cs">
-			<Link>Domain\IRetroGamingService.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Domain\RetroGamingService.cs">
-			<Link>Domain\RetroGamingService.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Domain\TwitchOAuthClient.cs">
-			<Link>Domain\TwitchOAuthClient.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Infrastructure\DependencyContainer.cs">
-			<Link>Infrastructure\DependencyContainer.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Infrastructure\ErrorEmulator.cs">
-			<Link>Infrastructure\ErrorEmulator.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Infrastructure\HttpLoggingHandler.cs">
-			<Link>Infrastructure\HttpLoggingHandler.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Navigation\Impl\FormsNavigationService.cs">
-			<Link>Navigation\Impl\FormsNavigationService.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Navigation\Impl\ViewLocator.cs">
-			<Link>Navigation\Impl\ViewLocator.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Navigation\INavigationService.cs">
-			<Link>Navigation\INavigationService.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Navigation\IViewLocator.cs">
-			<Link>Navigation\IViewLocator.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Navigation\NavigationTransition.cs">
-			<Link>Navigation\NavigationTransition.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ResourcesHelper.cs">
-			<Link>ResourcesHelper.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Styles\IconFont.cs">
-			<Link>Resources\Styles\IconFont.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\ANavigableViewModel.cs">
-			<Link>ViewModels\ANavigableViewModel.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\Bindable.cs">
-			<Link>ViewModels\Bindable.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\CommandsPageViewModel.cs">
-			<Link>ViewModels\CommandsPageViewModel.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\ErrorEmulatorViewModel.cs">
-			<Link>ViewModels\ErrorEmulatorViewModel.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\LoadOnDemandViewModel.cs">
-			<Link>ViewModels\LoadOnDemandViewModel.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\RetroGamesIsBusyViewModel.cs">
-			<Link>ViewModels\RetroGamesIsBusyViewModel.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\ViewModels\RetroGamesViewModel.cs">
-			<Link>ViewModels\RetroGamesViewModel.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\CommandsPage.xaml.cs">
-			<Link>Views\CommandsPage.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\DefaultIsBusyViewsPage.xaml.cs">
-			<Link>Views\DefaultIsBusyViewsPage.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\DefaultViewsPage.xaml.cs">
-			<Link>Views\DefaultViewsPage.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\DefaultViewsSkeletonPage.xaml.cs">
-			<Link>Views\DefaultViewsSkeletonPage.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\ErrorEmulatorView.xaml.cs">
-			<Link>Views\ErrorEmulatorView.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\GameViewCell.xaml.cs">
-			<Link>Views\GameViewCell.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\IBindablePage.cs">
-			<Link>Views\IBindablePage.cs</Link>
-		</Compile>
-		<None Include="..\Retronado\Sample\Views\LottieViewsPage.xaml.cs">
-			<Link>Views/LottieViewsPage.xaml.cs</Link>
-		</None>
-		<Compile Include="..\Retronado\Sample\Views\MainPage.xaml.cs">
-			<Link>Views\MainPage.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\NavigationToolBar.xaml.cs">
-			<Link>Views\NavigationToolBar.xaml.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\Skeletons.cs">
-			<Link>Views\Skeletons.cs</Link>
-		</Compile>
-		<Compile Include="..\Retronado\Sample\Views\UserViewsPage.xaml.cs">
-			<Link>Views\UserViewsPage.xaml.cs</Link>
-		</Compile>
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Update="Localization\ResourceValues.tt">
@@ -226,7 +83,8 @@
 		<PackageReference Include="Refit.Newtonsoft.Json" Version="8.0.0" />
 		<PackageReference Include="Sharpnado.TaskMonitor" Version="1.1.0" />
 		<PackageReference Include="SimpleInjector" Version="5.5.0" />
-		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
+		<PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0" />
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.164">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -238,12 +96,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Maui.Skeleton\Maui.Skeleton\Maui.Skeleton.csproj" />
 		<ProjectReference Include="..\Sharpnado.Maui.TaskLoaderView\Sharpnado.Maui.TaskLoaderView.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<MauiXaml Remove="Views\LottieViewsPage.xaml" />
-		<None Include="Views\LottieViewsPage.xaml" />
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Resources\Localization" />
 	</ItemGroup>
 </Project>
