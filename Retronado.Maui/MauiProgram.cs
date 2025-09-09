@@ -27,8 +27,7 @@ public static class MauiProgram
 
         TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
 
-        Initializer.Initialize(true, true);
-
         return builder.Build();
     }
 }
+
