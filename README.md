@@ -25,7 +25,7 @@ The `TaskLoaderView` is a UI component that handles all your UI loading state (L
 
 ![banner](https://user-images.githubusercontent.com/596903/211530187-d01267fe-f1f1-434e-999b-a3fe35b85988.png)
 
-It has been tested on **Android**, **iOS** and **UWP** platforms through the `Retronado` sample app.
+It has been tested on **Android**, **iOS**, **Windows** and **MacOS** platforms through the `Retronado` sample app.
 
 It uses the Sharpnado's [TaskMonitor](https://github.com/roubachof/Sharpnado.TaskMonitor).
 
