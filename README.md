@@ -2,14 +2,14 @@
 
 The `TaskLoaderView` is a UI component that handles all your UI loading state (Loading, Error, Result, Notification), and removes all the pain of async loading from your view models (try catch / async void / IsBusy / HasErrors / base view models / ...) thanks to its brother the `TaskLoaderNotifier`.
 
-| MAUI Supported platforms   | XF Supported platforms     |
-|----------------------------|----------------------------|
-| <img src="Docs/maui_logo.png" height="100" /> | <img src="Docs/tlv_icon_tos.png" height="100" />|
-| [![Nuget](https://img.shields.io/nuget/v/Sharpnado.Maui.TaskLoaderView.svg)](https://www.nuget.org/packages/Sharpnado.CollectionView)                            | [![Nuget](https://img.shields.io/nuget/v/Sharpnado.TaskLoaderView.svg)](https://www.nuget.org/packages/Sharpnado.CollectionView) |
-| :heavy_check_mark: Android | :heavy_check_mark: Android |
-| :heavy_check_mark: iOS     | :heavy_check_mark: iOS     |
-| :heavy_check_mark: Windows | :heavy_check_mark: Windows |
-| :heavy_check_mark: macOS   | :heavy_check_mark: macOS   |
+| MAUI Supported platforms   |
+|----------------------------|
+| <img src="Docs/maui_logo.png" height="100" /> |
+| [![Nuget](https://img.shields.io/nuget/v/Sharpnado.Maui.TaskLoaderView.svg)](https://www.nuget.org/packages/Sharpnado.CollectionView)                            |
+| :heavy_check_mark: Android | 
+| :heavy_check_mark: iOS     |
+| :heavy_check_mark: Windows |
+| :heavy_check_mark: macOS   |
 
 
 **Featuring:**
@@ -45,36 +45,14 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
+			.ConfigureTaskLoader(true) // logger enabled
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 				fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 			});
 
-		Initializer.Initialize(true); // logger enabled
-
 		return builder.Build();
-	}
-}
-```
-
-### Xamarin.Forms
-
-Add the [Sharpnado.TaskLoaderView](https://www.nuget.org/packages/Sharpnado.Maui.TaskLoaderView) nuget package.
-
-And call the initializer in your `MauiProgram.cs` file:
-
-```csharp
-public partial class App : Application
-{
-	public App()
-	{
-	    InitializeComponent();
-
-	    // TaskMonitorConfiguration.ConsiderCanceledAsFaulted = true;
-
-	    Initializer.Initialize(true); // logger enabled
-	    MainPage = new NavigationPage(new MainPage());
 	}
 }
 ```
