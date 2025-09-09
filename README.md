@@ -145,11 +145,11 @@ New `TemplatedTaskLoader`: it does the same job as the `TaskLoaderView` but usin
 
 There is an detailed example on how to use it here:
 
-https://github.com/roubachof/Sharpnado.TaskLoaderView/blob/master/Retronado/Sample/Views/CommandsPage.xaml
+https://github.com/roubachof/Sharpnado.TaskLoaderView/tree/master/Retronado.Maui/Views/CommandsPage.xaml
 
 and here:
 
-https://github.com/roubachof/Sharpnado.TaskLoaderView/blob/master/Retronado/Sample/ViewModels/CommandsPageViewModel.cs
+https://github.com/roubachof/Sharpnado.TaskLoaderView/tree/master/Retronado.Maui/ViewModels/CommandsPageViewModel.cs
 
 ### New CompositeTaskLoaderNotifier builder and simplified wiring
 
