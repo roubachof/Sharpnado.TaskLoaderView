@@ -31,7 +31,8 @@
                          IsRefreshing="{Binding Loader.ShowRefresher}"
                          RefreshColor="{StaticResource AccentColor}">
                 <ScrollView Grid.Row="1">
-                    <tlv:TemplatedTaskLoader TaskLoaderNotifier="{Binding Loader}">
+                    <tlv:TemplatedTaskLoader x:Name="TaskLoader"
+                                             TaskLoaderNotifier="{Binding Loader}">
                         <tlv:TemplatedTaskLoader.ResultControlTemplate>
                             <ControlTemplate>
                                 <Grid x:DataType="viewModels:CommandsPageViewModel"

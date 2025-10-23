@@ -4,6 +4,7 @@ namespace Sharpnado.TaskLoaderView;
 
 public class TemplatedTaskLoader : ContentView
 {
+
     public static readonly BindableProperty TaskLoaderNotifierProperty = BindableProperty.Create(
         nameof(TaskLoaderNotifier),
         typeof(ITaskLoaderNotifier),
@@ -29,6 +30,14 @@ public class TemplatedTaskLoader : ContentView
         nameof(EmptyControlTemplate),
         typeof(ControlTemplate),
         typeof(TemplatedTaskLoader));
+
+    public event EventHandler? ResultControlTemplateLoaded;
+
+    public event EventHandler? LoadingControlTemplateLoaded;
+
+    public event EventHandler? ErrorControlTemplateLoaded;
+
+    public event EventHandler? EmptyControlTemplateLoaded;
 
     public ITaskLoaderNotifier? TaskLoaderNotifier
     {
@@ -90,24 +99,28 @@ public class TemplatedTaskLoader : ContentView
         if (TaskLoaderNotifier.ShowResult)
         {
             ControlTemplate = ResultControlTemplate;
+            ResultControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
             return;
         }
 
         if (TaskLoaderNotifier.ShowError)
         {
             ControlTemplate = ErrorControlTemplate ?? ResultControlTemplate;
+            ErrorControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
             return;
         }
 
         if (TaskLoaderNotifier.ShowEmptyState)
         {
             ControlTemplate = EmptyControlTemplate ?? ResultControlTemplate;
+            EmptyControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
             return;
         }
 
         if (TaskLoaderNotifier.ShowLoader)
         {
             ControlTemplate = LoadingControlTemplate ?? ResultControlTemplate;
+            LoadingControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -117,18 +130,22 @@ public class TemplatedTaskLoader : ContentView
         {
             case nameof(ITaskLoaderNotifier.ShowResult) when TaskLoaderNotifier!.ShowResult:
                 ControlTemplate = ResultControlTemplate;
+                ResultControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
                 break;
 
             case nameof(ITaskLoaderNotifier.ShowError) when TaskLoaderNotifier!.ShowError:
                 ControlTemplate = ErrorControlTemplate;
+                ErrorControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
                 break;
 
             case nameof(ITaskLoaderNotifier.ShowLoader) when TaskLoaderNotifier!.ShowLoader:
                 ControlTemplate = LoadingControlTemplate;
+                LoadingControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
                 break;
 
             case nameof(ITaskLoaderNotifier.ShowEmptyState) when TaskLoaderNotifier!.ShowEmptyState:
                 ControlTemplate = EmptyControlTemplate;
+                EmptyControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
                 break;
         }
     }
