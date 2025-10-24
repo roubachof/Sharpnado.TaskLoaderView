@@ -204,7 +204,7 @@ namespace Sample.Domain
         {
             // For logging
             // var httpClient = new HttpClient(new HttpLoggingHandler())
-            var httpClient = new HttpClient(new HttpLoggingHandler())
+            var httpClient = new HttpClient()
             {
                 BaseAddress = new Uri("https://api.igdb.com/v4"),
             };

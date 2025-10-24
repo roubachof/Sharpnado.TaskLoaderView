@@ -28,23 +28,41 @@ public partial class CommandsPage : ContentPage, IBindablePage
         Padding = safeInsets;
     }
 
-    private void OnLoadingControlTemplateLoaded(object? sender, EventArgs e)
+    private void OnLoadingControlTemplateLoaded(object? sender, ControlTemplateLoadedEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[CommandsPage] Loading template loaded");
+        System.Diagnostics.Debug.WriteLine($"[CommandsPage] Loading template loaded. View type: {e.View?.GetType().Name}");
+
+        if (e.View is ActivityIndicator indicator)
+        {
+            System.Diagnostics.Debug.WriteLine($"[CommandsPage] ActivityIndicator found - IsRunning: {indicator.IsRunning}, Color: {indicator.Color}");
+        }
     }
 
-    private void OnResultControlTemplateLoaded(object? sender, EventArgs e)
+    private void OnResultControlTemplateLoaded(object? sender, ControlTemplateLoadedEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[CommandsPage] Result template loaded");
+        System.Diagnostics.Debug.WriteLine($"[CommandsPage] Result template loaded. View type: {e.View?.GetType().Name}");
+
+        if (e.View is Grid grid)
+        {
+            System.Diagnostics.Debug.WriteLine($"[CommandsPage] Grid found with {grid.Children.Count} children");
+        }
+
+        var button = TaskLoader.GetTemplateChild("BuyItButton");
+        System.Diagnostics.Debug.WriteLine("[CommandsPage] BuyIt Button found: " + button);
     }
 
-    private void OnErrorControlTemplateLoaded(object? sender, EventArgs e)
+    private void OnErrorControlTemplateLoaded(object? sender, ControlTemplateLoadedEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[CommandsPage] Error template loaded");
+        System.Diagnostics.Debug.WriteLine($"[CommandsPage] Error template loaded. View type: {e.View?.GetType().Name}");
+
+        if (e.View is StackLayout stackLayout)
+        {
+            System.Diagnostics.Debug.WriteLine($"[CommandsPage] StackLayout found with {stackLayout.Children.Count} children");
+        }
     }
 
-    private void OnEmptyControlTemplateLoaded(object? sender, EventArgs e)
+    private void OnEmptyControlTemplateLoaded(object? sender, ControlTemplateLoadedEventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine("[CommandsPage] Empty template loaded");
+        System.Diagnostics.Debug.WriteLine($"[CommandsPage] Empty template loaded. View type: {e.View?.GetType().Name}");
     }
 }

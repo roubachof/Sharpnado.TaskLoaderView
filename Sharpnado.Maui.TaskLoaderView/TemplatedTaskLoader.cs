@@ -1,9 +1,20 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace Sharpnado.TaskLoaderView;
 
+public class ControlTemplateLoadedEventArgs : EventArgs
+{
+    public ControlTemplateLoadedEventArgs(View? view)
+    {
+        View = view;
+    }
+
+    public View? View { get; }
+}
+
 public class TemplatedTaskLoader : ContentView
 {
+    private EventHandler<ControlTemplateLoadedEventArgs>? _pendingEventHandler;
 
     public static readonly BindableProperty TaskLoaderNotifierProperty = BindableProperty.Create(
         nameof(TaskLoaderNotifier),
@@ -31,13 +42,13 @@ public class TemplatedTaskLoader : ContentView
         typeof(ControlTemplate),
         typeof(TemplatedTaskLoader));
 
-    public event EventHandler? ResultControlTemplateLoaded;
+    public event EventHandler<ControlTemplateLoadedEventArgs>? ResultControlTemplateLoaded;
 
-    public event EventHandler? LoadingControlTemplateLoaded;
+    public event EventHandler<ControlTemplateLoadedEventArgs>? LoadingControlTemplateLoaded;
 
-    public event EventHandler? ErrorControlTemplateLoaded;
+    public event EventHandler<ControlTemplateLoadedEventArgs>? ErrorControlTemplateLoaded;
 
-    public event EventHandler? EmptyControlTemplateLoaded;
+    public event EventHandler<ControlTemplateLoadedEventArgs>? EmptyControlTemplateLoaded;
 
     public ITaskLoaderNotifier? TaskLoaderNotifier
     {
@@ -69,6 +80,11 @@ public class TemplatedTaskLoader : ContentView
         set => SetValue(EmptyControlTemplateProperty, value);
     }
 
+    public new View GetTemplateChild(string name)
+    {
+        return (View)base.GetTemplateChild(name);
+    }
+
     private static void TaskLoaderChanged(BindableObject bindable, object oldValue, object newValue)
     {
         var taskLoader = (TemplatedTaskLoader)bindable;
@@ -98,29 +114,25 @@ public class TemplatedTaskLoader : ContentView
 
         if (TaskLoaderNotifier.ShowResult)
         {
-            ControlTemplate = ResultControlTemplate;
-            ResultControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+            SetTemplateAndScheduleEvent(ResultControlTemplate, ResultControlTemplateLoaded);
             return;
         }
 
         if (TaskLoaderNotifier.ShowError)
         {
-            ControlTemplate = ErrorControlTemplate ?? ResultControlTemplate;
-            ErrorControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+            SetTemplateAndScheduleEvent(ErrorControlTemplate ?? ResultControlTemplate, ErrorControlTemplateLoaded);
             return;
         }
 
         if (TaskLoaderNotifier.ShowEmptyState)
         {
-            ControlTemplate = EmptyControlTemplate ?? ResultControlTemplate;
-            EmptyControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+            SetTemplateAndScheduleEvent(EmptyControlTemplate ?? ResultControlTemplate, EmptyControlTemplateLoaded);
             return;
         }
 
         if (TaskLoaderNotifier.ShowLoader)
         {
-            ControlTemplate = LoadingControlTemplate ?? ResultControlTemplate;
-            LoadingControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+            SetTemplateAndScheduleEvent(LoadingControlTemplate ?? ResultControlTemplate, LoadingControlTemplateLoaded);
         }
     }
 
@@ -129,24 +141,55 @@ public class TemplatedTaskLoader : ContentView
         switch (e.PropertyName)
         {
             case nameof(ITaskLoaderNotifier.ShowResult) when TaskLoaderNotifier!.ShowResult:
-                ControlTemplate = ResultControlTemplate;
-                ResultControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+                SetTemplateAndScheduleEvent(ResultControlTemplate, ResultControlTemplateLoaded);
                 break;
 
             case nameof(ITaskLoaderNotifier.ShowError) when TaskLoaderNotifier!.ShowError:
-                ControlTemplate = ErrorControlTemplate;
-                ErrorControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+                SetTemplateAndScheduleEvent(ErrorControlTemplate, ErrorControlTemplateLoaded);
                 break;
 
             case nameof(ITaskLoaderNotifier.ShowLoader) when TaskLoaderNotifier!.ShowLoader:
-                ControlTemplate = LoadingControlTemplate;
-                LoadingControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+                SetTemplateAndScheduleEvent(LoadingControlTemplate, LoadingControlTemplateLoaded);
                 break;
 
             case nameof(ITaskLoaderNotifier.ShowEmptyState) when TaskLoaderNotifier!.ShowEmptyState:
-                ControlTemplate = EmptyControlTemplate;
-                EmptyControlTemplateLoaded?.Invoke(this, EventArgs.Empty);
+                SetTemplateAndScheduleEvent(EmptyControlTemplate, EmptyControlTemplateLoaded);
                 break;
+        }
+    }
+
+    private void SetTemplateAndScheduleEvent(ControlTemplate? template, EventHandler<ControlTemplateLoadedEventArgs>? eventHandler)
+    {
+        _pendingEventHandler = eventHandler;
+        ControlTemplate = template;
+    }
+
+    protected override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        // TemplateRoot is set by MAUI after the template is applied
+        // Use reflection to access the internal TemplateRoot property
+        var templateRoot = GetTemplateRootViaReflection();
+        _pendingEventHandler?.Invoke(this, new ControlTemplateLoadedEventArgs(templateRoot));
+        _pendingEventHandler = null;
+    }
+
+    private View? GetTemplateRootViaReflection()
+    {
+        try
+        {
+            // Access the internal TemplateRoot property via reflection
+            var templateRootProperty = typeof(TemplatedView).GetProperty(
+                "Microsoft.Maui.Controls.IControlTemplated.TemplateRoot",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+            return templateRootProperty?.GetValue(this) as View;
+        }
+        catch
+        {
+            // If reflection fails, return null
+            return null;
         }
     }
 }

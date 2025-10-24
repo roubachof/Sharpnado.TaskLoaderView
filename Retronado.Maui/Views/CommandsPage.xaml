@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="Sample.Views.CommandsPage"
-             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:converters="clr-namespace:Sample.Converters"
-             xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             xmlns:loc="clr-namespace:Sample.Localization"
-             xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Sharpnado.HorusSkeleton.Maui"
-             xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
-             xmlns:viewModels="clr-namespace:Sample.ViewModels"
-             xmlns:views="clr-namespace:Sample.Views"
-             ios:Page.UseSafeArea="true"
-             x:DataType="viewModels:CommandsPageViewModel"
-             BackgroundColor="{StaticResource TopElementBackground}"
-             NavigationPage.HasNavigationBar="false">
+<ContentPage
+    x:Class="Sample.Views.CommandsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:Sample.Converters"
+    xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+    xmlns:loc="clr-namespace:Sample.Localization"
+    xmlns:skeleton="clr-namespace:Maui.Skeleton;assembly=Sharpnado.HorusSkeleton.Maui"
+    xmlns:tlv="clr-namespace:Sharpnado.TaskLoaderView;assembly=Sharpnado.Maui.TaskLoaderView"
+    xmlns:viewModels="clr-namespace:Sample.ViewModels"
+    xmlns:views="clr-namespace:Sample.Views"
+    ios:Page.UseSafeArea="true"
+    x:DataType="viewModels:CommandsPageViewModel"
+    BackgroundColor="{StaticResource TopElementBackground}"
+    NavigationPage.HasNavigationBar="false">
 
     <ContentPage.Content>
         <Grid>
@@ -21,97 +22,110 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <views:NavigationToolBar Title="{x:Static loc:SampleResources.Commands_Title}"
-                                     Grid.Row="0"
-                                     BackgroundColor="{StaticResource TopElementBackground}"
-                                     Theme="Standard" />
+            <views:NavigationToolBar
+                Title="{x:Static loc:SampleResources.Commands_Title}"
+                Grid.Row="0"
+                BackgroundColor="{StaticResource TopElementBackground}"
+                Theme="Standard" />
 
-            <RefreshView Grid.Row="1"
-                         Command="{Binding Loader.RefreshCommand}"
-                         IsRefreshing="{Binding Loader.ShowRefresher}"
-                         RefreshColor="{StaticResource AccentColor}">
+            <RefreshView
+                Grid.Row="1"
+                Command="{Binding Loader.RefreshCommand}"
+                IsRefreshing="{Binding Loader.ShowRefresher}"
+                RefreshColor="{StaticResource AccentColor}">
                 <ScrollView Grid.Row="1">
-                    <tlv:TemplatedTaskLoader x:Name="TaskLoader"
-                                             TaskLoaderNotifier="{Binding Loader}">
+                    <tlv:TemplatedTaskLoader x:Name="TaskLoader" TaskLoaderNotifier="{Binding Loader}">
                         <tlv:TemplatedTaskLoader.ResultControlTemplate>
                             <ControlTemplate>
-                                <Grid x:DataType="viewModels:CommandsPageViewModel"
-                                      BindingContext="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CommandsPageViewModel}}}"
-                                      RowDefinitions="300,*">
-                                    <Image Grid.Row="0"
-                                           skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                                           skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
-                                           Aspect="AspectFill"
-                                           Source="{Binding Loader.Result.ScreenshotUrl}" />
+                                <Grid
+                                    x:DataType="viewModels:CommandsPageViewModel"
+                                    BindingContext="{Binding Source={RelativeSource AncestorType={x:Type viewModels:CommandsPageViewModel}}}"
+                                    RowDefinitions="300,*">
+                                    <Image
+                                        Grid.Row="0"
+                                        skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                        skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                        Aspect="AspectFill"
+                                        Source="{Binding Loader.Result.ScreenshotUrl}" />
 
-                                    <Border Grid.Row="0"
-                                            Padding="15,5,15,30"
-                                            VerticalOptions="End"
-                                            BackgroundColor="{StaticResource DarkOverlay}"
-                                            ZIndex="1">
+                                    <Border
+                                        Grid.Row="0"
+                                        Padding="15,5,15,30"
+                                        BackgroundColor="{StaticResource DarkOverlay}"
+                                        VerticalOptions="End"
+                                        ZIndex="1">
 
-                                        <Grid Padding="0"
-                                              ColumnDefinitions="*,60"
-                                              RowDefinitions="40,20,20"
-                                              RowSpacing="0">
-                                            <Label Grid.Row="0"
-                                                   Grid.Column="0"
-                                                   Style="{StaticResource GameName}"
-                                                   Margin="0,0,10,0"
-                                                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                                                   skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
-                                                   Text="{Binding Loader.Result.Name}" />
+                                        <Grid
+                                            Padding="0"
+                                            ColumnDefinitions="*,60"
+                                            RowDefinitions="40,20,20"
+                                            RowSpacing="0">
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Margin="0,0,10,0"
+                                                skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                                skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                                Style="{StaticResource GameName}"
+                                                Text="{Binding Loader.Result.Name}" />
 
-                                            <Label Grid.Row="1"
-                                                   Style="{StaticResource GameCompany}"
-                                                   skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
-                                                   skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
-                                                   Text="{Binding Loader.Result.MajorCompany}" />
+                                            <Label
+                                                Grid.Row="1"
+                                                skeleton:Skeleton.BackgroundColor="{StaticResource GreyBackground}"
+                                                skeleton:Skeleton.IsBusy="{Binding Loader.ShowLoader}"
+                                                Style="{StaticResource GameCompany}"
+                                                Text="{Binding Loader.Result.MajorCompany}" />
 
-                                            <Label Grid.Row="2"
-                                                   Style="{StaticResource GameGenre}"
-                                                   Text="{Binding Loader.Result.MajorGenre}" />
+                                            <Label
+                                                Grid.Row="2"
+                                                Style="{StaticResource GameGenre}"
+                                                Text="{Binding Loader.Result.MajorGenre}" />
 
-                                            <Image Grid.Row="0"
-                                                   Grid.RowSpan="3"
-                                                   Grid.Column="1"
-                                                   Margin="0,10,0,0"
-                                                   Source="{Binding Loader.Result.CoverUrl}" />
+                                            <Image
+                                                Grid.Row="0"
+                                                Grid.RowSpan="3"
+                                                Grid.Column="1"
+                                                Margin="0,10,0,0"
+                                                Source="{Binding Loader.Result.CoverUrl}" />
 
                                         </Grid>
                                     </Border>
 
-                                    <Label Grid.Row="1"
-                                           Style="{StaticResource GameGenre}"
-                                           Margin="15,45,15,0"
-                                           Text="{Binding Loader.Result.Summary}"
-                                           TextColor="White" />
+                                    <Label
+                                        Grid.Row="1"
+                                        Margin="15,45,15,0"
+                                        Style="{StaticResource GameGenre}"
+                                        Text="{Binding Loader.Result.Summary}"
+                                        TextColor="White" />
 
-                                    <Button Grid.Row="1"
-                                            HeightRequest="40"
-                                            Margin="0,-20,100,0"
-                                            Padding="15,10"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Start"
-                                            BackgroundColor="{StaticResource AccentColor}"
-                                            Command="{Binding BuyGameCommand}"
-                                            FontFamily="FontAtariSt"
-                                            Text="BUY IT"
-                                            TextColor="{StaticResource TopElementBackground}"
-                                            ZIndex="10" />
+                                    <Button
+                                        x:Name="BuyItButton"
+                                        Grid.Row="1"
+                                        Margin="0,-20,100,0"
+                                        Padding="15,10"
+                                        BackgroundColor="{StaticResource AccentColor}"
+                                        Command="{Binding BuyGameCommand}"
+                                        FontFamily="FontAtariSt"
+                                        HeightRequest="40"
+                                        HorizontalOptions="Center"
+                                        Text="BUY IT"
+                                        TextColor="{StaticResource TopElementBackground}"
+                                        VerticalOptions="Start"
+                                        ZIndex="10" />
 
-                                    <Button Grid.Row="1"
-                                            HeightRequest="40"
-                                            Margin="100,-20,0,0"
-                                            Padding="15,10"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="Start"
-                                            BackgroundColor="{StaticResource AccentColor}"
-                                            Command="{Binding PlayTheGameCommand}"
-                                            FontFamily="FontAtariSt"
-                                            Text="PLAY IT"
-                                            TextColor="{StaticResource TopElementBackground}"
-                                            ZIndex="10" />
+                                    <Button
+                                        Grid.Row="1"
+                                        Margin="100,-20,0,0"
+                                        Padding="15,10"
+                                        BackgroundColor="{StaticResource AccentColor}"
+                                        Command="{Binding PlayTheGameCommand}"
+                                        FontFamily="FontAtariSt"
+                                        HeightRequest="40"
+                                        HorizontalOptions="Center"
+                                        Text="PLAY IT"
+                                        TextColor="{StaticResource TopElementBackground}"
+                                        VerticalOptions="Start"
+                                        ZIndex="10" />
 
                                 </Grid>
                             </ControlTemplate>
@@ -119,50 +133,56 @@
 
                         <tlv:TemplatedTaskLoader.LoadingControlTemplate>
                             <ControlTemplate>
-                                <ActivityIndicator HorizontalOptions="Center"
-                                                   VerticalOptions="Center"
-                                                   IsRunning="True"
-                                                   Color="{StaticResource AccentColor}" />
+                                <ActivityIndicator
+                                    HorizontalOptions="Center"
+                                    IsRunning="True"
+                                    VerticalOptions="Center"
+                                    Color="{StaticResource AccentColor}" />
                             </ControlTemplate>
                         </tlv:TemplatedTaskLoader.LoadingControlTemplate>
 
                         <tlv:TemplatedTaskLoader.ErrorControlTemplate>
                             <ControlTemplate x:DataType="{x:Null}">
-                                <StackLayout HorizontalOptions="Center"
-                                             VerticalOptions="Center"
-                                             BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TemplatedTaskLoader}}, Path=TaskLoaderNotifier}"
-                                             Orientation="Vertical"
-                                             Spacing="10">
-                                    <Border WidthRequest="100"
+                                <StackLayout
+                                    BindingContext="{Binding Source={RelativeSource AncestorType={x:Type tlv:TemplatedTaskLoader}}, Path=TaskLoaderNotifier}"
+                                    HorizontalOptions="Center"
+                                    Orientation="Vertical"
+                                    Spacing="10"
+                                    VerticalOptions="Center">
+                                    <Border
+                                        Margin="0,0,0,10"
+                                        Padding="0"
+                                        BackgroundColor="Transparent"
+                                        HeightRequest="100"
+                                        HorizontalOptions="Center"
+                                        StrokeShape="RoundRectangle 50"
+                                        VerticalOptions="Center"
+                                        WidthRequest="100">
+                                        <Image
                                             HeightRequest="100"
-                                            Margin="0,0,0,10"
-                                            Padding="0"
                                             HorizontalOptions="Center"
+                                            Source="{Binding Error, Converter={converters:ExceptionToImageSourceConverter}}"
                                             VerticalOptions="Center"
-                                            BackgroundColor="Transparent"
-                                            StrokeShape="RoundRectangle 50">
-                                        <Image WidthRequest="100"
-                                               HeightRequest="100"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               Source="{Binding Error, Converter={converters:ExceptionToImageSourceConverter}}" />
+                                            WidthRequest="100" />
                                     </Border>
-                                    <Label Style="{StaticResource TextBodySecondary}"
-                                           WidthRequest="300"
-                                           Margin="0,0,0,20"
-                                           HorizontalTextAlignment="Center"
-                                           LineBreakMode="WordWrap"
-                                           MaxLines="2"
-                                           Text="{Binding Error, Converter={converters:ExceptionToErrorMessageConverter}}" />
+                                    <Label
+                                        Margin="0,0,0,20"
+                                        HorizontalTextAlignment="Center"
+                                        LineBreakMode="WordWrap"
+                                        MaxLines="2"
+                                        Style="{StaticResource TextBodySecondary}"
+                                        Text="{Binding Error, Converter={converters:ExceptionToErrorMessageConverter}}"
+                                        WidthRequest="300" />
 
-                                    <Button Padding="10"
-                                            HorizontalOptions="Center"
-                                            VerticalOptions="End"
-                                            BackgroundColor="{StaticResource AccentColor}"
-                                            Command="{Binding ReloadCommand}"
-                                            CornerRadius="10"
-                                            Text="{x:Static loc:SampleResources.ErrorButton_Retry}"
-                                            TextColor="Black" />
+                                    <Button
+                                        Padding="10"
+                                        BackgroundColor="{StaticResource AccentColor}"
+                                        Command="{Binding ReloadCommand}"
+                                        CornerRadius="10"
+                                        HorizontalOptions="Center"
+                                        Text="{x:Static loc:SampleResources.ErrorButton_Retry}"
+                                        TextColor="Black"
+                                        VerticalOptions="End" />
                                 </StackLayout>
                             </ControlTemplate>
                         </tlv:TemplatedTaskLoader.ErrorControlTemplate>
@@ -171,41 +191,47 @@
                 </ScrollView>
             </RefreshView>
 
-            <AbsoluteLayout Grid.Row="1"
-                            BackgroundColor="#77002200"
-                            IsVisible="{Binding CompositeNotifier.ShowLoader}">
-                <Grid x:Name="ErrorNotificationView"
-                      AbsoluteLayout.LayoutFlags="PositionProportional"
-                      AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
-                      RowDefinitions="*,*">
+            <AbsoluteLayout
+                Grid.Row="1"
+                BackgroundColor="#77002200"
+                IsVisible="{Binding CompositeNotifier.ShowLoader}">
+                <Grid
+                    x:Name="ErrorNotificationView"
+                    AbsoluteLayout.LayoutBounds="0.5, 0.5, 300, 150"
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+                    RowDefinitions="*,*">
                     <Grid.Behaviors>
                         <tlv:TimedVisibilityBehavior VisibilityInMilliseconds="4000" />
                     </Grid.Behaviors>
-                    <Image Grid.RowSpan="2"
-                           Aspect="Fill"
-                           Source="window_border.png}" />
-                    <Image x:Name="BusyImage"
-                           Margin="15,30,15,0"
-                           Aspect="AspectFit"
-                           Source="busy_bee_white_bg.png" />
-                    <Label Grid.Row="1"
-                           Style="{StaticResource TextBody}"
-                           Margin="{StaticResource ThicknessLarge}"
-                           VerticalOptions="Center"
-                           HorizontalTextAlignment="Center"
-                           Text="{Binding LoadingText}" />
+                    <Image
+                        Grid.RowSpan="2"
+                        Aspect="Fill"
+                        Source="window_border.png}" />
+                    <Image
+                        x:Name="BusyImage"
+                        Margin="15,30,15,0"
+                        Aspect="AspectFit"
+                        Source="busy_bee_white_bg.png" />
+                    <Label
+                        Grid.Row="1"
+                        Margin="{StaticResource ThicknessLarge}"
+                        HorizontalTextAlignment="Center"
+                        Style="{StaticResource TextBody}"
+                        Text="{Binding LoadingText}"
+                        VerticalOptions="Center" />
                 </Grid>
             </AbsoluteLayout>
 
-            <tlv:Snackbar Grid.Row="1"
-                          Margin="15"
-                          VerticalOptions="End"
-                          BackgroundColor="White"
-                          FontFamily="FontAtariSt"
-                          IsVisible="{Binding CompositeNotifier.ShowLastError, Mode=TwoWay}"
-                          Text="{Binding CompositeNotifier.LastError, Converter={StaticResource ExceptionToErrorMessageConverter}}"
-                          TextColor="{StaticResource TextPrimaryColor}"
-                          TextHorizontalOptions="Start" />
+            <tlv:Snackbar
+                Grid.Row="1"
+                Margin="15"
+                BackgroundColor="White"
+                FontFamily="FontAtariSt"
+                IsVisible="{Binding CompositeNotifier.ShowLastError, Mode=TwoWay}"
+                Text="{Binding CompositeNotifier.LastError, Converter={StaticResource ExceptionToErrorMessageConverter}}"
+                TextColor="{StaticResource TextPrimaryColor}"
+                TextHorizontalOptions="Start"
+                VerticalOptions="End" />
         </Grid>
     </ContentPage.Content>
 
